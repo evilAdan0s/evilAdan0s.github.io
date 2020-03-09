@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="在做CTF时遇到这样一个题目，注入点过滤了SELECT和.还有WHERE等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式: 1id&#x3D;1&#39;;show tables;%23  但是没法查询字段，于是就可以利用构建预编译语句来绕过过滤。 先来谈谈什么叫预编译，实际上它经常被用来防止SQL注入，介于SQL注入的根本原理是未将数据与代码有效区分开，预编译的目的就在于解">
+    <meta name="description" content="在做CTF时遇到这样一个题目，注入点过滤了SELECT和.还有WHERE等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式: 1id&#x3D;1&#39;;show tables;%23  但是没法查询字段，于是就可以利用构建预编译语句来绕过过滤。  利用此方法的前提是支持多语句查询。  先来谈谈什么叫预编译，实际上它经常被用来防止SQL注入，介于SQL注入的根本原理是未将数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用预编译来SQL注入">
 <meta property="og:url" content="https://eviladan0s.github.io/2020/03/08/sql_trick/index.html">
 <meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="在做CTF时遇到这样一个题目，注入点过滤了SELECT和.还有WHERE等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式: 1id&#x3D;1&#39;;show tables;%23  但是没法查询字段，于是就可以利用构建预编译语句来绕过过滤。 先来谈谈什么叫预编译，实际上它经常被用来防止SQL注入，介于SQL注入的根本原理是未将数据与代码有效区分开，预编译的目的就在于解">
+<meta property="og:description" content="在做CTF时遇到这样一个题目，注入点过滤了SELECT和.还有WHERE等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式: 1id&#x3D;1&#39;;show tables;%23  但是没法查询字段，于是就可以利用构建预编译语句来绕过过滤。  利用此方法的前提是支持多语句查询。  先来谈谈什么叫预编译，实际上它经常被用来防止SQL注入，介于SQL注入的根本原理是未将数">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2020-03-08T13:45:12.000Z">
-<meta property="article:modified_time" content="2020-03-09T03:51:50.780Z">
+<meta property="article:modified_time" content="2020-03-09T04:08:58.381Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="CTF">
 <meta name="twitter:card" content="summary">
@@ -152,6 +152,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id&#x3D;1&#39;;show tables;%23</span><br></pre></td></tr></table></figure>
 
 <p>但是没法查询字段，于是就可以利用构建预编译语句来绕过过滤。</p>
+<blockquote>
+<p>利用此方法的前提是支持多语句查询。</p>
+</blockquote>
 <p>先来谈谈什么叫预编译，实际上它经常被用来防止SQL注入，介于SQL注入的根本原理是未将数据与代码有效区分开，预编译的目的就在于解决这一点。</p>
 <p>我们常见的有关防止SQL注入的预编译手段都是基于后端代码的，即PHP或Java的PDO，而这次的用法就是使用SQL命令直接预编译语句。</p>
 <p>MySQL的预编译语法为：</p>
