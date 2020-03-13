@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>白袍的小行星</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://eviladan0s.github.io/"/>
+  <updated>2020-03-12T14:52:53.792Z</updated>
+  <id>https://eviladan0s.github.io/</id>
+  
+  <author>
+    <name>白袍</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>escapeshellarg()与escapeshellcmd()的奇妙组合</title>
+    <link href="https://eviladan0s.github.io/2020/03/12/cmd_arg/"/>
+    <id>https://eviladan0s.github.io/2020/03/12/cmd_arg/</id>
+    <published>2020-03-12T11:51:19.000Z</published>
+    <updated>2020-03-12T14:52:53.792Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近做一道题，源码是这样的：&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-php&quot;&gt;&lt;code class=&quot;language-php&quot;&gt;&lt;span class=&quot;token delimiter&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span
+      
+    
+    </summary>
+    
+    
+    
+      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CTF中的一些小技巧</title>
+    <link href="https://eviladan0s.github.io/2020/03/10/ctf_trick/"/>
+    <id>https://eviladan0s.github.io/2020/03/10/ctf_trick/</id>
+    <published>2020-03-10T03:51:49.000Z</published>
+    <updated>2020-03-12T14:52:46.274Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本文是用来记录一下在CTF中遇到的小技巧，因为比较零碎，不适合单独写一篇文章，就总结在一起了。&lt;/p&gt;
+&lt;h1 id=&quot;Web&quot;&gt;&lt;a href=&quot;#Web&quot; class=&quot;headerlink&quot; title=&quot;Web&quot;&gt;&lt;/a&gt;Web&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;利用
+      
+    
+    </summary>
+    
+    
+    
+      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>利用预编译来SQL注入</title>
+    <link href="https://eviladan0s.github.io/2020/03/08/sql_trick/"/>
+    <id>https://eviladan0s.github.io/2020/03/08/sql_trick/</id>
+    <published>2020-03-08T13:45:12.000Z</published>
+    <updated>2020-03-12T14:52:37.809Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在做CTF时遇到这样一个题目，注入点过滤了&lt;code&gt;SELECT&lt;/code&gt;和&lt;code&gt;.&lt;/code&gt;还有&lt;code&gt;WHERE&lt;/code&gt;等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;id=1&amp;#39;;
+      
+    
+    </summary>
+    
+    
+    
+      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
+    
+  </entry>
+  
+</feed>
