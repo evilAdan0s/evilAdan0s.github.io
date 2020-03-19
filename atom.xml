@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-03-17T05:37:33.960Z</updated>
+  <updated>2020-03-19T12:06:40.121Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>PHP反序列化大挑战</title>
+    <link href="https://eviladan0s.github.io/2020/03/17/php-chanllenge/"/>
+    <id>https://eviladan0s.github.io/2020/03/17/php-chanllenge/</id>
+    <published>2020-03-17T10:07:21.000Z</published>
+    <updated>2020-03-19T12:06:40.121Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;经过了一段时间的刷题，发现自己在反序列化这里的认识还很浅薄，魔鬼训练走一波。&lt;/p&gt;
+&lt;p&gt;大量代码预警！！！&lt;/p&gt;
+&lt;h1 id=&quot;Level-0&quot;&gt;&lt;a href=&quot;#Level-0&quot; class=&quot;headerlink&quot; title=&quot;Level 0&quot;&gt;&lt;/a&gt;Le
+      
+    
+    </summary>
+    
+    
+    
+      <category term="安全研究" scheme="https://eviladan0s.github.io/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>利用phar伪协议进行反序列化攻击</title>
