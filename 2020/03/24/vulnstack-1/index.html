@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200326-151451@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200326-151718@2x.png">
 <meta property="article:published_time" content="2020-03-24T04:51:29.000Z">
-<meta property="article:modified_time" content="2020-03-26T07:32:23.986Z">
+<meta property="article:modified_time" content="2020-03-26T07:37:16.792Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="渗透测试">
 <meta name="twitter:card" content="summary">
@@ -200,7 +200,7 @@ net user /domain # 返回域用户列表<span aria-hidden="true" class="line-num
 <p>抓到的东西可以在<code>View -&gt; Credentials</code>里以列表的方式查看。</p>
 <p>下面就面对一个问题，我们没法直接访问到内网环境，所以就需要穿透或者转发。</p>
 <p>我这里用的是cs派生一个SMB Beacon，让内网的机器连接到这台跳板机，最后进行攻击。</p>
-<p>这里可以看404的这篇文章：[<strong>第三节[SMB Beacon]</strong>](<a href="https://github.com/aleenzz/Cobalt_Strike_wiki/blob/master/第三节[SMB" target="_blank" rel="noopener">https://github.com/aleenzz/Cobalt_Strike_wiki/blob/master/第三节[SMB</a> Beacon].md)</p>
+<p>这里可以看404的项目：<a href="https://github.com/aleenzz/Cobalt_Strike_wiki/" target="_blank" rel="noopener">Cobalt Strike wiki</a></p>
 <p>完事之后就可以使用<code>psexec</code>来进行横向移动，选定相应的<code>Target</code>然后右键选择<code>jump -&gt; psexec</code>，填好信息就可以直接运行：</p>
 <p><img src="/images/WX20200326-151451@2x.png" alt=""></p>
 <p>最后的成品：</p>
