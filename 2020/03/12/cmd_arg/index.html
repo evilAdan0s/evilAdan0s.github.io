@@ -127,7 +127,7 @@
         
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
-5 分钟后你将读完本篇文章.
+4 分钟后你将读完本篇文章.
     
     <h1 class="posttitle" itemprop="name headline">
         escapeshellarg()与escapeshellcmd()的奇妙组合
@@ -197,9 +197,9 @@
 <span class="token punctuation">}</span>
 <span class="token delimiter">?></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>结果是这样的：</p>
-<p><img src="/images/WX20200312-200352@2x.png" alt></p>
+<p><img src="/images/WX20200312-200352@2x.png" alt=""></p>
 <p>如果加一个单引号就会:</p>
-<p><img src="/images/WX20200312-200410@2x.png" alt></p>
+<p><img src="/images/WX20200312-200410@2x.png" alt=""></p>
 <p>下面来看另一个。</p>
 <blockquote>
 <p><strong>escapeshellcmd()</strong> 对字符串中可能会欺骗 shell 命令执行任意命令的字符进行转义。</p>
@@ -219,7 +219,7 @@
 <span class="token punctuation">}</span>
 <span class="token delimiter">?></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输入数据为<code>1&#39;</code>时，返回变成了这样：</p>
-<p><img src="/images/WX20200312-202719@2x.png" alt></p>
+<p><img src="/images/WX20200312-202719@2x.png" alt=""></p>
 <p>分析一下：</p>
 <p>在经过第一个函数后，结果我们测试过了，即<code>&#39;1&#39;\&#39;&#39;&#39;</code>，第二个函数处理时，给反斜杠和落单的引号都加上了反斜杠，所以就变成了<code>&#39;1&#39;\\&#39;&#39;\&#39;</code>。</p>
 <p>也许你有点晕，那么来看看一个清晰点的对比:</p>

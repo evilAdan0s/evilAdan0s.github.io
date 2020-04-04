@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200404-121629@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200404-150339@2x.png">
 <meta property="article:published_time" content="2020-04-04T03:43:18.000Z">
-<meta property="article:modified_time" content="2020-04-04T07:04:21.148Z">
+<meta property="article:modified_time" content="2020-04-04T07:18:48.447Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="研发">
 <meta name="twitter:card" content="summary">
@@ -125,7 +125,7 @@
         
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
-4 分钟后你将读完本篇文章.
+5 分钟后你将读完本篇文章.
     
     <h1 class="posttitle" itemprop="name headline">
         Windows Hack之资源释放技术
@@ -164,27 +164,27 @@
 <h1 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h1><p>一整套的动作可分解为4个步骤：</p>
 <ol>
 <li><p>定位程序里的资源，使用<code>FindResource</code>完成，最后得到一个句柄：</p>
-<pre class="line-numbers language-c++"><code class="language-c++">HRSRC FindResourceA(
-  HMODULE hModule, //用于处理包含资源的可执行模块，如果为NULL，则从当前进程的模块装载
-  LPCSTR  lpName, //指定资源名称
-  LPCSTR  lpType //指定资源类型
-);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp"><code class="language-cpp">HRSRC <span class="token function">FindResourceA</span><span class="token punctuation">(</span>
+  HMODULE hModule<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//用于处理包含资源的可执行模块，如果为NULL，则从当前进程的模块装载</span>
+  LPCSTR  lpName<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//指定资源名称</span>
+  LPCSTR  lpType <span class="token comment" spellcheck="true">//指定资源类型</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>根据句柄，获取资源大小并加载到内存，分别使用<code>SizeofResource</code>和<code>LoadResource</code>实现：</p>
-<pre class="line-numbers language-c++"><code class="language-c++">DWORD SizeofResource(
-  HMODULE hModule, //包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载
-  HRSRC   hResInfo //资源句柄，必须由 FindResource 或 FindResourceEx 来创建
-);
+<pre class="line-numbers language-cpp"><code class="language-cpp">DWORD <span class="token function">SizeofResource</span><span class="token punctuation">(</span>
+  HMODULE hModule<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载</span>
+  HRSRC   hResInfo <span class="token comment" spellcheck="true">//资源句柄，必须由 FindResource 或 FindResourceEx 来创建</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-HGLOBAL LoadResource(
-  HMODULE hModule, //包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载
-  HRSRC   hResInfo //资源句柄，必须由 FindResource 或 FindResourceEx 来创建
-);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+HGLOBAL <span class="token function">LoadResource</span><span class="token punctuation">(</span>
+  HMODULE hModule<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载</span>
+  HRSRC   hResInfo <span class="token comment" spellcheck="true">//资源句柄，必须由 FindResource 或 FindResourceEx 来创建</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>锁定此块内存，避免被其他程序影响，通过<code>LockResource</code>实现，返回值为资源在内存中的起始地址：</p>
-<pre class="line-numbers language-c++"><code class="language-c++">LPVOID LockResource(
-  HGLOBAL hResData //装载资源的句柄，可以由LoadResource返回
-);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp"><code class="language-cpp">LPVOID <span class="token function">LockResource</span><span class="token punctuation">(</span>
+  HGLOBAL hResData <span class="token comment" spellcheck="true">//装载资源的句柄，可以由LoadResource返回</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>根据资源大小和起始地址，读取并保存资源到本地。</p>
 </li>
@@ -201,79 +201,79 @@ HGLOBAL LoadResource(
 <p>添加好之后就可以开始编写代码尝试了。</p>
 <h2 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h2><p>这里使用C++来实现，需要读者对Win32编程有最基础的了解即可。</p>
 <p>主体函数：</p>
-<pre class="line-numbers language-c++"><code class="language-c++">BOOL FreeMyResource(UINT uResourceName, char *ResourceType, char *SaveFileName){
-    //获取资源
-    HRSRC hSrc = ::FindResourceA(NULL, MAKEINTRESOURCEA(uResourceName), ResourceType);
-    if (hSrc == NULL){
-        cout << "Can't find resource" << endl;
-        return FALSE;
-    }
+<pre class="line-numbers language-cpp"><code class="language-cpp">BOOL <span class="token function">FreeMyResource</span><span class="token punctuation">(</span>UINT uResourceName<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>ResourceType<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>SaveFileName<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//获取资源</span>
+    HRSRC hSrc <span class="token operator">=</span> <span class="token operator">::</span><span class="token function">FindResourceA</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token function">MAKEINTRESOURCEA</span><span class="token punctuation">(</span>uResourceName<span class="token punctuation">)</span><span class="token punctuation">,</span> ResourceType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hSrc <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Can't find resource"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    //获取资源大小
-    DWORD sizeResource = ::SizeofResource(NULL, hSrc);
-    if (sizeResource <= 0){
-        cout << "Can't get the size of resource" << endl;
-        return FALSE;
-    }
+    <span class="token comment" spellcheck="true">//获取资源大小</span>
+    DWORD sizeResource <span class="token operator">=</span> <span class="token operator">::</span><span class="token function">SizeofResource</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> hSrc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeResource <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Can't get the size of resource"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    //加载资源
-    HGLOBAL lResource = ::LoadResource(NULL, hSrc);
-    if (lResource == NULL){
-        cout << "Can't load resource" << endl;
-        return FALSE;
-    }
+    <span class="token comment" spellcheck="true">//加载资源</span>
+    HGLOBAL lResource <span class="token operator">=</span> <span class="token operator">::</span><span class="token function">LoadResource</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> hSrc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lResource <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Can't load resource"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    //锁定内存
-    LPVOID lock = ::LockResource(lResource);
-    if (lock == NULL){
-        cout << "Can't lock resource" << endl;
-        return FALSE;
-    }
+    <span class="token comment" spellcheck="true">//锁定内存</span>
+    LPVOID lock <span class="token operator">=</span> <span class="token operator">::</span><span class="token function">LockResource</span><span class="token punctuation">(</span>lResource<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lock <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Can't lock resource"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    //释放资源到本地
-    FILE *fp = NULL;
-    fopen_s(&fp, SaveFileName, "wb+");
-    if (fp == NULL){
-        cout << "Can't write file" << endl;
-        return FALSE;
-    }
-    fwrite(lock, sizeof(char), sizeResource, fp);
-    fclose(fp);
-    return TRUE;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token comment" spellcheck="true">//释放资源到本地</span>
+    FILE <span class="token operator">*</span>fp <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    <span class="token function">fopen_s</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>fp<span class="token punctuation">,</span> SaveFileName<span class="token punctuation">,</span> <span class="token string">"wb+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fp <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Can't write file"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">fwrite</span><span class="token punctuation">(</span>lock<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sizeResource<span class="token punctuation">,</span> fp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">fclose</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> TRUE<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中有个坑点，就是<code>FindResourceA</code>的传参，需要使用<code>MAKEINTRESOURCEA</code>来转换一下。原因在于我们常常使用资源ID来标识资源，ID号一般为无符号的整型，<code>FindResourceA</code>的对象参数为<code>LPCSTR</code>类型，这就需要一个类型转换相关的函数来处理了。</p>
 <p>这里放出主函数和资源相关的头文件<code>resource.h</code>，供参考使用。</p>
-<pre class="line-numbers language-c++"><code class="language-c++">//主函数
-int _tmain(int argc, _TCHAR* argv[])
-{
-    if (FreeMyResource(IDR_MYTXT2, "MYTXT", "hacker.txt")){
-        cout << "You win!" << endl;
-    }
-    else{
-        cout << "You lose!" << endl;
-    }
-    system("pause");
-    return 0;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-c++"><code class="language-c++">//resource.h
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//主函数</span>
+<span class="token keyword">int</span> <span class="token function">_tmain</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> _TCHAR<span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">FreeMyResource</span><span class="token punctuation">(</span>IDR_MYTXT2<span class="token punctuation">,</span> <span class="token string">"MYTXT"</span><span class="token punctuation">,</span> <span class="token string">"hacker.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"You win!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span><span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"You lose!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"pause"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//resource.h</span>
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 win32test.rc 使用
-//
-#define IDR_MYTXT1                      101
-#define IDR_MYTXT2                      102
+<span class="token comment" spellcheck="true">//{{NO_DEPENDENCIES}}</span>
+<span class="token comment" spellcheck="true">// Microsoft Visual C++ 生成的包含文件。</span>
+<span class="token comment" spellcheck="true">// 供 win32test.rc 使用</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> IDR_MYTXT1                      101</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> IDR_MYTXT2                      102</span>
 
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        103
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1001
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment" spellcheck="true">// Next default values for new objects</span>
+<span class="token comment" spellcheck="true">// </span>
+<span class="token macro property">#<span class="token directive keyword">ifdef</span> APSTUDIO_INVOKED</span>
+<span class="token macro property">#<span class="token directive keyword">ifndef</span> APSTUDIO_READONLY_SYMBOLS</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> _APS_NEXT_RESOURCE_VALUE        103</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> _APS_NEXT_COMMAND_VALUE         40001</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> _APS_NEXT_CONTROL_VALUE         1001</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> _APS_NEXT_SYMED_VALUE           101</span>
+<span class="token macro property">#<span class="token directive keyword">endif</span></span>
+<span class="token macro property">#<span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>运行结果如图：</p>
 <p><img src="/images/WX20200404-150339@2x.png" alt=""></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>编程能力确实很重要，加油吧。</p>
