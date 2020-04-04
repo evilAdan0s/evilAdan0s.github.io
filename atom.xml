@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-03-26T07:37:16.792Z</updated>
+  <updated>2020-04-04T07:04:21.148Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Windows Hack之资源释放技术</title>
+    <link href="https://eviladan0s.github.io/2020/04/04/windows_hack_free_resource/"/>
+    <id>https://eviladan0s.github.io/2020/04/04/windows_hack_free_resource/</id>
+    <published>2020-04-04T03:43:18.000Z</published>
+    <updated>2020-04-04T07:04:21.148Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;资源释放是一种经常被木马或病毒使用的技术，目的在于使攻击文件更简洁，只需一个exe文件就能完成攻击，本文将使用简单的例子来演示这种技术。&lt;/p&gt;
+&lt;h1 id=&quot;实现方式&quot;&gt;&lt;a href=&quot;#实现方式&quot; class=&quot;headerlink&quot; title=&quot;实现方式&quot;&gt;&lt;/
+      
+    
+    </summary>
+    
+    
+    
+      <category term="研发" scheme="https://eviladan0s.github.io/tags/%E7%A0%94%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>红日安全靶场--红队实战（一）</title>
     <link href="https://eviladan0s.github.io/2020/03/24/vulnstack-1/"/>
     <id>https://eviladan0s.github.io/2020/03/24/vulnstack-1/</id>
     <published>2020-03-24T04:51:29.000Z</published>
-    <updated>2020-03-26T07:37:16.792Z</updated>
+    <updated>2020-03-26T10:55:12.091Z</updated>
     
     <summary type="html">
     
@@ -35,7 +58,7 @@
     
     
     
-      <category term="渗透测试" scheme="https://eviladan0s.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+      <category term="域渗透" scheme="https://eviladan0s.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   

@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Windows Hack之资源释放技术</title>
+      <link href="/2020/04/04/windows_hack_free_resource/"/>
+      <url>/2020/04/04/windows_hack_free_resource/</url>
+      
+        <content type="html"><![CDATA[<p>资源释放是一种经常被木马或病毒使用的技术，目的在于使攻击文件更简洁，只需一个exe文件就能完成攻击，本文将使用简单的例子来演示这种技术。</p><h1 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h1><p>一整套的动作可分解为4个步骤：</p><ol><li><p>定位程序里的资源，使用<code>FindResource</code>完成，最后得到一个句柄：</p><pre class="line-numbers language-c++"><code class="language-c++">HRSRC FindResourceA(  HMODULE hModule, //用于处理包含资源的可执行模块，如果为NULL，则从当前进程的模块装载  LPCSTR  lpName, //指定资源名称  LPCSTR  lpType //指定资源类型);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li><li><p>根据句柄，获取资源大小并加载到内存，分别使用<code>SizeofResource</code>和<code>LoadResource</code>实现：</p><pre class="line-numbers language-c++"><code class="language-c++">DWORD SizeofResource(  HMODULE hModule, //包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载  HRSRC   hResInfo //资源句柄，必须由 FindResource 或 FindResourceEx 来创建);HGLOBAL LoadResource(  HMODULE hModule, //包含资源的可执行文件的句柄，若为NULL，则从当前进程的模块装载  HRSRC   hResInfo //资源句柄，必须由 FindResource 或 FindResourceEx 来创建);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li><li><p>锁定此块内存，避免被其他程序影响，通过<code>LockResource</code>实现，返回值为资源在内存中的起始地址：</p><pre class="line-numbers language-c++"><code class="language-c++">LPVOID LockResource(  HGLOBAL hResData //装载资源的句柄，可以由LoadResource返回);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li><li><p>根据资源大小和起始地址，读取并保存资源到本地。</p></li></ol><h1 id="实现示例"><a href="#实现示例" class="headerlink" title="实现示例"></a>实现示例</h1><blockquote><p>本次实验环境</p><p>Windows 10 专业版</p><p>Visual Studio 2013</p></blockquote><p>新建一个Win32控制台程序，然后添加一个txt文件为资源，文件内容如图：</p><p><img src="/images/WX20200404-121501@2x.png" alt=""></p><p>资源类型选择自定义：</p><p><img src="/images/WX20200404-121629@2x.png" alt=""></p><p>添加好之后就可以开始编写代码尝试了。</p><h2 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h2><p>这里使用C++来实现，需要读者对Win32编程有最基础的了解即可。</p><p>主体函数：</p><pre class="line-numbers language-c++"><code class="language-c++">BOOL FreeMyResource(UINT uResourceName, char *ResourceType, char *SaveFileName){    //获取资源    HRSRC hSrc = ::FindResourceA(NULL, MAKEINTRESOURCEA(uResourceName), ResourceType);    if (hSrc == NULL){        cout << "Can't find resource" << endl;        return FALSE;    }    //获取资源大小    DWORD sizeResource = ::SizeofResource(NULL, hSrc);    if (sizeResource <= 0){        cout << "Can't get the size of resource" << endl;        return FALSE;    }    //加载资源    HGLOBAL lResource = ::LoadResource(NULL, hSrc);    if (lResource == NULL){        cout << "Can't load resource" << endl;        return FALSE;    }    //锁定内存    LPVOID lock = ::LockResource(lResource);    if (lock == NULL){        cout << "Can't lock resource" << endl;        return FALSE;    }    //释放资源到本地    FILE *fp = NULL;    fopen_s(&fp, SaveFileName, "wb+");    if (fp == NULL){        cout << "Can't write file" << endl;        return FALSE;    }    fwrite(lock, sizeof(char), sizeResource, fp);    fclose(fp);    return TRUE;}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>其中有个坑点，就是<code>FindResourceA</code>的传参，需要使用<code>MAKEINTRESOURCEA</code>来转换一下。原因在于我们常常使用资源ID来标识资源，ID号一般为无符号的整型，<code>FindResourceA</code>的对象参数为<code>LPCSTR</code>类型，这就需要一个类型转换相关的函数来处理了。</p><p>这里放出主函数和资源相关的头文件<code>resource.h</code>，供参考使用。</p><pre class="line-numbers language-c++"><code class="language-c++">//主函数int _tmain(int argc, _TCHAR* argv[]){    if (FreeMyResource(IDR_MYTXT2, "MYTXT", "hacker.txt")){        cout << "You win!" << endl;    }    else{        cout << "You lose!" << endl;    }    system("pause");    return 0;}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><pre class="line-numbers language-c++"><code class="language-c++">//resource.h//{{NO_DEPENDENCIES}}// Microsoft Visual C++ 生成的包含文件。// 供 win32test.rc 使用//#define IDR_MYTXT1                      101#define IDR_MYTXT2                      102// Next default values for new objects// #ifdef APSTUDIO_INVOKED#ifndef APSTUDIO_READONLY_SYMBOLS#define _APS_NEXT_RESOURCE_VALUE        103#define _APS_NEXT_COMMAND_VALUE         40001#define _APS_NEXT_CONTROL_VALUE         1001#define _APS_NEXT_SYMED_VALUE           101#endif#endif<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>运行结果如图：</p><p><img src="/images/WX20200404-150339@2x.png" alt=""></p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>编程能力确实很重要，加油吧。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 研发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>红日安全靶场--红队实战（一）</title>
       <link href="/2020/03/24/vulnstack-1/"/>
       <url>/2020/03/24/vulnstack-1/</url>
@@ -14,7 +33,7 @@
       
         <tags>
             
-            <tag> 渗透测试 </tag>
+            <tag> 域渗透 </tag>
             
         </tags>
       
