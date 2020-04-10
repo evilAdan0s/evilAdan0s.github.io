@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-04-10T03:09:41.401Z</updated>
+  <updated>2020-04-10T03:19:09.878Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -17,24 +17,25 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>ad-security-ticket</title>
-    <link href="https://eviladan0s.github.io/2020/04/07/ad-security-ticket/"/>
-    <id>https://eviladan0s.github.io/2020/04/07/ad-security-ticket/</id>
-    <published>2020-04-07T11:15:57.263Z</published>
-    <updated>2020-04-10T03:09:41.401Z</updated>
+    <title>域渗透--有关票据</title>
+    <link href="https://eviladan0s.github.io/2020/04/10/ad-ticket/"/>
+    <id>https://eviladan0s.github.io/2020/04/10/ad-ticket/</id>
+    <published>2020-04-10T03:17:56.000Z</published>
+    <updated>2020-04-10T03:19:09.878Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;title: 域渗透–有关票据&lt;br&gt;date: 2020-04-07 19:15:57&lt;br&gt;tags: [‘域渗透’]&lt;br&gt;search: true&lt;/p&gt;
-&lt;p&gt;我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。&lt;/p&gt;
-&lt;h1
+        &lt;p&gt;我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。&lt;/p&gt;
+&lt;h1 id=&quot;域内认证协议&quot;&gt;&lt;a href=&quot;#域内认证协议&quot; class=&quot;headerlink&quot; title=&quot;域内认证协议&quot;&gt;&lt;/a&gt;域内认证协议&lt;/h1&gt;&lt;p&gt;在W
       
     
     </summary>
     
     
+    
+      <category term="域渗透" scheme="https://eviladan0s.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   

@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="title: 域渗透–有关票据date: 2020-04-07 19:15:57tags: [‘域渗透’]search: true 我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于">
+    <meta name="description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ad-security-ticket">
-<meta property="og:url" content="https://eviladan0s.github.io/2020/04/07/ad-security-ticket/index.html">
+<meta property="og:title" content="域渗透--有关票据">
+<meta property="og:url" content="https://eviladan0s.github.io/2020/04/10/ad-ticket/index.html">
 <meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="title: 域渗透–有关票据date: 2020-04-07 19:15:57tags: [‘域渗透’]search: true 我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于">
+<meta property="og:description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://eviladan0s.github.io/images/Kerberos.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-092859@2x.png">
@@ -19,9 +19,10 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-163224@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204538@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204941@2x.png">
-<meta property="article:published_time" content="2020-04-07T11:15:57.263Z">
-<meta property="article:modified_time" content="2020-04-10T03:09:41.401Z">
+<meta property="article:published_time" content="2020-04-10T03:17:56.000Z">
+<meta property="article:modified_time" content="2020-04-10T03:19:09.878Z">
 <meta property="article:author" content="白袍">
+<meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://eviladan0s.github.io/images/Kerberos.png">
     
@@ -43,7 +44,7 @@
         
     
     <!-- title -->
-    <title>ad-security-ticket</title>
+    <title>域渗透--有关票据</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -102,17 +103,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&text=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&is_video=false&description=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=ad-security-ticket&body=Check out this article: https://eviladan0s.github.io/2020/04/07/ad-security-ticket/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&name=ad-security-ticket&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&t=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--有关票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -130,7 +131,7 @@
 10 分钟后你将读完本篇文章.
     
     <h1 class="posttitle" itemprop="name headline">
-        ad-security-ticket
+        域渗透--有关票据
     </h1>
 
 
@@ -142,7 +143,7 @@
       
     <div class="postdate">
       
-        <time datetime="2020-04-07T11:15:57.263Z" itemprop="datePublished">2020-04-07</time>
+        <time datetime="2020-04-10T03:17:56.000Z" itemprop="datePublished">2020-04-10</time>
         
       
     </div>
@@ -151,14 +152,18 @@
       
 
       
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" rel="tag">域渗透</a>
+    </div>
+
 
     </div>
   </header>
   
 
   <div class="content" itemprop="articleBody">
-    <p>title: 域渗透–有关票据<br>date: 2020-04-07 19:15:57<br>tags: [‘域渗透’]<br>search: true</p>
-<p>我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。</p>
+    <p>我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。</p>
 <h1 id="域内认证协议"><a href="#域内认证协议" class="headerlink" title="域内认证协议"></a>域内认证协议</h1><p>在Windows域内，认证协议分为两种：一种是<code>NTLM</code>，另一种是<code>Kerbrros</code>.</p>
 <p>前一种并非票据相关，放到后面再讲吧，主要看后一种。</p>
 <p><code>Kerberos</code>，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通过它来进行交易。</p>
@@ -197,8 +202,7 @@ kerberos::golden /domain:<span class="token operator">&lt;</span>域名<span cla
 <pre><code>lsadump::dcsync /domain:&lt;域名&gt; /user:&lt;要读取的用户&gt;</code></pre><p><img src="/images/WX20200409-131913@2x.png" alt=""></p>
 <h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>在一开始，我看了黄金票据的产生过程，还有一点疑惑：为什么一个入场券类的东西比访问对应服务的票券还更有用？实践了之后才明白，有了入场券，你想要哪个服务的票据都可以。</p>
 <h1 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h1><h2 id="结构和原理"><a href="#结构和原理" class="headerlink" title="结构和原理"></a>结构和原理</h2><p>在第五步，我们收到了RST，然后将其发给对应的服务，我们发送的数据为：</p>
-<pre><code>
-K(c,s)加密[Authenticator（[DomainName\Username,ServerName(DomainName\Server)]）],[Tiket（Server_ntlm_hash(Tiket（K(c,s),Client_Name(domainName\Username),TGT_EndTime）)）]</code></pre><p>同样的，我们缺少的是<code>Server_ntlm_hash</code>，有了它，便可以伪造白银票据了。</p>
+<pre><code>K(c,s)加密[Authenticator（[DomainName\Username,ServerName(DomainName\Server)]）],[Tiket（Server_ntlm_hash(Tiket（K(c,s),Client_Name(domainName\Username),TGT_EndTime）)）]</code></pre><p>同样的，我们缺少的是<code>Server_ntlm_hash</code>，有了它，便可以伪造白银票据了。</p>
 <p>白银票据只能访问对应的服务，所以我们在伪造时要指定相应的服务名。</p>
 <h2 id="利用-1"><a href="#利用-1" class="headerlink" title="利用"></a>利用</h2><p>同样的，使用<code>mimikatz</code>抓取<code>Server_ntlm_hash</code>:</p>
 <p>注意，这里使用的是<code>OWA$</code>的哈希，即服务账户的哈希，而不是<code>krbtgt</code>的哈希</p>
@@ -286,17 +290,17 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&text=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&is_video=false&description=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=ad-security-ticket&body=Check out this article: https://eviladan0s.github.io/2020/04/07/ad-security-ticket/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&title=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&name=ad-security-ticket&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/07/ad-security-ticket/&t=ad-security-ticket" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--有关票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -380,6 +384,45 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <script src="/js/main.js"></script>
 
 <!-- search -->
+
+  
+<script src="/js/search.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+
+    var $inputArea = $("input#search-input");
+    var $resultArea = document.querySelector("div#search-result");
+
+    $inputArea.focus(function() {
+      var search_path = "search.xml";
+      if (search_path.length == 0) {
+        search_path = "search.xml";
+      }
+      var path = "/" + search_path;
+      searchFunc(path, 'search-input', 'search-result');
+    });
+
+    $inputArea.keydown(function(e) {
+      if (e.which == 13) {
+        e.preventDefault();
+      }
+    });
+
+    var observer = new MutationObserver(function(mutationsList, observer) {
+      if (mutationsList.length == 1) {
+        if (mutationsList[0].addedNodes.length) {
+          $(".search-no-result").hide();
+        } else if (mutationsList[0].removedNodes.length) {
+          $(".search-no-result").show(200);
+        }
+      }
+    });
+
+    observer.observe($resultArea, { childList: true });
+
+  });
+  </script>
 
 <!-- Google Analytics -->
 
