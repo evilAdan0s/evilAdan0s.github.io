@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-04-04T07:18:48.447Z</updated>
+  <updated>2020-04-10T03:09:41.401Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ad-security-ticket</title>
+    <link href="https://eviladan0s.github.io/2020/04/07/ad-security-ticket/"/>
+    <id>https://eviladan0s.github.io/2020/04/07/ad-security-ticket/</id>
+    <published>2020-04-07T11:15:57.263Z</published>
+    <updated>2020-04-10T03:09:41.401Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;title: 域渗透–有关票据&lt;br&gt;date: 2020-04-07 19:15:57&lt;br&gt;tags: [‘域渗透’]&lt;br&gt;search: true&lt;/p&gt;
+&lt;p&gt;我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。&lt;/p&gt;
+&lt;h1
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Windows Hack之资源释放技术</title>
