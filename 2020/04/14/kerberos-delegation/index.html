@@ -9,7 +9,7 @@
     <meta name="description" content="委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。 具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。 分类1. 非约束委派（Unconstrained delegation）原理即无限制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="域渗透--有关委派">
-<meta property="og:url" content="https://eviladan0s.github.io/2020/04/10/kerberos-delegation/index.html">
+<meta property="og:url" content="https://eviladan0s.github.io/2020/04/14/kerberos-delegation/index.html">
 <meta property="og:site_name" content="白袍的小行星">
 <meta property="og:description" content="委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。 具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。 分类1. 非约束委派（Unconstrained delegation）原理即无限制">
 <meta property="og:locale" content="zh">
@@ -30,8 +30,8 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-114616@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-115352@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-123021@2x.png">
-<meta property="article:published_time" content="2020-04-10T05:32:13.000Z">
-<meta property="article:modified_time" content="2020-04-14T04:39:50.330Z">
+<meta property="article:published_time" content="2020-04-14T05:32:13.000Z">
+<meta property="article:modified_time" content="2020-04-14T04:44:42.822Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
@@ -114,17 +114,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/10/kerberos-delegation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/14/kerberos-delegation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -154,7 +154,7 @@
       
     <div class="postdate">
       
-        <time datetime="2020-04-10T05:32:13.000Z" itemprop="datePublished">2020-04-10</time>
+        <time datetime="2020-04-14T05:32:13.000Z" itemprop="datePublished">2020-04-14</time>
         
       
     </div>
@@ -309,17 +309,17 @@ Get<span class="token operator">-</span>NetComputer <span class="token operator"
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/10/kerberos-delegation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/14/kerberos-delegation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/14/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
