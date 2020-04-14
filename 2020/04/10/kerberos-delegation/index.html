@@ -13,6 +13,7 @@
 <meta property="og:site_name" content="白袍的小行星">
 <meta property="og:description" content="委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。 具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。 分类1. 非约束委派（Unconstrained delegation）原理即无限制">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-123835@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-102918@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-103553@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-103742@2x.png">
@@ -21,6 +22,7 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-150940@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-151438@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-171112@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-123923@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200413-182528@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200413-130945@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-111040@2x.png">
@@ -29,11 +31,11 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-115352@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-123021@2x.png">
 <meta property="article:published_time" content="2020-04-10T05:32:13.000Z">
-<meta property="article:modified_time" content="2020-04-14T04:35:45.899Z">
+<meta property="article:modified_time" content="2020-04-14T04:39:50.330Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://eviladan0s.github.io/images/WX20200411-102918@2x.png">
+<meta name="twitter:image" content="https://eviladan0s.github.io/images/WX20200414-123835@2x.png">
     
     
         
@@ -175,6 +177,7 @@
     <p>委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B<strong>“代理”</strong>自己去访问C服务，说是代理，也可以理解为<strong>“假冒”</strong>。</p>
 <p>具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。</p>
 <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="1-非约束委派（Unconstrained-delegation）"><a href="#1-非约束委派（Unconstrained-delegation）" class="headerlink" title="1. 非约束委派（Unconstrained delegation）"></a>1. 非约束委派（Unconstrained delegation）</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>即无限制的转发，B可以用从A处得到的TGT访问任意服务，其中B也可以是任意服务。</p>
+<p><img src="/images/WX20200414-123835@2x.png" alt=""></p>
 <p>流程如下：</p>
 <ol>
 <li>用户向KDC请求可转发TGT，记为TGT1</li>
@@ -233,6 +236,7 @@ Get<span class="token operator">-</span>NetComputer <span class="token operator"
 <p>我们还需要两个工具：<a href="https://github.com/GhostPack/Rubeus" target="_blank" rel="noopener">Rubeus</a>，<a href="https://github.com/leechristensen/SpoolSample" target="_blank" rel="noopener">SpoolSample</a>，具体不演示了，因为<code>SpoolSample</code>一直崩溃，无语。</p>
 <h2 id="2-约束委派（Constrained-delegation）"><a href="#2-约束委派（Constrained-delegation）" class="headerlink" title="2. 约束委派（Constrained delegation）"></a>2. 约束委派（Constrained delegation）</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>因为非约束委派很不安全，所以微软又发布了约束委派，区别在于不会直接把TGT给服务，所发送的认证信息中包含了允许访问的服务，即不允许服务代表用户去访问其他服务。</p>
 <p>其实现主要依靠一组kerberos扩展：<code>S4U2Self</code>（Service for User to Self）和<code>S4U2Proxy</code>（Service for User to Proxy）</p>
+<p><img src="/images/WX20200414-123923@2x.png" alt=""></p>
 <p>流程如下：</p>
 <ol>
 <li>用户向服务1发出请求</li>
