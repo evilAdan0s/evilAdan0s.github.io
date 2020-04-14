@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
+    <meta name="description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerberos. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
 <meta property="og:type" content="article">
 <meta property="og:title" content="域渗透--有关票据">
 <meta property="og:url" content="https://eviladan0s.github.io/2020/04/10/ad-ticket/index.html">
 <meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerbrros. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
+<meta property="og:description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerberos. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://eviladan0s.github.io/images/Kerberos.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-092859@2x.png">
@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204538@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204941@2x.png">
 <meta property="article:published_time" content="2020-04-10T03:17:56.000Z">
-<meta property="article:modified_time" content="2020-04-10T03:19:09.878Z">
+<meta property="article:modified_time" content="2020-04-10T06:30:37.541Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
@@ -88,6 +88,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2020/04/10/kerberos-delegation/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2020/04/04/windows_hack_free_resource/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -164,7 +166,7 @@
 
   <div class="content" itemprop="articleBody">
     <p>我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。</p>
-<h1 id="域内认证协议"><a href="#域内认证协议" class="headerlink" title="域内认证协议"></a>域内认证协议</h1><p>在Windows域内，认证协议分为两种：一种是<code>NTLM</code>，另一种是<code>Kerbrros</code>.</p>
+<h1 id="域内认证协议"><a href="#域内认证协议" class="headerlink" title="域内认证协议"></a>域内认证协议</h1><p>在Windows域内，认证协议分为两种：一种是<code>NTLM</code>，另一种是<code>Kerberos</code>.</p>
 <p>前一种并非票据相关，放到后面再讲吧，主要看后一种。</p>
 <p><code>Kerberos</code>，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通过它来进行交易。</p>
 <p>具体的流程可以分为六步，如下图所示：</p>

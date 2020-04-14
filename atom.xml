@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-04-10T03:19:09.878Z</updated>
+  <updated>2020-04-14T04:35:45.899Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>域渗透--有关委派</title>
+    <link href="https://eviladan0s.github.io/2020/04/10/kerberos-delegation/"/>
+    <id>https://eviladan0s.github.io/2020/04/10/kerberos-delegation/</id>
+    <published>2020-04-10T05:32:13.000Z</published>
+    <updated>2020-04-14T04:35:45.899Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B&lt;strong&gt;“代理”&lt;/strong&gt;自己去访问C服务，说是代理，也可以理解为&lt;strong&gt;“假冒”&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;具体为：域中A使用Kerberos身份验
+      
+    
+    </summary>
+    
+    
+    
+      <category term="域渗透" scheme="https://eviladan0s.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>域渗透--有关票据</title>
     <link href="https://eviladan0s.github.io/2020/04/10/ad-ticket/"/>
     <id>https://eviladan0s.github.io/2020/04/10/ad-ticket/</id>
     <published>2020-04-10T03:17:56.000Z</published>
-    <updated>2020-04-10T03:19:09.878Z</updated>
+    <updated>2020-04-10T06:30:37.541Z</updated>
     
     <summary type="html">
     
