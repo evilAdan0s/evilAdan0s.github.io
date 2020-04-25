@@ -9,7 +9,7 @@
     <meta name="description" content="前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。 基础知识Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在C:&#x2F;Windows&#x2F;system32&#x2F;config&#x2F;sam中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的&#x2F;etc&#x2F;passwd，这里的哈希即为NTLM Hash. 除了在上述目录中，我们还可以在域控的NTDS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="域渗透--有关NTLM">
-<meta property="og:url" content="https://eviladan0s.github.io/2020/04/21/about-ntlm/index.html">
+<meta property="og:url" content="https://eviladan0s.github.io/2020/04/25/about-ntlm/index.html">
 <meta property="og:site_name" content="白袍的小行星">
 <meta property="og:description" content="前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。 基础知识Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在C:&#x2F;Windows&#x2F;system32&#x2F;config&#x2F;sam中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的&#x2F;etc&#x2F;passwd，这里的哈希即为NTLM Hash. 除了在上述目录中，我们还可以在域控的NTDS">
 <meta property="og:locale" content="zh">
@@ -21,8 +21,8 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200422-101405@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200422-101600@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200423-084039@2x.png">
-<meta property="article:published_time" content="2020-04-21T05:16:49.000Z">
-<meta property="article:modified_time" content="2020-04-25T08:08:52.244Z">
+<meta property="article:published_time" content="2020-04-25T05:16:49.000Z">
+<meta property="article:modified_time" content="2020-04-25T08:19:57.227Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
@@ -105,17 +105,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/21/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/21/about-ntlm/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/21/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/25/about-ntlm/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -145,7 +145,7 @@
       
     <div class="postdate">
       
-        <time datetime="2020-04-21T05:16:49.000Z" itemprop="datePublished">2020-04-21</time>
+        <time datetime="2020-04-25T05:16:49.000Z" itemprop="datePublished">2020-04-25</time>
         
       
     </div>
@@ -289,17 +289,17 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/21/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/21/about-ntlm/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/21/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/21/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/25/about-ntlm/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
