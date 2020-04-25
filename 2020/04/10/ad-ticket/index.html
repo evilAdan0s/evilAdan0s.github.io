@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerberos. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
 <meta property="og:type" content="article">
-<meta property="og:title" content="域渗透--有关票据">
+<meta property="og:title" content="域渗透--Kerberos票据">
 <meta property="og:url" content="https://eviladan0s.github.io/2020/04/10/ad-ticket/index.html">
 <meta property="og:site_name" content="白袍的小行星">
 <meta property="og:description" content="我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。 域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerberos. 前一种并非票据相关，放到后面再讲吧，主要看后一种。 Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头犬。其认证流程主要涉及三个角色：客户端、服务端和KDC，可以把KDC理解为证券交易所，买方卖方都要通">
@@ -17,10 +17,8 @@
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-092859@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-131913@2x.png">
 <meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-163224@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204538@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204941@2x.png">
 <meta property="article:published_time" content="2020-04-10T03:17:56.000Z">
-<meta property="article:modified_time" content="2020-04-10T06:30:37.541Z">
+<meta property="article:modified_time" content="2020-04-21T05:40:26.686Z">
 <meta property="article:author" content="白袍">
 <meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
@@ -44,7 +42,7 @@
         
     
     <!-- title -->
-    <title>域渗透--有关票据</title>
+    <title>域渗透--Kerberos票据</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -106,21 +104,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--有关票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--Kerberos票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--Kerberos票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#域内认证协议"><span class="toc-number">1.</span> <span class="toc-text">域内认证协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#黄金票据"><span class="toc-number">2.</span> <span class="toc-text">黄金票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构与原理"><span class="toc-number">2.1.</span> <span class="toc-text">结构与原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#白银票据"><span class="toc-number">3.</span> <span class="toc-text">白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构和原理"><span class="toc-number">3.1.</span> <span class="toc-text">结构和原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-1"><span class="toc-number">3.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考-1"><span class="toc-number">3.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#哈希传递攻击"><span class="toc-number">4.</span> <span class="toc-text">哈希传递攻击</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#域内认证协议"><span class="toc-number">1.</span> <span class="toc-text">域内认证协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#黄金票据"><span class="toc-number">2.</span> <span class="toc-text">黄金票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构与原理"><span class="toc-number">2.1.</span> <span class="toc-text">结构与原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#白银票据"><span class="toc-number">3.</span> <span class="toc-text">白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构和原理"><span class="toc-number">3.1.</span> <span class="toc-text">结构和原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-1"><span class="toc-number">3.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考-1"><span class="toc-number">3.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">4.</span> <span class="toc-text">结语</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -130,10 +128,10 @@
         
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
-10 分钟后你将读完本篇文章.
+9 分钟后你将读完本篇文章.
     
     <h1 class="posttitle" itemprop="name headline">
-        域渗透--有关票据
+        域渗透--Kerberos票据
     </h1>
 
 
@@ -251,15 +249,6 @@ kerberos::golden /domain:<span class="token operator">&lt;</span>域名<span cla
 </tr>
 </tbody></table>
 <h2 id="思考-1"><a href="#思考-1" class="headerlink" title="思考"></a>思考</h2><p>与黄金票据不同，白银票据只能对特定的服务使用，但好处在于不用与域控交互，减少了被发现的可能。</p>
-<h1 id="哈希传递攻击"><a href="#哈希传递攻击" class="headerlink" title="哈希传递攻击"></a>哈希传递攻击</h1><p>在Windows中，远程登录其实是将哈希值传递过去进行验证，而不是密码，如果我们知道了用户的哈希值，就可以利用它免密码登录。</p>
-<p>我这里使用msf的<code>exploit/windows/smb/psexec</code>模块，介绍比较重要的几个参数：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">SMBDomain # 这个目标有域环境需要填上
-SMBPass # 这一项为LM Hash和NTLM Hash的组合，即 LM Hash:NTLM Hash
-SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>贴一下我的配置：</p>
-<p><img src="/images/WX20200409-204538@2x.png" alt=""></p>
-<p>最后获取到shell：</p>
-<p><img src="/images/WX20200409-204941@2x.png" alt=""></p>
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>其实kerberos不止这么简单，下篇文章想写写关于委派方面的，因为自己也是不大清楚哈哈哈</p>
 
   </div>
@@ -287,22 +276,22 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#域内认证协议"><span class="toc-number">1.</span> <span class="toc-text">域内认证协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#黄金票据"><span class="toc-number">2.</span> <span class="toc-text">黄金票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构与原理"><span class="toc-number">2.1.</span> <span class="toc-text">结构与原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#白银票据"><span class="toc-number">3.</span> <span class="toc-text">白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构和原理"><span class="toc-number">3.1.</span> <span class="toc-text">结构和原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-1"><span class="toc-number">3.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考-1"><span class="toc-number">3.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#哈希传递攻击"><span class="toc-number">4.</span> <span class="toc-text">哈希传递攻击</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#域内认证协议"><span class="toc-number">1.</span> <span class="toc-text">域内认证协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#黄金票据"><span class="toc-number">2.</span> <span class="toc-text">黄金票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构与原理"><span class="toc-number">2.1.</span> <span class="toc-text">结构与原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#白银票据"><span class="toc-number">3.</span> <span class="toc-text">白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构和原理"><span class="toc-number">3.1.</span> <span class="toc-text">结构和原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-1"><span class="toc-number">3.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考-1"><span class="toc-number">3.3.</span> <span class="toc-text">思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-number">4.</span> <span class="toc-text">结语</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--有关票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--有关票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&text=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&is_video=false&description=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=域渗透--Kerberos票据&body=Check out this article: https://eviladan0s.github.io/2020/04/10/ad-ticket/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&title=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/10/ad-ticket/&name=域渗透--Kerberos票据&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/10/ad-ticket/&t=域渗透--Kerberos票据" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

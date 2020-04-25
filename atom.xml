@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-04-14T04:44:42.822Z</updated>
+  <updated>2020-04-25T08:08:52.244Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>域渗透--有关委派</title>
+    <title>域渗透--有关NTLM</title>
+    <link href="https://eviladan0s.github.io/2020/04/21/about-ntlm/"/>
+    <id>https://eviladan0s.github.io/2020/04/21/about-ntlm/</id>
+    <published>2020-04-21T05:16:49.000Z</published>
+    <updated>2020-04-25T08:08:52.244Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。&lt;/p&gt;
+&lt;h1 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h1&gt;&lt;p&gt;Windows的登录有多种方式，其中本地认证
+      
+    
+    </summary>
+    
+    
+    
+      <category term="域渗透" scheme="https://eviladan0s.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>域渗透--Kerberos委派</title>
     <link href="https://eviladan0s.github.io/2020/04/14/kerberos-delegation/"/>
     <id>https://eviladan0s.github.io/2020/04/14/kerberos-delegation/</id>
     <published>2020-04-14T05:32:13.000Z</published>
-    <updated>2020-04-14T04:44:42.822Z</updated>
+    <updated>2020-04-21T05:16:05.052Z</updated>
     
     <summary type="html">
     
@@ -40,11 +63,11 @@
   </entry>
   
   <entry>
-    <title>域渗透--有关票据</title>
+    <title>域渗透--Kerberos票据</title>
     <link href="https://eviladan0s.github.io/2020/04/10/ad-ticket/"/>
     <id>https://eviladan0s.github.io/2020/04/10/ad-ticket/</id>
     <published>2020-04-10T03:17:56.000Z</published>
-    <updated>2020-04-10T06:30:37.541Z</updated>
+    <updated>2020-04-21T05:40:26.686Z</updated>
     
     <summary type="html">
     
