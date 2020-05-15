@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>网鼎杯的一道逆向题</title>
+      <link href="/2020/05/15/reverse-newbee/"/>
+      <url>/2020/05/15/reverse-newbee/</url>
+      
+        <content type="html"><![CDATA[<p>昨天做了网鼎杯的一道逆向，属于很简单那种，记录一下过程。</p><p>题目是一道Linux逆向，设置好IDA的远程调试后开始看题目。</p><p>大致逻辑为，你需要打败恶龙，当你的攻击力大于恶龙血量时才能打败，想要加攻击力要靠金币买，但初始只有5个金币，攻击力100，2个金币可以买1点攻击力，恶龙的初始血量是10000.</p><p>起初我以为是那种Web题的思路，需要你想办法刷金币然后买攻击力，最后朋友告诉我完全不用，这就是逆向的魅力吧。</p><p>找到主函数，反编译后在打恶龙的<code>boss()</code>函数处下好断点，我这个图下的比较多==</p><p><img src="/images/%E5%9B%BE%E7%89%871.png" alt=""></p><p>开始执行程序，主界面直接选择打恶龙，命中断点：</p><p><img src="/images/%E5%9B%BE%E7%89%872.png" alt=""></p><p><img src="/images/%E5%9B%BE%E7%89%873.png" alt=""></p><p>接下来要执行到关键的<code>jle</code>跳转处，它是一个条件跳转，即小于等于时跳到相应位置，否则执行下一条指令。</p><p><img src="/images/%E5%9B%BE%E7%89%874.png" alt=""></p><p>注意并非上图所执行到的那个<code>jle</code>，是下面那个，需要单步步过，不然直接<code>call</code>到游戏结束处了。</p><p>第二个<code>jle</code>会因为你的攻击力小于巨龙血量，所以将跳转到游戏结束，我们要做的就是不让它跳转，继续执行，下面就是打败之后的结果。</p><p><code>jle</code>跳转与否取决于标志寄存器的值，在它之前，比较两个值大小的工作交给了<code>cmp</code>指令。</p><pre class="line-numbers language-assembly"><code class="language-assembly">cmp ax,bx ;即ax - bx，将结果送入标志寄存器<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>在这题里ax是我们攻击力，bx是恶龙血量，所以肯定得到的是负数。</p><p>标志符号的是SF，SF=1代表负数，SF=0代表正数。</p><p>可以看到执行到此处时SF是等于1的，修改为0即可。</p><p><img src="/images/%E5%9B%BE%E7%89%876.png" alt=""></p><p>连续这样修改三次即可成功拿到flag</p><p><img src="/images/%E5%9B%BE%E7%89%877.png" alt=""></p><p><img src="/images/%E5%9B%BE%E7%89%878.png" alt=""></p><hr><p>有时间学一学二进制，还挺有意思的。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>域渗透--有关NTLM</title>
       <link href="/2020/04/25/about-ntlm/"/>
       <url>/2020/04/25/about-ntlm/</url>

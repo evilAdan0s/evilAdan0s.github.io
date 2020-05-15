@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-04-25T08:19:57.227Z</updated>
+  <updated>2020-05-15T05:35:15.761Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>网鼎杯的一道逆向题</title>
+    <link href="https://eviladan0s.github.io/2020/05/15/reverse-newbee/"/>
+    <id>https://eviladan0s.github.io/2020/05/15/reverse-newbee/</id>
+    <published>2020-05-15T04:50:29.000Z</published>
+    <updated>2020-05-15T05:35:15.761Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;昨天做了网鼎杯的一道逆向，属于很简单那种，记录一下过程。&lt;/p&gt;
+&lt;p&gt;题目是一道Linux逆向，设置好IDA的远程调试后开始看题目。&lt;/p&gt;
+&lt;p&gt;大致逻辑为，你需要打败恶龙，当你的攻击力大于恶龙血量时才能打败，想要加攻击力要靠金币买，但初始只有5个金币，攻击力100，2
+      
+    
+    </summary>
+    
+    
+    
+      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
+    
+  </entry>
   
   <entry>
     <title>域渗透--有关NTLM</title>
