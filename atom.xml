@@ -214,9 +214,7 @@
       
       
         &lt;p&gt;最近做一道题，源码是这样的：&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-php&quot;&gt;&lt;code class=&quot;language-php&quot;&gt;&lt;span class=&quot;token delimiter&quot;&gt;&amp;lt;?php&lt;/span&gt;
-
-&lt;span
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/
       
     
     </summary>
@@ -263,7 +261,7 @@
       
       
         &lt;p&gt;在做CTF时遇到这样一个题目，注入点过滤了&lt;code&gt;SELECT&lt;/code&gt;和&lt;code&gt;.&lt;/code&gt;还有&lt;code&gt;WHERE&lt;/code&gt;等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;id=1&amp;#39;;
+&lt;figure class=&quot;highli
       
     
     </summary>

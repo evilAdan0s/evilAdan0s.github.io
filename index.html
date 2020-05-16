@@ -1,316 +1,38 @@
-<!DOCTYPE html>
-<html lang=zh>
-<head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="莫忘少年凌云志，曾许天下第一流！">
-<meta property="og:type" content="website">
-<meta property="og:title" content="白袍的小行星">
-<meta property="og:url" content="https://eviladan0s.github.io/index.html">
-<meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="莫忘少年凌云志，曾许天下第一流！">
-<meta property="og:locale" content="zh">
-<meta property="article:author" content="白袍">
-<meta name="twitter:card" content="summary">
-    
-    
-        
-          
-              <link rel="shortcut icon" href="/images/favicon.ico">
-          
-        
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-          
-        
-    
-    <!-- title -->
-    <title>白袍的小行星</title>
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="莫忘少年凌云志，曾许天下第一流！"><meta name="keywords" content=""><meta name="author" content="白袍"><meta name="copyright" content="白袍"><title>白袍的小行星</title><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/57424ce0a622b132.jpg"></div><div class="author-info__name text-center">白袍</div><div class="author-info__description text-center">莫忘少年凌云志，曾许天下第一流！</div><div class="follow-button"><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">11</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://www.d-rose.cn/" target="_blank" rel="noopener">D-R0s1</a></div></div></div><nav id="nav" style="background-image: url(/img/back.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">白袍的小行星</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="site-info"><div id="site-title">白袍的小行星</div><div id="site-sub-title"></div><div id="site-social-icons"><a class="social-icon" href="https://github.com/evilAdan0s" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-github fa"></i></a><a class="social-icon" href="https://eviladan0s.github.io/atom.xml" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-rss fa"></i></a></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2020/05/15/reverse-newbee/">网鼎杯的一道逆向题</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-15</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span><div class="content">昨天做了网鼎杯的一道逆向，属于很简单那种，记录一下过程。
+题目是一道Linux逆向，设置好IDA的远程调试后开始看题目。
+大致逻辑为，你需要打败恶龙，当你的攻击力大于恶龙血量时才能打败，想要加攻击力要靠金币买，但初始只有5个金币，攻击力100，2个金币可以买1点攻击力，恶龙的初始血量是10000.
+ ...</div><a class="more" href="/2020/05/15/reverse-newbee/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/04/25/about-ntlm/">域渗透--有关NTLM</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-25</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a></span><div class="content">前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。
+基础知识Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在C:/Windows/system32/config/sam中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的/e ...</div><a class="more" href="/2020/04/25/about-ntlm/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/04/14/kerberos-delegation/">域渗透--Kerberos委派</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-21</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a></span><div class="content">委派（Delegation）是kerberos相对于NTLM认证独有的特性，指的是A可以让B“代理”自己去访问C服务，说是代理，也可以理解为“假冒”。
+具体为：域中A使用Kerberos身份验证访问域中的服务B，而B再利用A的身份去请求域中的服务C，因为用的是A的身份，所以只有A有权限访问C的时候， ...</div><a class="more" href="/2020/04/14/kerberos-delegation/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/04/10/ad-ticket/">域渗透--Kerberos票据</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-21</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a></span><div class="content">我们经常会看到域渗透的文章里写了“黄金票据”、“白银票据”，这到底是什么？一起来看看吧。
+域内认证协议在Windows域内，认证协议分为两种：一种是NTLM，另一种是Kerberos.
+前一种并非票据相关，放到后面再讲吧，主要看后一种。
+Kerberos，其名称来源于希腊神话的一种恶魔，也叫地狱三头 ...</div><a class="more" href="/2020/04/10/ad-ticket/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/04/04/windows_hack_free_resource/">Windows Hack之资源释放技术</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-04</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E7%A0%94%E5%8F%91/">研发</a></span><div class="content">资源释放是一种经常被木马或病毒使用的技术，目的在于使攻击文件更简洁，只需一个exe文件就能完成攻击，本文将使用简单的例子来演示这种技术。
+实现方式一整套的动作可分解为4个步骤：
 
-    <!-- persian styles -->
-    
-      
-<link rel="stylesheet" href="/css/rtl.css">
+定位程序里的资源，使用FindResource完成，最后得到一个句柄：
+HRSRC FindResourceA(  HM ...</div><a class="more" href="/2020/04/04/windows_hack_free_resource/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/03/24/vulnstack-1/">红日安全靶场--红队实战（一）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-26</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a></span><div class="content">下载了红日的靶场搞一搞，搭建之类的就不说了，直接从入口走起。
+拿下Webshell访问Web服务器对应的地址，发现直接出了phpstudy的探针==
+好吧，访问/yxcms这个目录，进去后发现是1.2.1版本的：
 
-    
-    <!-- rss -->
-    
-    
-      <link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml" />
-    
-<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
-
-<body class="max-width mx-auto px3 ltr">
-    
-    <div class="content index py4">
-        
-          <header id="header">
-  <a href="/">
-  
-    
-      <div id="logo" style="background-image: url(/images/logo.png);"></div>
-    
-  
-    <div id="title">
-      <h1>白袍的小行星</h1>
-    </div>
-  </a>
-  <div id="nav">
-    <ul>
-      <li class="icon">
-        <a href="#"><i class="fas fa-bars fa-2x"></i></a>
-      </li>
-       
-        <li><a href="/">Home</a></li>
-       
-        <li><a href="/about/">About</a></li>
-       
-        <li><a href="/archives/">Writing</a></li>
-       
-        <li><a href="/search/">Search</a></li>
-       
-        <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-      
-    </ul>
-  </div>
-</header>
-
-        
-        <section id="about">
-  
-    <p>莫忘少年凌云志，曾许天下第一流！</p>
-
-  
-  
-    <p>
-      Find me on
-      
-      
-      
-        
-          <a class="icon" target="_blank" rel="noopener" href="https://github.com/evilAdan0s">
-            <i class="fab fa-github"></i><!--
-      ---></a><!--
-    ---><!--
-    --->, 
-        
-      
-        
-          <a class="icon" target="_blank" rel="noopener" href="/">
-            <i class="fab fa-twitter"></i><!--
-      ---></a><!--
-    ---><!--
-    ---> and 
-        
-      
-        
-          <a class="icon" target="_blank" rel="noopener" href="mailto:eviladan0s@gmail.com">
-            <i class="fas fa-envelope"></i><!--
-      ---></a><!--
-      ---><!--
-    --->.
-        
-      
-    </p>
-  
-</section>
-
-<section id="writing">
-  <span class="h1"><a href="/archives">Writing</a></span>
-  
-  <span class="h2">Topics</span>
-  <span class="widget tagcloud">
-    <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" style="font-size: 20px;">域渗透</a> <a href="/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/" style="font-size: 15px;">安全研究</a> <a href="/tags/%E7%A0%94%E5%8F%91/" style="font-size: 10px;">研发</a>
-  </span>
-  <span class="h2">Most recent</span>
-  
-  <ul class="post-list">
-    
-    
-      
-    
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2020-05-15T04:50:29.000Z" itemprop="datePublished">2020-05-15</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2020/05/15/reverse-newbee/">网鼎杯的一道逆向题</a>
-    
-
-
-</span>
-      </li>
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2020-04-25T05:16:49.000Z" itemprop="datePublished">2020-04-25</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2020/04/25/about-ntlm/">域渗透--有关NTLM</a>
-    
-
-
-</span>
-      </li>
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2020-04-14T05:32:13.000Z" itemprop="datePublished">2020-04-14</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2020/04/14/kerberos-delegation/">域渗透--Kerberos委派</a>
-    
-
-
-</span>
-      </li>
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2020-04-10T03:17:56.000Z" itemprop="datePublished">2020-04-10</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2020/04/10/ad-ticket/">域渗透--Kerberos票据</a>
-    
-
-
-</span>
-      </li>
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2020-04-04T03:43:18.000Z" itemprop="datePublished">2020-04-04</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2020/04/04/windows_hack_free_resource/">Windows Hack之资源释放技术</a>
-    
-
-
-</span>
-      </li>
-    
-  </ul>
-  
-</section>
-
-
-
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2020 白袍
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </nav>
-  </div>
-</footer>
-
-    </div>
-    <!-- styles -->
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-
-<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
-
-
-    <!-- jquery -->
-
-<script src="/lib/jquery/jquery.min.js"></script>
-
-
-<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
-
-<!-- clipboard -->
-
-
-<script src="/js/main.js"></script>
-
-<!-- search -->
-
-<!-- Google Analytics -->
-
-<!-- Baidu Analytics -->
-
-<!-- Disqus Comments -->
-
-<!-- particles -->
-
-<script src="/lib/particles/particles.min.js"></script>
-
-<script type="text/javascript">
- 
-      
-</script>
-
-    <div id="particles-js"></div>
-</body>
-</html>
+在扫描根目录的时候，发现有一个名为beifen.rar的文件，下载后打开，在里面找到 ...</div><a class="more" href="/2020/03/24/vulnstack-1/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/03/17/php-chanllenge/">PHP反序列化大挑战</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-19</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/">安全研究</a></span><div class="content">经过了一段时间的刷题，发现自己在反序列化这里的认识还很浅薄，魔鬼训练走一波。
+大量代码预警！！！
+Level 0&lt;?phperror_reporting(0);include "flag.php";$KEY = "adan0s";$str = $_GET['str'];if (unserial ...</div><a class="more" href="/2020/03/17/php-chanllenge/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/03/14/php_phar/">利用phar伪协议进行反序列化攻击</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-17</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/">安全研究</a></span><div class="content">在以往的认知中，PHP反序列化漏洞都至少需要unserialize()函数存在，不然我们是没法利用的。其实不然，利用phar://伪协议也可以完成反序列化漏洞利用。
+何为phar？简单来说，phar是PHP提供的一种压缩和归档的方案，并且还提供了各种处理它的方法。
+一个phar文件由四部分组成，分别 ...</div><a class="more" href="/2020/03/14/php_phar/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/03/12/cmd_arg/">escapeshellarg()与escapeshellcmd()的奇妙组合</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-12</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span><div class="content">最近做一道题，源码是这样的：
+&lt;?phpif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) &#123;    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];&#125;if(!iss ...</div><a class="more" href="/2020/03/12/cmd_arg/#more" style="margin-top: 14px">Read more</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2020/03/10/ctf_trick/">CTF中的一些小技巧</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-13</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span><div class="content">本文是用来记录一下在CTF中遇到的小技巧，因为比较零碎，不适合单独写一篇文章，就总结在一起了。
+Web
+利用PHP字符串解析特性可绕过WAF，如?id=1不接受字符串参数，那么可以使用?%20id=1或?+id=1绕过限制，这是因为PHP在接受查询参数时会转换为关联数组，解析过程会删除或使用下划线替 ...</div><a class="more" href="/2020/03/10/ctf_trick/#more" style="margin-top: 14px">Read more</a><hr></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(/img/back.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By 白袍</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

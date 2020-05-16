@@ -1,173 +1,14 @@
-<!DOCTYPE html>
-<html lang=zh>
-<head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。 基础知识Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在C:&#x2F;Windows&#x2F;system32&#x2F;config&#x2F;sam中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的&#x2F;etc&#x2F;passwd，这里的哈希即为NTLM Hash. 除了在上述目录中，我们还可以在域控的NTDS">
-<meta property="og:type" content="article">
-<meta property="og:title" content="域渗透--有关NTLM">
-<meta property="og:url" content="https://eviladan0s.github.io/2020/04/25/about-ntlm/index.html">
-<meta property="og:site_name" content="白袍的小行星">
-<meta property="og:description" content="前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。 基础知识Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在C:&#x2F;Windows&#x2F;system32&#x2F;config&#x2F;sam中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的&#x2F;etc&#x2F;passwd，这里的哈希即为NTLM Hash. 除了在上述目录中，我们还可以在域控的NTDS">
-<meta property="og:locale" content="zh">
-<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204538@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/WX20200409-204941@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200421-170221@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200421-204042@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200422-095850@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200422-101405@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200422-101600@2x.png">
-<meta property="og:image" content="https://eviladan0s.github.io/images/QQ20200423-084039@2x.png">
-<meta property="article:published_time" content="2020-04-25T05:16:49.000Z">
-<meta property="article:modified_time" content="2020-04-25T08:19:57.227Z">
-<meta property="article:author" content="白袍">
-<meta property="article:tag" content="域渗透">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://eviladan0s.github.io/images/WX20200409-204538@2x.png">
-    
-    
-        
-          
-              <link rel="shortcut icon" href="/images/favicon.ico">
-          
-        
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-          
-        
-    
-    <!-- title -->
-    <title>域渗透--有关NTLM</title>
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <!-- persian styles -->
-    
-      
-<link rel="stylesheet" href="/css/rtl.css">
-
-    
-    <!-- rss -->
-    
-    
-      <link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml" />
-    
-<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
-
-<body class="max-width mx-auto px3 ltr">
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" href="/2020/05/15/reverse-newbee/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
-        
-        
-        <li><a class="icon" href="/2020/04/14/kerberos-delegation/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
-        
-        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
-        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/25/about-ntlm/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-    <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击"><span class="toc-number">2.</span> <span class="toc-text">攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-暴力破解"><span class="toc-number">2.1.</span> <span class="toc-text">1. 暴力破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-哈希传递"><span class="toc-number">2.2.</span> <span class="toc-text">2. 哈希传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#认证过程"><span class="toc-number">2.2.1.</span> <span class="toc-text">认证过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#演示"><span class="toc-number">2.2.2.</span> <span class="toc-text">演示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-number">2.2.3.</span> <span class="toc-text">注意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.2.4.</span> <span class="toc-text">分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取Net-NTLM-Hash"><span class="toc-number">2.3.</span> <span class="toc-text">3. 获取Net-NTLM Hash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#中间人攻击"><span class="toc-number">2.3.1.</span> <span class="toc-text">中间人攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WPAD（网络代理自动发现协议）"><span class="toc-number">2.3.2.</span> <span class="toc-text">WPAD（网络代理自动发现协议）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web漏洞"><span class="toc-number">2.3.3.</span> <span class="toc-text">Web漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SMB中继"><span class="toc-number">2.4.</span> <span class="toc-text">4. SMB中继</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用"><span class="toc-number">2.4.2.</span> <span class="toc-text">利用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
-    </div>
-  </span>
-</div>
-
-    
-    <div class="content index py4">
-        
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-14 分钟后你将读完本篇文章.
-    
-    <h1 class="posttitle" itemprop="name headline">
-        域渗透--有关NTLM
-    </h1>
-
-
-
-    <div class="meta">
-      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">白袍的小行星</span>
-      </span>
-      
-    <div class="postdate">
-      
-        <time datetime="2020-04-25T05:16:49.000Z" itemprop="datePublished">2020-04-25</time>
-        
-      
-    </div>
-
-
-      
-
-      
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" rel="tag">域渗透</a>
-    </div>
-
-
-    </div>
-  </header>
-  
-
-  <div class="content" itemprop="articleBody">
-    <p>前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。</p>
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="域渗透--有关NTLM"><meta name="keywords" content="域渗透"><meta name="author" content="白袍"><meta name="copyright" content="白袍"><title>域渗透--有关NTLM | 白袍的小行星</title><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击"><span class="toc-number">2.</span> <span class="toc-text">攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-暴力破解"><span class="toc-number">2.1.</span> <span class="toc-text">1. 暴力破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-哈希传递"><span class="toc-number">2.2.</span> <span class="toc-text">2. 哈希传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#认证过程"><span class="toc-number">2.2.1.</span> <span class="toc-text">认证过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#演示"><span class="toc-number">2.2.2.</span> <span class="toc-text">演示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-number">2.2.3.</span> <span class="toc-text">注意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.2.4.</span> <span class="toc-text">分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取Net-NTLM-Hash"><span class="toc-number">2.3.</span> <span class="toc-text">3. 获取Net-NTLM Hash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#中间人攻击"><span class="toc-number">2.3.1.</span> <span class="toc-text">中间人攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WPAD（网络代理自动发现协议）"><span class="toc-number">2.3.2.</span> <span class="toc-text">WPAD（网络代理自动发现协议）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web漏洞"><span class="toc-number">2.3.3.</span> <span class="toc-text">Web漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SMB中继"><span class="toc-number">2.4.</span> <span class="toc-text">4. SMB中继</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用"><span class="toc-number">2.4.2.</span> <span class="toc-text">利用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/57424ce0a622b132.jpg"></div><div class="author-info__name text-center">白袍</div><div class="author-info__description text-center">莫忘少年凌云志，曾许天下第一流！</div><div class="follow-button"><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">11</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://www.d-rose.cn/" target="_blank" rel="noopener">D-R0s1</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/back.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">白袍的小行星</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">域渗透--有关NTLM</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-25</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>前两篇写了有关Kerberos的内容，这次来看看有关NTLM的。</p>
 <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><p>Windows的登录有多种方式，其中本地认证就是跟NTLM有关。在<code>C:/Windows/system32/config/sam</code>中，存储着本地认证的密码哈希，需要登录时就取出对应账户的哈希进行比对，其作用类似于linux中的<code>/etc/passwd</code>，这里的哈希即为<code>NTLM Hash</code>.</p>
 <p>除了在上述目录中，我们还可以在域控的<code>NTDS.dit</code>文件中得到<code>NTLM Hash</code>.</p>
 <p>还有一种叫<code>Net-NTLM Hash</code>，它是基于<code>NTLM Hash</code>使用一定算法生成的，用于网络环境下的认证。</p>
@@ -186,9 +27,8 @@
 </ol>
 <p>质询完成后即验证，服务端比较Response和Challenge1，如果相同，验证成功。</p>
 <h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p>我这里使用msf的<code>exploit/windows/smb/psexec</code>模块，介绍比较重要的几个参数：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">SMBDomain # 这个目标有域环境需要填上
-SMBPass # 这一项为LM Hash和NTLM Hash的组合，即 LM Hash:NTLM Hash
-SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">SMBDomain # 这个目标有域环境需要填上</span><br><span class="line">SMBPass # 这一项为LM Hash和NTLM Hash的组合，即 LM Hash:NTLM Hash</span><br><span class="line">SMBUser # 用户名</span><br></pre></td></tr></table></figure>
+
 <p>贴一下我的配置：</p>
 <p><img src="/images/WX20200409-204538@2x.png" alt=""></p>
 <p>最后获取到shell：</p>
@@ -224,9 +64,12 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <li>服务器：Windows server 2008</li>
 </ul>
 <p>在攻击机上使用<code>Responder</code>监听：</p>
-<pre class="line-numbers language-bash"><code class="language-bash">Responder -I eth0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Responder -I eth0</span><br></pre></td></tr></table></figure>
+
 <p>这时受害者，向服务器的文件共享服务发起请求：</p>
-<pre><code>dir \\owa\</code></pre><p>监听的攻击机已经拿到了哈希：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dir \\owa\</span><br></pre></td></tr></table></figure>
+
+<p>监听的攻击机已经拿到了哈希：</p>
 <p><img src="/images/QQ20200421-204042@2x.png" alt=""></p>
 <p>为什么会这样？因为<strong>涉及到<code>Net-NTLM</code>认证的地方，系统都会先使用本地的哈希尝试验证一遍</strong>，所以在我们告诉受害者自己是服务器时，它就把哈希也乖乖发过来啦。</p>
 <p>注意：在受害者发起请求时，错误的SMB服务器名称也可以获取到哈希。</p>
@@ -242,7 +85,8 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>首先配置受害者机器的浏览器设置：</p>
 <p><img src="/images/QQ20200422-095850@2x.png" alt=""></p>
 <p>然后在攻击机上开启监听：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">responder -I eth0 -wFb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">responder -I eth0 -wFb</span><br></pre></td></tr></table></figure>
+
 <p>当用户打开浏览器时，就会弹出这个框来：</p>
 <p><img src="/images/QQ20200422-101405@2x.png" alt=""></p>
 <p>如果用户在此输入凭证，就会被我们捕捉到：</p>
@@ -255,191 +99,14 @@ SMBUser # 用户名<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>此种方式的核心就在<strong>欺骗</strong>和<strong>重放</strong>上，如何让客户端的流量流经你的机器？这就是首先要解决的问题。</p>
 <p>要说明的是，SMB中继是有利用条件的，即目标机器不能开启SMB签名，有了签名，重放这个动作自然也就无效了。</p>
 <h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>第一步要识别出目标机器是否禁用了SMB签名，Windows 7/8/10默认不开启，Windows server默认开启，并且对打了ms08-068的老系统如xp/2003以下的系统无效。</p>
-<pre class="line-numbers language-bash"><code class="language-bash">nmap -p 445 --open --script smb-security-mode.nse,smb-os-discovery.nse 192.168.52.0/24<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nmap -p 445 --open --script smb-security-mode.nse,smb-os-discovery.nse 192.168.52.0/24</span><br></pre></td></tr></table></figure>
+
 <p><img src="/images/QQ20200423-084039@2x.png" alt=""></p>
 <p>上图可以看到有一台Win 7没有开启SMB签名，那受害者就是你了。</p>
 <p>因为环境实在太麻烦，我就放链接替代实验过程吧：<a href="https://klionsec.github.io/2016/07/20/smb-replay-attack/" target="_blank" rel="noopener">smb重放攻击</a></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>大致写完了域内有关NTLM的东西，啥也不说干就完了。</p>
-
-  </div>
-</article>
-
-
-        
-          <div id="footer-post-container">
-  <div id="footer-post">
-
-    <div id="nav-footer" style="display: none">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </div>
-
-    <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#攻击"><span class="toc-number">2.</span> <span class="toc-text">攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-暴力破解"><span class="toc-number">2.1.</span> <span class="toc-text">1. 暴力破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-哈希传递"><span class="toc-number">2.2.</span> <span class="toc-text">2. 哈希传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#认证过程"><span class="toc-number">2.2.1.</span> <span class="toc-text">认证过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#演示"><span class="toc-number">2.2.2.</span> <span class="toc-text">演示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-number">2.2.3.</span> <span class="toc-text">注意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.2.4.</span> <span class="toc-text">分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取Net-NTLM-Hash"><span class="toc-number">2.3.</span> <span class="toc-text">3. 获取Net-NTLM Hash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#中间人攻击"><span class="toc-number">2.3.1.</span> <span class="toc-text">中间人攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WPAD（网络代理自动发现协议）"><span class="toc-number">2.3.2.</span> <span class="toc-text">WPAD（网络代理自动发现协议）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web漏洞"><span class="toc-number">2.3.3.</span> <span class="toc-text">Web漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SMB中继"><span class="toc-number">2.4.</span> <span class="toc-text">4. SMB中继</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用"><span class="toc-number">2.4.2.</span> <span class="toc-text">利用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
-    </div>
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&text=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&is_video=false&description=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=域渗透--有关NTLM&body=Check out this article: https://eviladan0s.github.io/2020/04/25/about-ntlm/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&title=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://eviladan0s.github.io/2020/04/25/about-ntlm/&name=域渗透--有关NTLM&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://eviladan0s.github.io/2020/04/25/about-ntlm/&t=域渗透--有关NTLM" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-
-    <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
-        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
-    </div>
-
-  </div>
-</div>
-
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2020 白袍
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="/search/">Search</a></li>
-         
-          <li><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Projects</a></li>
-        
-      </ul>
-    </nav>
-  </div>
-</footer>
-
-    </div>
-    <!-- styles -->
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-
-<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
-
-
-    <!-- jquery -->
-
-<script src="/lib/jquery/jquery.min.js"></script>
-
-
-<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
-
-<!-- clipboard -->
-
-  
-<script src="/lib/clipboard/clipboard.min.js"></script>
-
-  <script type="text/javascript">
-  $(function() {
-    // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
-    btn += '<i class="far fa-clone"></i>';
-    btn += '</span>'; 
-    // mount it!
-    $(".highlight table").before(btn);
-    var clip = new ClipboardJS('.btn-copy', {
-      text: function(trigger) {
-        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
-      }
-    });
-    clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "Copied!");
-      e.clearSelection();
-    })
-  })
-  </script>
-
-
-<script src="/js/main.js"></script>
-
-<!-- search -->
-
-  
-<script src="/js/search.js"></script>
-
-  <script type="text/javascript">
-  $(function() {
-
-    var $inputArea = $("input#search-input");
-    var $resultArea = document.querySelector("div#search-result");
-
-    $inputArea.focus(function() {
-      var search_path = "search.xml";
-      if (search_path.length == 0) {
-        search_path = "search.xml";
-      }
-      var path = "/" + search_path;
-      searchFunc(path, 'search-input', 'search-result');
-    });
-
-    $inputArea.keydown(function(e) {
-      if (e.which == 13) {
-        e.preventDefault();
-      }
-    });
-
-    var observer = new MutationObserver(function(mutationsList, observer) {
-      if (mutationsList.length == 1) {
-        if (mutationsList[0].addedNodes.length) {
-          $(".search-no-result").hide();
-        } else if (mutationsList[0].removedNodes.length) {
-          $(".search-no-result").show(200);
-        }
-      }
-    });
-
-    observer.observe($resultArea, { childList: true });
-
-  });
-  </script>
-
-<!-- Google Analytics -->
-
-<!-- Baidu Analytics -->
-
-<!-- Disqus Comments -->
-
-<!-- particles -->
-
-<script src="/lib/particles/particles.min.js"></script>
-
-<script type="text/javascript">
- 
-      
-</script>
-
-    <div id="particles-js"></div>
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">白袍</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://eviladan0s.github.io/2020/04/25/about-ntlm/">https://eviladan0s.github.io/2020/04/25/about-ntlm/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a></div><div class="post-qr-code"><div class="post-qr-code-item"><img class="post-qr-code__img" src="/img/weixin.png"><div class="post-qr-code__desc">感谢支持</div></div></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/05/15/reverse-newbee/"><i class="fa fa-chevron-left">  </i><span>网鼎杯的一道逆向题</span></a></div><div class="next-post pull-right"><a href="/2020/04/14/kerberos-delegation/"><span>域渗透--Kerberos委派</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(/img/back.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By 白袍</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
