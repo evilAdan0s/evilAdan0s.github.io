@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-06-07T03:29:40.153Z</updated>
+  <updated>2020-06-20T01:48:31.109Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>一周实战总结</title>
+    <link href="https://eviladan0s.github.io/2020/06/18/a-redteam-action/"/>
+    <id>https://eviladan0s.github.io/2020/06/18/a-redteam-action/</id>
+    <published>2020-06-18T13:57:05.000Z</published>
+    <updated>2020-06-20T01:48:31.109Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这周被公司派出去做一个内部演练的攻击方，苦逼地干了一周，终于搞完了，写点总结。&lt;/p&gt;
+&lt;p&gt;本次演练是某大型国企内部的，总公司要求我们攻击所有属于他们的资产，包括下属子公司的，只要证明是其资产即可。&lt;/p&gt;
+&lt;p&gt;与互联网公司不同，这种企业的网站管理比较混乱，基本不会围绕
+      
+    
+    </summary>
+    
+    
+    
+      <category term="实战" scheme="https://eviladan0s.github.io/tags/%E5%AE%9E%E6%88%98/"/>
+    
+  </entry>
+  
+  <entry>
     <title>kkcms最新版（1.371）前台SQL注入</title>
     <link href="https://eviladan0s.github.io/2020/06/07/kkcms-new-vul/"/>
     <id>https://eviladan0s.github.io/2020/06/07/kkcms-new-vul/</id>
     <published>2020-06-07T02:27:35.000Z</published>
-    <updated>2020-06-07T03:29:40.153Z</updated>
+    <updated>2020-06-09T01:56:26.889Z</updated>
     
     <summary type="html">
     
