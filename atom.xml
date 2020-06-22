@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-06-20T01:48:31.109Z</updated>
+  <updated>2020-06-22T09:29:01.852Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于kkcms的填坑</title>
+    <link href="https://eviladan0s.github.io/2020/06/22/kkcms-again/"/>
+    <id>https://eviladan0s.github.io/2020/06/22/kkcms-again/</id>
+    <published>2020-06-22T07:37:44.000Z</published>
+    <updated>2020-06-22T09:29:01.852Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在&lt;a href=&quot;https://eviladan0s.github.io/2020/06/07/kkcms-new-vul/&quot;&gt;之前一篇文章中&lt;/a&gt;，我发出来两个kkcms的漏洞，这次修改一点东西，顺便再审一审。&lt;/p&gt;
+&lt;h1 id=&quot;改正上次的错误&quot;&gt;&lt;a hre
+      
+    
+    </summary>
+    
+    
+    
+      <category term="漏洞" scheme="https://eviladan0s.github.io/tags/%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
   
   <entry>
     <title>一周实战总结</title>

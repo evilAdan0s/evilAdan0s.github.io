@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>关于kkcms的填坑</title>
+      <link href="/2020/06/22/kkcms-again/"/>
+      <url>/2020/06/22/kkcms-again/</url>
+      
+        <content type="html"><![CDATA[<p>在<a href="https://eviladan0s.github.io/2020/06/07/kkcms-new-vul/">之前一篇文章中</a>，我发出来两个kkcms的漏洞，这次修改一点东西，顺便再审一审。</p><h1 id="改正上次的错误"><a href="#改正上次的错误" class="headerlink" title="改正上次的错误"></a>改正上次的错误</h1><p>上次在审SQL注入时，我以为是毫无过滤的，事后发现，其实是有的：</p><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (!get_magic_quotes_gpc()) &#123;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_GET)) &#123;</span><br><span class="line">$_GET = addslashes_deep($_GET);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_POST)) &#123;</span><br><span class="line">$_POST = addslashes_deep($_POST);</span><br><span class="line">&#125;</span><br><span class="line">$_COOKIE = addslashes_deep($_COOKIE);</span><br><span class="line">$_REQUEST = addslashes_deep($_REQUEST);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>在头部引入了此文件，<code>addslashes_deep()</code>函数定义如下：</p><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addslashes_deep</span><span class="params">($_var_0)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>($_var_0)) &#123;</span><br><span class="line"><span class="keyword">return</span> $_var_0;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">return</span> is_array($_var_0) ? array_map(<span class="string">'addslashes_deep'</span>, $_var_0) : addslashes($_var_0);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这个算是一个用来全局过滤引号的函数，但这个函数本身不安全，如果传入一个数组，它只会过滤数组的<code>value</code>，对于<code>key</code>不过滤。</p><p>在kkcms中，本来是有用的，可惜是白给：</p><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$username = stripslashes(trim($_POST[<span class="string">'name'</span>]));</span><br></pre></td></tr></table></figure><p>本来转义了单引号，但这里代入的时候又去掉了反斜杠，所以过滤完全白给。</p><p>纠正一下自己的错误，向作者道歉，原来并不是没过滤，是过滤了个寂寞。</p><h1 id="另一处前台SQL注入"><a href="#另一处前台SQL注入" class="headerlink" title="另一处前台SQL注入"></a>另一处前台SQL注入</h1><p>在<code>/tamplate/wapian/vlist.php</code>中：</p><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'cid'</span>])) &#123;</span><br><span class="line"><span class="keyword">if</span> ($_GET[<span class="string">'cid'</span>] != <span class="number">0</span>)&#123;</span><br><span class="line">$sql = <span class="string">'select * from xtcms_vod where d_parent in ('</span>.$_GET[<span class="string">'cid'</span>].<span class="string">') order by d_id desc'</span>;</span><br><span class="line">$pager = page_handle(<span class="string">'page'</span>,<span class="number">24</span>,mysql_num_rows(mysql_query($sql)));</span><br><span class="line">$result = mysql_query($sql.<span class="string">' limit '</span>.$pager[<span class="number">0</span>].<span class="string">','</span>.$pager[<span class="number">1</span>].<span class="string">''</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">$sql = <span class="string">'select * from xtcms_vod order by d_id desc'</span>;</span><br><span class="line">$pager = page_handle(<span class="string">'page'</span>,<span class="number">24</span>,mysql_num_rows(mysql_query($sql)));</span><br><span class="line">$result = mysql_query($sql.<span class="string">' limit '</span>.$pager[<span class="number">0</span>].<span class="string">','</span>.$pager[<span class="number">1</span>].<span class="string">''</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>虽然<code>$cid</code>被全局过滤了引号，但这里的SQL语句没有用引号包裹变量，所以还是一样注入，不过要把<code>cid</code>设为不等于0的值，还需要闭合括号，回显位在这里：</p><p><img src="/images/QQ20200622-165438@2x.png" alt=""></p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这个cms漏洞挺多，比较适合新手练习，一堆XSS和注入，上传之类的还没找到，可能作者用的其他人的代码写的上传哈哈哈（就是嘲笑的意思</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>一周实战总结</title>
       <link href="/2020/06/18/a-redteam-action/"/>
       <url>/2020/06/18/a-redteam-action/</url>
