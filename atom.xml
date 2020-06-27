@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-06-22T09:29:01.852Z</updated>
+  <updated>2020-06-27T12:33:55.321Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hack The Box 的一些WP</title>
+    <link href="https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/"/>
+    <id>https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/</id>
+    <published>2020-06-23T15:04:12.000Z</published>
+    <updated>2020-06-27T12:33:55.321Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;重新拾起了HTB的账号，开了个会员，从头练级！&lt;/p&gt;
+&lt;p&gt;现在会员可以使用pwnbox，就是在他们假设的一个parrot os，可以ssh连上去干，很方便，就是时长太短，一个月才给24小时，得省着用。&lt;/p&gt;
+&lt;h1 id=&quot;Legacy&quot;&gt;&lt;a href=&quot;#Lega
+      
+    
+    </summary>
+    
+    
+    
+      <category term="HackTheBox" scheme="https://eviladan0s.github.io/tags/HackTheBox/"/>
+    
+  </entry>
   
   <entry>
     <title>关于kkcms的填坑</title>
