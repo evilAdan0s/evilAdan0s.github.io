@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Hack The Box-Active</title>
+      <link href="/2020/06/27/hackthebox-active/"/>
+      <url>/2020/06/27/hackthebox-active/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/images/QQ20200627-185856@2x.png" alt=""></p><p>这道算是比较有水平的题目了，涉及到Windows域的一些知识，比较适合用来入门。</p><p>开局先扫描端口：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Nmap scan report for bogon (10.10.10.100)</span><br><span class="line">Host is up (0.44s latency).</span><br><span class="line">Not shown: 983 closed ports</span><br><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">53&#x2F;tcp    open  domain        Microsoft DNS 6.1.7601 (1DB15D39) (Windows Server 2008 R2 SP1)</span><br><span class="line">88&#x2F;tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2020-06-27 11:00:11Z)</span><br><span class="line">135&#x2F;tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">139&#x2F;tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">389&#x2F;tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: active.htb, Site: Default-First-Site-Name)</span><br><span class="line">445&#x2F;tcp   open  microsoft-ds?</span><br><span class="line">464&#x2F;tcp   open  kpasswd5?</span><br><span class="line">593&#x2F;tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636&#x2F;tcp   open  tcpwrapped</span><br><span class="line">3268&#x2F;tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: active.htb, Site: Default-First-Site-Name)</span><br><span class="line">3269&#x2F;tcp  open  tcpwrapped</span><br><span class="line">49152&#x2F;tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49153&#x2F;tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49154&#x2F;tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49155&#x2F;tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49157&#x2F;tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49158&#x2F;tcp open  msrpc         Microsoft Windows RPC</span><br></pre></td></tr></table></figure><p>主要的服务有<code>Kerberos</code>，<code>ldap</code>，<code>netbios-ssn</code>这些。</p><h1 id="普通用户"><a href="#普通用户" class="headerlink" title="普通用户"></a>普通用户</h1><p>先从139看起，这个端口一般用于文件共享，用的是SMB协议，所以可以用<code>smbmap</code>来枚举一下共享目录的信息。</p><p>因为没有用户名和密码的其他信息，所以直接枚举：</p><p><img src="/images/QQ20200627-223000@2x.png" alt=""></p><p>只有一个有读取权限，那就读取吧，用<code>smbclient</code>来连接：</p><p><img src="/images/QQ20200627-223321@2x.png" alt=""></p><p>翻了半天后在<code>\active.htb\policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\machine\preferences\groups\&gt;</code>找到个<code>Groups.xml</code>，里面有一个域用户和密码。</p><p>密码是密文，看起来很像base64，其实是AES-256.</p><p><img src="/images/QQ20200627-224434@2x.png" alt=""></p><p>本来这个加密强度基本上是解不开的，但是微软公布了此加密的私钥，任何人都可以解密出密码了，我们可以用<code>gpp-decrypt</code>这个工具来解密。</p><p>密码是<code>GPPstillStandingStrong2k18</code>，有了它我们又多了一些权限：</p><p><img src="/images/QQ20200627-225218@2x.png" alt=""></p><p>连接<code>Users</code>，可以直接拿到<code>user.txt</code>了：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">smbclient &#x2F;&#x2F;10.10.10.100&#x2F;Users -U SVC_TGS</span><br></pre></td></tr></table></figure><h1 id="管理员"><a href="#管理员" class="headerlink" title="管理员"></a>管理员</h1><p>要想拿到更高权限的内容，就必须转向其他的路，别忘了我们还有<code>Kerberos</code>没探索。</p><p>关于<code>Kerberos</code>攻击我了解的不多，之前所了解的都是关于协议内容方面的。</p><p>这次我们用到的是一种叫<code>Kerberoasting</code>的攻击技术，首先需要了解<code>kerberos</code>的认证过程和<code>SPN</code>相关。</p><p>之前写过此方面文章，所以不再赘述，大致就是：<strong>用户拿到TGT后，可以请求获取任意服务TGS，用户会收到包含加密服务票据的TGS响应数据包，我们拿到它可以破解出服务账户的哈希。</strong></p><p>这是因为kerberos的认证机制，导致任何经过了身份验证的用户都可以得到被加密的TGS，从而进行破解。</p><p>另外要说的就是SPN，简单来说就是用来标识服务的，Kerberos使用SPN决定用哪个服务的哈希来加密票据。在加密的时候，域控要通过SPN来查询对应的服务账户，进而使用它的哈希来加密TGS.</p><p>SPN也分为两种类似，分别是域用户和机器账户的，机器账户的不能用于远程连接，且30天随机生成更换一次，很难破解，所以我们要关注的就是域用户类的SPN.</p><p>先把域名加进hosts里：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10.10.10.100 active.htb</span><br></pre></td></tr></table></figure><p>再使用<code>GetUserSPNs</code>去查询SPN并获取TGS：</p><p><img src="/images/QQ20200628-093142@2x.png" alt=""></p><p>后面就可以直接破解了：</p><p><img src="/images/QQ20200628-100810@2x.png" alt=""></p><p>使用<code>psexec</code>就可以获得SYSTEM的shell：</p><p><img src="/images/QQ20200628-102158@2x.png" alt=""></p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>还是学到了不少内容，有一些新的攻击方式以前没用过。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HackTheBox </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hack The Box 的一些WP</title>
       <link href="/2020/06/23/hackthebox-wp-1/"/>
       <url>/2020/06/23/hackthebox-wp-1/</url>
