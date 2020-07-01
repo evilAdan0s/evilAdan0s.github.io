@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-06-28T02:26:22.783Z</updated>
+  <updated>2020-06-30T08:56:27.381Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hack The Box 通关记录2</title>
+    <link href="https://eviladan0s.github.io/2020/06/28/hackthebox-wp-2/"/>
+    <id>https://eviladan0s.github.io/2020/06/28/hackthebox-wp-2/</id>
+    <published>2020-06-28T02:30:12.000Z</published>
+    <updated>2020-06-30T08:56:27.381Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;年轻人就要越挫越勇，继续肝，不能让我的10欧浪费了。&lt;/p&gt;
+&lt;h1 id=&quot;Access&quot;&gt;&lt;a href=&quot;#Access&quot; class=&quot;headerlink&quot; title=&quot;Access&quot;&gt;&lt;/a&gt;Access&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/images/QQ
+      
+    
+    </summary>
+    
+    
+    
+      <category term="HackTheBox" scheme="https://eviladan0s.github.io/tags/HackTheBox/"/>
+    
+  </entry>
   
   <entry>
     <title>Hack The Box-Active</title>
@@ -42,11 +65,11 @@
   </entry>
   
   <entry>
-    <title>Hack The Box 的一些WP</title>
+    <title>Hack The Box 通关记录1</title>
     <link href="https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/"/>
     <id>https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/</id>
     <published>2020-06-23T15:04:12.000Z</published>
-    <updated>2020-06-27T12:33:55.321Z</updated>
+    <updated>2020-06-28T02:31:37.806Z</updated>
     
     <summary type="html">
     

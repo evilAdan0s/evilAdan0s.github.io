@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://eviladan0s.github.io/2020/06/27/hackthebox-active/</loc>
+    <loc>https://eviladan0s.github.io/2020/06/28/hackthebox-wp-2/</loc>
     
-    <lastmod>2020-06-28T02:26:22.783Z</lastmod>
+    <lastmod>2020-06-30T08:56:27.381Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://eviladan0s.github.io/about/index.html</loc>
+    
+    <lastmod>2020-06-28T13:37:20.215Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://eviladan0s.github.io/2020/06/23/hackthebox-wp-1/</loc>
     
-    <lastmod>2020-06-27T12:33:55.321Z</lastmod>
+    <lastmod>2020-06-28T02:31:37.806Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://eviladan0s.github.io/2020/06/27/hackthebox-active/</loc>
+    
+    <lastmod>2020-06-28T02:26:22.783Z</lastmod>
     
   </url>
   
@@ -40,13 +54,6 @@
     <loc>https://eviladan0s.github.io/2020/06/04/bloodhound-learn/</loc>
     
     <lastmod>2020-06-04T09:25:08.491Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://eviladan0s.github.io/about/index.html</loc>
-    
-    <lastmod>2020-05-16T09:09:55.401Z</lastmod>
     
   </url>
   
