@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-07-08T15:16:57.691Z</updated>
+  <updated>2020-07-17T13:47:21.573Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>buuctf平台刷题记录1</title>
+    <link href="https://eviladan0s.github.io/2020/07/16/buu-ctf-1/"/>
+    <id>https://eviladan0s.github.io/2020/07/16/buu-ctf-1/</id>
+    <published>2020-07-16T09:45:37.000Z</published>
+    <updated>2020-07-17T13:47:21.573Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;新坑，为了恰钱开始刷题。&lt;/p&gt;
+&lt;h1 id=&quot;护网杯-2018-easy-tornado&quot;&gt;&lt;a href=&quot;#护网杯-2018-easy-tornado&quot; class=&quot;headerlink&quot; title=&quot;[护网杯 2018]easy_tornado&quot;&gt;&lt;/a&gt;[护
+      
+    
+    </summary>
+    
+    
+    
+      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
+    
+  </entry>
   
   <entry>
     <title>Hack The Box Active靶机的记录</title>
@@ -445,29 +468,6 @@
         &lt;p&gt;本文是用来记录一下在CTF中遇到的小技巧，因为比较零碎，不适合单独写一篇文章，就总结在一起了。&lt;/p&gt;
 &lt;h1 id=&quot;Web&quot;&gt;&lt;a href=&quot;#Web&quot; class=&quot;headerlink&quot; title=&quot;Web&quot;&gt;&lt;/a&gt;Web&lt;/h1&gt;&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;利用
-      
-    
-    </summary>
-    
-    
-    
-      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>利用预编译来SQL注入</title>
-    <link href="https://eviladan0s.github.io/2020/03/08/sql_trick/"/>
-    <id>https://eviladan0s.github.io/2020/03/08/sql_trick/</id>
-    <published>2020-03-08T13:45:12.000Z</published>
-    <updated>2020-03-12T14:52:37.809Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;在做CTF时遇到这样一个题目，注入点过滤了&lt;code&gt;SELECT&lt;/code&gt;和&lt;code&gt;.&lt;/code&gt;还有&lt;code&gt;WHERE&lt;/code&gt;等关键词，但是支持多语句查询，这样是可以看到库名列名的，利用如下的方式:&lt;/p&gt;
-&lt;figure class=&quot;highli
       
     
     </summary>
