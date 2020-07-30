@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://eviladan0s.github.io/"/>
-  <updated>2020-07-24T08:59:54.559Z</updated>
+  <updated>2020-07-30T08:48:45.502Z</updated>
   <id>https://eviladan0s.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java安全学习笔记——基础</title>
+    <link href="https://eviladan0s.github.io/2020/07/30/java-sec-1/"/>
+    <id>https://eviladan0s.github.io/2020/07/30/java-sec-1/</id>
+    <published>2020-07-30T01:39:58.000Z</published>
+    <updated>2020-07-30T08:48:45.502Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;又是一个新坑，想学习一下Java安全，毕竟学了才是安全人上人。&lt;/p&gt;
+&lt;h1 id=&quot;反射&quot;&gt;&lt;a href=&quot;#反射&quot; class=&quot;headerlink&quot; title=&quot;反射&quot;&gt;&lt;/a&gt;反射&lt;/h1&gt;&lt;h2 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; clas
+      
+    
+    </summary>
+    
+    
+    
+      <category term="Java" scheme="https://eviladan0s.github.io/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>CTF Pwn学习之栈溢出一</title>
@@ -447,29 +470,6 @@
     
     
       <category term="安全研究" scheme="https://eviladan0s.github.io/tags/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>escapeshellarg()与escapeshellcmd()的奇妙组合</title>
-    <link href="https://eviladan0s.github.io/2020/03/12/cmd_arg/"/>
-    <id>https://eviladan0s.github.io/2020/03/12/cmd_arg/</id>
-    <published>2020-03-12T11:51:19.000Z</published>
-    <updated>2020-03-12T14:52:53.792Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;最近做一道题，源码是这样的：&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/
-      
-    
-    </summary>
-    
-    
-    
-      <category term="CTF" scheme="https://eviladan0s.github.io/tags/CTF/"/>
     
   </entry>
   
