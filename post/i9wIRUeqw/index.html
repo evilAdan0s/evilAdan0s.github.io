@@ -1,0 +1,271 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>我的OSCE3之路——OSEP | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1710333081950">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="我的OSCE3之路——OSEP | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前言
+OffSec Experienced Pentester (OSEP) 可以看做OSCP的DLC，涵盖的内容实际上是两大块：防御规避和Windows域。
+OSCP的Windows域内容比较基础，不涉及委派、ACL滥用、域间信任等内容，..." />
+    <meta name="keywords" content="OffSec" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1710333081950" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              我的OSCE3之路——OSEP
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-09-11
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/omhFdQrox/" class="post-tag">
+                  # OffSec
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="前言">前言</h1>
+<p><code>OffSec Experienced Pentester (OSEP)</code> 可以看做<code>OSCP</code>的DLC，涵盖的内容实际上是两大块：防御规避和Windows域。</p>
+<p><code>OSCP</code>的Windows域内容比较基础，不涉及委派、ACL滥用、域间信任等内容，<code>OSEP</code>则对其进行了补充，所以这是我的下一个目标。</p>
+<h1 id="课程内容与对比">课程内容与对比</h1>
+<p><code>OSEP</code>对应的课程为<code>PEN-300（Advanced Evasion Techniques and Breaching Defenses）</code>，它并没有像<code>PEN-200（OSCP）</code>那样频繁更新，上次更新可能是2021年，这就导致了其中并不涵盖最新的技术，如<code>ZeroLogon</code>、<code>KrbRelayUp</code>、<code>ADCS</code>利用等，这也是其为人诟病的地方。</p>
+<p>另外，<code>PEN-300</code>中的防御规避技术比较基础（或者叫老旧），所以不要指望单靠这个就能学会实战免杀，尤其是对抗<code>EDR</code>这种环境。</p>
+<p>因为内容的相似性，<code>OSEP</code>常常会被用来和<code>CRTP</code>、<code>CRTO</code>对比。<a href="https://www.alteredsecurity.com/post/certified-red-team-professional-crtp">CRTP</a>我认为要比<code>OSEP</code>的Windows域部分更加深入，而且会更多地教你使用Windows本身的东西来完成攻击（基本靠PowerShell）。</p>
+<p>而<a href="https://training.zeropointsecurity.co.uk/courses/red-team-ops">CRTO</a>的优势在于可以在实验室环境中使用最新版的<code>Cobalt Strike</code>，但更多的是教你如何利用<code>Cobalt Strike</code>完成攻击而不是告诉你具体的原理。另外，<code>CRTO</code>学习材料的内容很少，尤其是与<code>OSEP</code>几百页的PDF相比。</p>
+<p>两者都比<code>OSEP</code>便宜很多，所以看个人选择，我主要是奔着<code>OSCE3</code>去的。</p>
+<p>另外，2021年10月份，<code>OSEP</code>考试被泄露过一次，官方因此重新制作了考试环境，据一些人说，新考试比旧考试要难，<code>Lab</code>中的练习还不够，最好再去<code>HackTheBox ProLabs</code>进行练习，这个看个人选择。</p>
+<h1 id="考试要求">考试要求</h1>
+<p>考试时长为47小时45分钟，结束后同样有24小时的时间来提交报告。</p>
+<p>考试环境模拟一个企业网络，给你一个入口地址，需要先打点（漏洞或钓鱼），之后才能继续进行横向等操作，考试环境具体有多少台机器也是未知的，非官方消息是在20台左右。</p>
+<p>考试通过则需要达成以下两个条件之一：</p>
+<ul>
+<li>拿到100分（每个<code>local.txt</code>或<code>proof.txt</code>为10分）</li>
+<li>拿到<code>secret.txt</code>，具体位置由考试面板提供</li>
+</ul>
+<p>考试限制使用商业工具、chatgpt类问答AI，不限制<code>Metasploit</code>社区版、<code>sqlmap</code>等工具。</p>
+<p><code>OSEP</code>考试并不存在任何奖励分。</p>
+<h1 id="备考">备考</h1>
+<p>课程中的大部分内容我都接触过，所以我读完课程材料大概花了半个月左右，包括做课后练习。有下面几个点需要注意：</p>
+<ol>
+<li><code>OSCP</code>的知识很重要，据朋友说，他在考试中遇到了不少<code>OSCP</code>类型的主机，也就是考验你的枚举和漏洞利用能力，所以我认为，<code>OSEP</code>就是<code>OSCP</code>的大型DLC，一定要扎实地掌握<code>OSCP</code>内的知识。</li>
+<li><code>HackTheBox Pro Labs</code>是比较好的拓展练习，时间和金额充裕可以都做完，如果来不及的话，<code>Cybernetics</code>先做完，这是最贴近<code>OSEP</code>的（虽然多了<code>ADCS</code>的内容）。</li>
+<li>防御规避部分主要涉及：AppLocker、CLM、AMSI、Defender，就按照每台机器都开了所有安全机制来准备相关工具和代码。</li>
+<li>测试防御规避时，按照由简单到复杂的顺序来，例如Word宏钓鱼：<code>下载exe执行 -&gt; VBA Shellcode Loader -&gt; VBA远程加载PowerShell -&gt; ...</code>，每一项手法和代码都在课程环境中测试好，保证考试时没问题。</li>
+<li>和准备<code>OSCP</code>一样，每种攻击都要多学几种方式完成，例如<code>Bypass AppLocker</code>，课程中只教了一个<code>LOLBAS</code>，最好多掌握几个。</li>
+</ol>
+<p>读完材料后，大概在7月27号开始做<code>Lab</code>，也同样是6个<code>challenge</code>，前四个都相当于小的专项练习，域也只是单域，5和6则涉及了多个域，难度也基本上是按照序号来的。<br>
+个人感觉OSEP的<code>Lab</code>要比OSCP有意思得多，在8月11号做完了6个<code>challenge</code>：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171655VDsbXU4RIWcm.jpg" alt="20230911171655VDsbXU4RIWcm" loading="lazy"><br>
+完成<code>challenge</code>后就买了一个月的<code>HTB ProLabs</code>开始练习，预定了9月7号8:00的考试。</p>
+<p>但<code>HTB ProLabs</code>我没打完，因为环境是共享的，实在是太不稳定了，非常怀念独占的环境，想重置就重置，最后只把wp看了一遍，然后将近20天的时间都没事干，只整理了一下笔记以及可能会用到的代码。</p>
+<p>期间和不少考过试的人请教经验，基本上都说<code>Lab</code>做完不难，但OSCP中的枚举不能忘，像CME、winpeas都要用起来。</p>
+<h1 id="考试">考试</h1>
+<p>当天早上8点开考，这次考前验证步骤熟练了很多，没出现什么情况。</p>
+<p>考试本身难度适中，比<code>Lab</code>略难一点，但没有超过太多，不做<code>HTB ProLabs</code>我觉得也是够的，不过有一点需要注意，一定不要仅仅依赖一种方法或者工具完成某个攻击，万一考试中那个方法用不了就抓瞎了。</p>
+<p>花了12个小时，我拿到了10个flag，但之后花了20个小时都没能拿到新的。<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171721BFn6gBjmiaxL.jpg" alt="20230911171721BFn6gBjmiaxL" loading="lazy"><br>
+最终在9月8号晚上结束考试并提交了报告，报告只写了43页，因为基本上没用自定义代码。</p>
+<p>有个在discord认识的哥们，比我早一天提交，但他第三天就收到了结果，速度还是挺快的。</p>
+<p>为了及时得知自己的考试结果，借用赵今师傅的<a href="https://gist.github.com/glzjin/9464f22ecd83f3de1ede14fea4bc0743">监控脚本</a>，搞了个自动提醒，解放双手，在9月11号凌晨收到了通过的消息：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171743h8IZ6tYC6SOj.jpg" alt="20230911171743h8IZ6tYC6SOj" loading="lazy"><br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171751mWhn1UCxIpdb.jpg" alt="20230911171751mWhn1UCxIpdb" loading="lazy"></p>
+<h1 id="结语">结语</h1>
+<p>总结一下：</p>
+<ul>
+<li>免杀和域都不难，课程里的手法都能过，但尽量准备备用手法，防止意外情况</li>
+<li>熟练使用<code>BloodHound</code>、<code>CrackMapExec</code>、<code>Rubeus</code>等工具</li>
+<li>仍然记住：枚举是关键</li>
+</ul>
+<p>打算休息几天，然后开始<code>OSWE</code>的学习😄</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E8%AF%BE%E7%A8%8B%E5%86%85%E5%AE%B9%E4%B8%8E%E5%AF%B9%E6%AF%94">课程内容与对比</a></li>
+<li><a href="#%E8%80%83%E8%AF%95%E8%A6%81%E6%B1%82">考试要求</a></li>
+<li><a href="#%E5%A4%87%E8%80%83">备考</a></li>
+<li><a href="#%E8%80%83%E8%AF%95">考试</a></li>
+<li><a href="#%E7%BB%93%E8%AF%AD">结语</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/DuVsd-Fla/">
+              <h3 class="post-title">
+                我的OSCE3之路——OSCP
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

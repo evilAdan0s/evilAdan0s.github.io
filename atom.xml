@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://red-team.tips</id>
+    <title>白袍的小行星</title>
+    <updated>2024-03-13T12:31:24.688Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://red-team.tips"/>
+    <link rel="self" href="https://red-team.tips/atom.xml"/>
+    <subtitle>&lt;strong&gt;Once a hacker, always a hacker!&lt;/strong&gt;</subtitle>
+    <logo>https://red-team.tips/images/avatar.png</logo>
+    <icon>https://red-team.tips/favicon.ico</icon>
+    <rights>All rights reserved 2024, 白袍的小行星</rights>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSED]]></title>
+        <id>https://red-team.tips/post/oxqLv6NzK/</id>
+        <link href="https://red-team.tips/post/oxqLv6NzK/">
+        </link>
+        <updated>2024-03-13T12:12:51.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2023年终总结]]></title>
+        <id>https://red-team.tips/post/2mrt_3sfo/</id>
+        <link href="https://red-team.tips/post/2mrt_3sfo/">
+        </link>
+        <updated>2024-01-01T14:41:31.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSWE]]></title>
+        <id>https://red-team.tips/post/hfHBw5hIv/</id>
+        <link href="https://red-team.tips/post/hfHBw5hIv/">
+        </link>
+        <updated>2023-12-20T10:47:32.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Thread Execution Hijacking技术]]></title>
+        <id>https://red-team.tips/post/GrTNvFA7J/</id>
+        <link href="https://red-team.tips/post/GrTNvFA7J/">
+        </link>
+        <updated>2023-09-20T01:40:30.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSEP]]></title>
+        <id>https://red-team.tips/post/i9wIRUeqw/</id>
+        <link href="https://red-team.tips/post/i9wIRUeqw/">
+        </link>
+        <updated>2023-09-11T09:14:35.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSCP]]></title>
+        <id>https://red-team.tips/post/DuVsd-Fla/</id>
+        <link href="https://red-team.tips/post/DuVsd-Fla/">
+        </link>
+        <updated>2023-07-08T09:09:14.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Mojarra JSF 反序列化到内存马]]></title>
+        <id>https://red-team.tips/post/QD8CY1FoV/</id>
+        <link href="https://red-team.tips/post/QD8CY1FoV/">
+        </link>
+        <updated>2023-03-23T09:21:55.000Z</updated>
+    </entry>
+</feed>

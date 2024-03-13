@@ -1,0 +1,313 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>我的OSCE3之路——OSCP | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1710333081950">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="我的OSCE3之路——OSCP | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前言
+OSCP（PEN-200）并不是获得OSCE3的必要条件，但因为出于磨砺自己渗透测试思路的目的，我还是去学习和参加了考试（或者说是因为我订阅了Learn Unlimited，不考白不考）
+课程内容与变化
+OffSec官方与今年3月大幅..." />
+    <meta name="keywords" content="OffSec" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1710333081950" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              我的OSCE3之路——OSCP
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-07-08
+              </span>
+              <span>
+                11 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/omhFdQrox/" class="post-tag">
+                  # OffSec
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="前言">前言</h1>
+<p>OSCP（PEN-200）并不是获得OSCE3的必要条件，但因为出于磨砺自己渗透测试思路的目的，我还是去学习和参加了考试（或者说是因为我订阅了Learn Unlimited，不考白不考）</p>
+<h1 id="课程内容与变化">课程内容与变化</h1>
+<p>OffSec官方与今年3月大幅度更新了PEN-200的课程和考试内容，即PEN-200-2023，主要变化包括：</p>
+<ul>
+<li>移出了前置的基础内容，包括：熟悉Kali Linux、命令行使用等</li>
+<li>移出了缓冲区溢出内容</li>
+<li>扩充了SQL注入部分</li>
+<li>扩充了提权部分</li>
+<li>扩充了端口转发和隧道部分</li>
+<li>扩充了Active Directory部分</li>
+</ul>
+<p>这次更新颇得人心，缓冲区溢出在平时渗透工作中基本不可能遇到，早该删删了；扩充提权和Active Directory部分也是更加贴近实际工作需要了。</p>
+<p>获得10个奖励积分的条件也发生了变化，变成了：</p>
+<ul>
+<li>获得30台主机的<code>proof.txt</code></li>
+<li>完成每个模块中80%的练习</li>
+</ul>
+<p>模块的练习有时候比较阴间，让你填一个文字性的答案，多个单词或者少一个都不行，所以有信心的就不用考虑这10分了。</p>
+<p>新<code>labs</code>面板如下图所示（discord里找的）：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171106xd301qo3ZCL6.jpg" alt="20230911171106xd301qo3ZCL6" loading="lazy"><br>
+前三个<code>challenge</code>每个都是一个模拟场景，需要通过渗透来扩大可达范围，即打下外围机器然后做转发进内网，某些情况下还需要你获得特定机器上的信息才能进入另一台，也就是机器之间可能存在依赖关系，这些依赖是不会告诉你的，你只能靠自己尝试或者跟频道里的谜语人聊天获得，旧<code>labs</code>总共75台机器，新<code>labs</code>变成57台了。</p>
+<p>后三个相当于模拟考试，和考试的结构一样，都是一个域环境加三台独立主机。</p>
+<h1 id="报名">报名</h1>
+<p>报名可以走国内的代理谷安，或者自己报名，现在报名不需要护照了，考试时是需要的，异地（非户口所在地）办理需要20天才能拿到护照，非异地应该只需要一周。</p>
+<p>自己从官方报名需要准备一张支持VISA或万事达的卡用于付款，用paypal也可以，但就享受不到优惠了。</p>
+<p>谷安有针对课程的培训，也可以单纯代理报名，价格也是优惠后的，好处是可以不用准备境外支付的银行卡，谷安的价格和官方优惠后的价格相差无几，所以看个人选择。</p>
+<p>目前针对认证的购买类型大致分为三种：</p>
+<ul>
+<li>证书考试包：$1599，可以学习一门课程，外加90天的实验室时长，和一次考试机会</li>
+<li><code>Learn One</code>订阅：$2499，可以学习一门课程，外加一年的实验室时长，两次考试机会，还可以访问所有基础课程</li>
+<li><code>Learn Unlimited</code>订阅：$5499，可以学习所有课程，外加一年实验室时长，无限考试机会（仍有冷静期，但更短），也包括所有基础课程</li>
+</ul>
+<p>因为我的目标是OSCE3，所以直接冲<code>Learn Unlimited</code>.</p>
+<p>准备好相关材料和资金后，联系David报名，提供了姓名、公司邮箱和个人邮箱，会先发过来一个docusign链接进行电子签名，之后会收到付款邮件，付款完成后将收到注册链接，因为<code>Learn Unlimited</code>正常情况下不开放给个人的，这里实际上是为订阅者开了一个组织，所以你还需要将自己邀请进课程：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171135QEEuNDa6lNzG.jpg" alt="20230911171135QEEuNDa6lNzG" loading="lazy"><br>
+之后等课程开始就可以使用了。</p>
+<p>Here we go!<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171150ngTxiLXS1YN4.jpg" alt="20230911171150ngTxiLXS1YN4" loading="lazy"></p>
+<h1 id="考试要求">考试要求</h1>
+<p>考试总时长为24小时，结束后有24小时的时间来写报告并提交，考试中全程需要开启摄像头和屏幕共享供监考，可以睡觉或暂时离开，跟考官说一下就行。</p>
+<p>不能使用除考试设备之外的电子设备，包括手机、平板电脑，也不能用手机或平板当监考摄像头。</p>
+<p>在考试中，不能使用商业工具（如Burpsuite Pro、Coablt Strike等）、自动化利用工具（如sqlmap）、chatgpt类问答AI、大型漏扫（如AWVS）、可能影响网络的其他工具。</p>
+<p>考试中，只能对一个目标使用msf（包括auxiliary、exploit、meterpreter），无论攻击是否成功都不能换目标，但可以对一个目标多次使用，也不能在域环境使用（横向或转发相当于多个目标）；使用<code>msfvenom</code>和<code>exploit/multi/handler</code>是不受限制的。</p>
+<p>考试总分为100分，达到70分即可通过，目标为3台独立主机和一个域环境，域环境中包括了3台主机，所以要通过考试，域环境几乎是必须要拿下的。</p>
+<p>3台独立主机中，每台的普通用户权限和管理员权限分别占10分，总计60分；域环境中，总计40分，没有步骤分，也就是要么全部拿到，要么一分没有。</p>
+<p>考试报告也是一个非常重要的部分，内容必须详细，包括所有步骤、命令、得到的回显输出、截图，要求能被复现。成功获取权限的唯一证明是，通过<strong>交互式shell</strong>从<strong>原始位置</strong>读取flag（RDP登录和webshell都不行），并且截图，截图必须包括flag内容和该机器IP地址。</p>
+<h1 id="备考">备考</h1>
+<p>我的课程从5月24号开始，备考计划是先看一下课程中新增和有变化的内容部分（提权、转发、Active Directory），之后打<code>Lab</code>，顺序是先做前两个<code>challenge</code>，后面再做三个模拟考试，最后再做第三个<code>challenge</code>，因为官方提示第三个很难并且超出了考试范围，不过最后实际上没怎么看课程材料，直接去做<code>Lab</code>了。</p>
+<p>虽然很多人推荐了HackTheBox、TryHackMe这些平台作为额外练习，但我觉得没必要，因为要么难度不合理，要么太<code>CTF Like</code>，官方的<code>PG Practice</code>才是最好的扩展练习。</p>
+<p>目标是一个月之内把<code>Labs</code>解决，解决完之后就约最近的考试，等待期间打<code>PG Practice</code>保持手感。<br>
+备考练习中注意这几点：</p>
+<ol>
+<li>不要一卡住就去看提示或问思路，养成这种习惯并不好，考试的时候可没人能问，不过为了效率，可以设定一个时间限制，比如卡住超过2小时，再去论坛或discord问</li>
+<li>尽量不使用考试中限制的工具，如msf、sqlmap、burpsuite pro，培养手动利用漏洞的能力，减少一把梭。</li>
+</ol>
+<p>第一个<code>challenge</code>花了五天时间做完，看了不少次提示，总的来说还是比较简单。</p>
+<p>第二个<code>challenge</code>略难一点，学到了很多之前没接触过的新知识。</p>
+<p>最后三个<code>challenge</code>都是模拟考试，感觉难点就是寻找立足点，只要找到了直接就拿到对应权限，没有太多的弯弯绕。</p>
+<p>总结一下经验：</p>
+<ul>
+<li>扫描一定要选择全端口，哪怕慢点，并且最好扫两遍</li>
+<li>当发现没有入口点的时候，再从头枚举，枚举就是一切</li>
+<li>可以凭感觉去找问题，但不要放过任何可能，也就是不要想当然。有时候你找了半个小时的Web漏洞，最后却发现在不起眼的端口上<code>searchsploit</code>就能getshell</li>
+<li>Keep Simple，不要想得太多，OSCP不会考的特别深，一般不会让你自己从头写脚本，最多是对已有exploit简单修改</li>
+</ul>
+<p>最终完成了除<code>challenge 3</code>以外的其他<code>lab</code>后，在6月15日我就约了考试，时间定在了北京时间7月2日10:00，这里尽量提前约考试，能找到比较合适的时间段，不然就剩一些半夜3点的阴间时间，很不利于考试。</p>
+<p>约完考试会发一封邮件给你，之后在考试前72小时还会再发一封，其中包括了考试时间、考试注意事项、监考工具手册等，考试前一定再仔细看一遍。</p>
+<p>在等待考试的这段时间做了大概20多台PG里的机器，临近考试的一周就什么也没做了，放松。</p>
+<h1 id="考试过程">考试过程</h1>
+<p>考试前15分钟就可以登录考试平台了，输入你的OSID和md5，让考官完成考前检查工作，包括护照验证、环境验证等，例如：</p>
+<ul>
+<li>检查护照是否过期，护照上的名字与报名时提供的是否项目</li>
+<li>要求用摄像头扫描房间，包括四周、桌子下，保证桌子上没有与考试无关的电子设备</li>
+<li>开启屏幕共享，要求是所有屏幕，如果桌子上有不用的显示器要拿走</li>
+<li>验证网络连接，在考试VPN包中会有检测脚本</li>
+</ul>
+<p>考试时监考人员听不到你的声音，所以沟通都是通过监考平台的在线聊天完成的，按照他的要求完成考前检查即可。</p>
+<p>当天7点半起床，洗了个澡，吃了前一天晚上买的小面包加自制拿铁，就坐在电脑前等开始了。</p>
+<p>9点45进入监考平台，但遇到了屏幕共享问题，我的两个屏幕共享的时候考官说只能看到一个，所以直到十点半我才正式开始考试。</p>
+<p>遇到这种情况别慌，我当时想的就是大不了把这个多余的屏幕拆了搬走，后面自己又好了，就继续检查房间、确认电子设备不在身边，Apple Watch也被要求取下放到别处。</p>
+<p>完成检查后会发送VPN连接包邮件，之后在Kali中连接，考试提交平台是内网的，所以要在连了VPN的机器上访问。</p>
+<p>计划先做AD部分，因为我没拿到奖励分数，AD做不出来就肯定过不了。用了20分钟找到了立足点，但是提权部分卡了很久，最后甚至想申请用MSF，还是忍住了，最终13:00左右拿下第一台的管理员，然后又是漫长的横向枚举，这里把所有可能都试了一遍，最后发现了有个地方漏了，15:30最终拿下AD.</p>
+<p>拿下AD信心倍增，休息了半个小时吃了个饭，第一台独立机器花了一个半小时，在一个我之前没想过的地方找到了入口，提权很简单。第二台也是入口点卡了半天，找到思路之后二十分钟全部搞定。</p>
+<p>然后苦逼的来了，剩的那台始终解决不了，任何我能想到的地方都试过了，甚至让官方技术支持检查一下机器是否有问题，他们的回复是一切正常，最后只能放弃了。</p>
+<p>到了差不多0:30开始写报告，花了三个半小时写完，上下眼皮已经在打架了，最后检查了一遍是否漏了步骤、截图、flag，然后直接联系监考人员结束考试。<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171313vWRkgmjuw2cL.jpg" alt="20230911171313vWRkgmjuw2cL" loading="lazy"><br>
+本来准备睡醒第二天交，一想这会交了算了，没必要等睡醒，转PDF打包7z上传一气呵成，睡前看了窗外一眼，不知东方之既白啊。</p>
+<h1 id="结语">结语</h1>
+<p>经过4天度日如年般的等待，终于在7月7日晚上收到了通过的邮件：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171324q1avHzzmQSrX.jpg" alt="20230911171324q1avHzzmQSrX" loading="lazy"><br>
+有人问我考试体验怎么样，我说：等待结果是最难的一部分😄</p>
+<p>下一个目标是OSEP，继续Try Harder!</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E8%AF%BE%E7%A8%8B%E5%86%85%E5%AE%B9%E4%B8%8E%E5%8F%98%E5%8C%96">课程内容与变化</a></li>
+<li><a href="#%E6%8A%A5%E5%90%8D">报名</a></li>
+<li><a href="#%E8%80%83%E8%AF%95%E8%A6%81%E6%B1%82">考试要求</a></li>
+<li><a href="#%E5%A4%87%E8%80%83">备考</a></li>
+<li><a href="#%E8%80%83%E8%AF%95%E8%BF%87%E7%A8%8B">考试过程</a></li>
+<li><a href="#%E7%BB%93%E8%AF%AD">结语</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/QD8CY1FoV/">
+              <h3 class="post-title">
+                Mojarra JSF 反序列化到内存马
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

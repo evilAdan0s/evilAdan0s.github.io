@@ -1,0 +1,277 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>我的OSCE3之路——OSWE | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1710333081950">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="我的OSCE3之路——OSWE | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前言
+OSWE对应的课程为WEB-300(Advanced Web Attacks and Exploitation)，主要考察白盒代码审计，所涉及的语言和框架也不止一种，有PHP、Java、.NET等。
+WEB-300我个人认为是300级..." />
+    <meta name="keywords" content="OffSec" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1710333081950" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              我的OSCE3之路——OSWE
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-12-20
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/omhFdQrox/" class="post-tag">
+                  # OffSec
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="前言">前言</h1>
+<p><code>OSWE</code>对应的课程为<code>WEB-300(Advanced Web Attacks and Exploitation)</code>，主要考察白盒代码审计，所涉及的语言和框架也不止一种，有<code>PHP</code>、<code>Java</code>、<code>.NET</code>等。</p>
+<p><code>WEB-300</code>我个人认为是300级课程中<s>难度最低</s>的一个，原因是相比<code>PEN-300</code>，随机性更小；而<code>EXP-301</code>是我基本不懂的二进制领域。</p>
+<h1 id="考试规则">考试规则</h1>
+<p>相比<code>OSCP</code>和<code>OSEP</code>，<code>OSWE</code>的考试严格约定了<strong>不允许下载源码到本地</strong>这一规则，我想这还是因为考试保密的要求，因为<code>OSWE</code>的考试核心就是源码，拿到了就能复制一个考试环境出来，<code>OSCP</code>及<code>OSEP</code>是做不到这一点的。</p>
+<p>同时，也不能使用源代码分析器，无论是商用的还是开源的或者自己写的，CodeQL、tabby这种都不可以，意味着必须手动去发现漏洞。</p>
+<p>另外，不能使用自动利用工具（sqlmap等）、漏洞扫描器（Nessus等）、chatgpt类AI、远程文件管理工具（sshfs、sftp等）。</p>
+<p>看其他人的review，说到考试中总共会给5台机器：</p>
+<ul>
+<li>测试机一台：一般是Kali，通过这台跑脚本速度更快；</li>
+<li>调试机两台，给系统登录权限，运行了目标应用，上面没有flag，配置了VSCode、JD-GUI等工具；</li>
+<li>目标机两台，有flag，没有登录权限，其他部分都和测试机一样。</li>
+</ul>
+<p>考试中总共会给两台目标，分别需要完成权限认证绕过和RCE，最少需要85分才能通过考试，官方并没有在<code>Exam Guide</code>中确认每一项的分数是多少，但按照很多人的经验，至少需要完全完成其中一台机器，及完成另一台的身份认证绕过（这一点可能要在考试时得到的<code>Specific Instructions</code>中确认）。</p>
+<p>最终需要提交一个PDF，其中要包含整个漏洞利用链的描述，并将整个漏洞利用脚本放入，漏洞利用脚本需要在<strong>不经过用户交互</strong>的情况下获取flag文件，你可以选择反弹shell回来然后手动读取flag，并且不需要在脚本里实现接收shell，即：你可以在另外的窗口手动打开nc监听，只需要在报告里说明所用的命令即可：</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20231220184910NtgeBHDXLSqW.jpg" alt="20231220184910NtgeBHDXLSqW" loading="lazy"></figure>
+<h1 id="备考">备考</h1>
+<p>我本身虽然对大部分Web漏洞的原理和利用都足够了解，但基本上没有尝试过白盒审计的方式来学习和实践。</p>
+<p>因为考试需要自行写脚本来达到目的，所以一门脚本语言是必须的（只要你想，用Java来写也不是不行），我就选择了自己最熟悉的Python，其他的如<code>requests</code>库这些都需要熟练掌握。</p>
+<p>和一般CTF Web题目相比，考试环境的代码量肯定是远远超过的，但也远不会像大型CMS那么恐怖。不会出现CTF那种脑洞题，真正的难点在于发现漏洞和将其组合利用起来。</p>
+<p>本来是准备在10月就开始学的，但因为工作太忙，实际上一直拖到了11月才真正开始。</p>
+<p>看了前两章后，我就打算约考试了，结果发现12月只剩两天能预约，其中一个是凌晨两点，所以最后选了12月16号晚八点考试。</p>
+<p>备考思路：</p>
+<ul>
+<li>最好把课程里的练习都做了，包括<code>Extra Mile</code>，每个练习都按照考试的标准写好脚本</li>
+<li>扩展练习：<a href="https://pentesterlab.com/badges/codereview">https://pentesterlab.com/badges/codereview</a>、<a href="https://portswigger.net/web-security/dashboard">https://portswigger.net/web-security/dashboard</a></li>
+<li>和其他OffSec考试一样，有兔子洞，所以需要合理规划时间</li>
+<li>可以列一个漏洞checklist，每种语言常见的漏洞类型，以此为参考，通读代码，逐个测试</li>
+<li>借助Burp插件可以加快脚本编写速度，比如：<a href="https://github.com/silentsignal/burp-requests">burp-requests（将Burp请求转换为Python requests脚本）</a>、<a href="https://github.com/TheKingOfDuck/Copy2Java">Copy2Java（将Burp请求转换为Java代码）</a></li>
+</ul>
+<p>课程材料很有意思，OffSec很详细地讲解了这些漏洞，虽然都是公开的CVE，但他们会从漏洞发掘的思路进行介绍，并辅以各类调试技巧，我觉得对代码审计新手还是非常有帮助的。</p>
+<p>虽然材料中会给出利用脚本来帮助学习，但通常都会留一个地方让你补充完全或修复，这一点挺有趣，避免你直接复制粘贴。</p>
+<p>最后几章的XSS、CSRF、SSRF，讲的漏洞都是OffSec官方发现并提交的，给我的感觉就是炫技，因为不论是挖掘还是利用难度都很高，考试要是出这种百分百做不出来😅</p>
+<p>WEB-300的<code>Challenge</code>只有三个：<code>Answers</code>、<code>DocEdit</code>和<code>Sqeakr</code>，也不用提交flag. 前两个为完全白盒，最后一个需要黑盒先拿到源码再进行审计。</p>
+<p>最后因为时间原因，我来不及完成所有课程练习的自动脚本了，就只写了三个<code>Challenge</code>的，每个<code>Challenge</code>都可以用不止一种路径完成。</p>
+<h1 id="考试">考试</h1>
+<p>考试当天也没心思学习，看了一天的哈利波特电影，快考试时去买了点补给品，还来了杯瑞幸。</p>
+<p>考试开始后，我本来打算在自己的vps直接连考试vpn的，但突然报了个错无法连接，正在排查的时候，监考人员催了我一句“你连上vpn了吗？”，就先用本地连了。后面发现是openvpn版本问题，vps上是2.4.12，需要注释掉<code>data-ciphers</code>和<code>data-ciphers-fallback</code>这两行，而本地kali的openvpn版本是2.6，可以兼容。</p>
+<p>先黑盒看了看，没发现异常，也根据功能列了可能存在的漏洞，然后就开始看代码了。</p>
+<p>上来就遇到个兔子洞，不过没在上面花时间，继续挨个看路由，不到半小时就找到第一个漏洞，验证成功。</p>
+<p>本来信心满满，但随后就陷入了另一个兔子洞，直到凌晨三点我才相信这个思路是走不通的，当时真的是身心俱疲。</p>
+<p>跟监考人员说了我要休息一会，睡到10点起来继续做。这里要批评下自己，配置各类环境的调试很不熟练（我能说是因为只能用VSCode并且没法装新插件么），也浪费了很多时间在上面，最终我是在完全没有断点调试的情况下完成的。</p>
+<p>因为我知道这套代码肯定是有漏洞的，只不过我还没找到而已，所以开始逐个看路由，并记录下所有可能存在漏洞的地方，例如（仅举例，与考试内容没有关系）：</p>
+<ul>
+<li>这里没用预编译，可能有SQL注入</li>
+<li>这里有XML处理，可能有XXE</li>
+<li>这里有文件上传，可能可以传webshell</li>
+<li>……</li>
+</ul>
+<p>记录完后开始逐个排查，终于在一个不太显眼的地方找到了第二个漏洞，并配合第一个漏洞绕过了身份验证。</p>
+<p>而RCE相比而言就简单些了，这里也是一个小技巧，当在找身份验证绕过时，你只需要看那些不需要身份验证以及只需要普通用户权限（能注册用户的前提下）的功能或路由，而找RCE时，只需要看admin权限相关的功能和路由即可。</p>
+<p>第二台同样开头不顺利，但其实考试题目说明里给了一点提示，最终依靠黑盒手法找到了绕过身份认证的漏洞，这里也是经验，黑盒白盒结合起来效率会更高。</p>
+<p>拿到85分已经是考试开始后的24小时了，我大概只睡了5个小时，大脑已经开始转不动了，所以直接选择放弃第二台的RCE，开始测试脚本和编写报告。</p>
+<p>建议在做课程练习和challenge时把代码写的模块化一点，这样需要的时候就可以直接拿来用，不需要再从头编写。</p>
+<p>报告写了30多页（我看到有人说他写了80多页……），最终在凌晨5点完成，反复检查了各部分内容确认无误后，我结束了考试，并直接提交了报告。</p>
+<p>OSWE考试的评分倒是很快，大概在我提交报告（还不是考试结束）的24小时后就收到了邮件，拿到了OSWE：</p>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20231220185017yM7W11gbJ4Ya.jpg" alt="20231220185017yM7W11gbJ4Ya" loading="lazy"></figure>
+<h1 id="小结">小结</h1>
+<p>考完后我的感想就是：WEB-300的核心难点仍然是枚举，你需要非常仔细地寻找漏洞所在，与之相比，漏洞的利用反而更简单。</p>
+<p>今年总共拿到了3个OffSec的证书，也算是收获满满，而OSED和OSCE3只能等明年再战了。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E8%80%83%E8%AF%95%E8%A7%84%E5%88%99">考试规则</a></li>
+<li><a href="#%E5%A4%87%E8%80%83">备考</a></li>
+<li><a href="#%E8%80%83%E8%AF%95">考试</a></li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/GrTNvFA7J/">
+              <h3 class="post-title">
+                Thread Execution Hijacking技术
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
