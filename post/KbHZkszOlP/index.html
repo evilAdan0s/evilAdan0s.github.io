@@ -1,0 +1,572 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cobalt Strike 4.5 二开相关笔记 | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1767833857201">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Cobalt Strike 4.5 二开相关笔记 | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="近期有人已经把beacon源码公布了，所以也把之前自己的一些研究笔记汇总发一下。
+另外想说下自己的观点：已经2025年了，所谓二开 Cobalt Strike 对绝大部分人来说都是伪需求，你能有官方团队写的好么？学习一下就行了。
+0x1 环..." />
+    <meta name="keywords" content="红队研究" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1767833857201" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Cobalt Strike 4.5 二开相关笔记
+            </h2>
+            <div class="post-info">
+              <span>
+                2025-08-12
+              </span>
+              <span>
+                15 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/f5G6oBVmo/" class="post-tag">
+                  # 红队研究
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>近期有人已经把beacon源码公布了，所以也把之前自己的一些研究笔记汇总发一下。</p>
+<p>另外想说下自己的观点：已经2025年了，所谓二开 Cobalt Strike 对绝大部分人来说都是伪需求，你能有官方团队写的好么？学习一下就行了。</p>
+<h1 id="0x1-环境搭建">0x1 环境搭建</h1>
+<h2 id="java端">Java端</h2>
+<p>可能部分人还没有Java的原生源码，所以介绍下反编译的方法。</p>
+<p>先把jar包反编译了，利用IDEA自带的<code>java-decompiler.jar</code>：</p>
+<pre><code class="language-plain">java -cp java-decompiler.jar org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler -dgs=true cs_original/cobaltstrike.jar cs_src
+</code></pre>
+<p><code>cs_original/cobaltstrike.jar</code>是原包，<code>cs_src</code>是反编译后的输出目录，得到一个jar后缀文件，解压缩即可得到源码。</p>
+<p>IDEA新建项目，将反编译后的所有源码放入<code>decompiled_src</code>目录，原包放入<code>lib</code>目录，再在<code>File-Project Structure-Modules-Dependencies</code>中添加原包：</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142156200.png" alt="" loading="lazy"></figure>
+<p>在<code>File-Project Structure-Artifacts</code>中添加JAR，主类为<code>aggressor.Aggressor</code>：</p>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142228000.png" alt="" loading="lazy"></figure>
+<p>需要修改相应文件时，右键选择<code>Refactor-Copy file</code>，<code>To directory</code>选择<code>src</code>目录里新建的目录：</p>
+<figure data-type="image" tabindex="3"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142239827.png" alt="" loading="lazy"></figure>
+<p>修改完成后就可以进行编译，选择<code>Build-Build Artifacts</code>，在<code>out</code>目录下得到重新打包好的jar包。</p>
+<h2 id="beacon端">Beacon端</h2>
+<p>beacon源码是纯C的，为了兼容性，需要使用<code>Visual Studio 2012</code>来开发，并且要安装<code>Update 1</code>补丁，否则无法满足平台工具集<code>Visual Studio 2012 - Windows XP (v110_xp)</code>的设置。</p>
+<p>另外还有几个地方需要修复下，不然无法通过编译。</p>
+<p><code>ReflectiveLoader.c</code>中，会出现一个<code>fatal error C1017: 无效的整数常量表达式</code>错误，代码如下：</p>
+<figure data-type="image" tabindex="4"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142252797.png" alt="" loading="lazy"></figure>
+<p>编译时<code>RefLoadSize</code>没初始化，就会导致错误，这个实际上会在预处理器里初始化，所以这里定义一下就行，我用的<code>100</code>:</p>
+<figure data-type="image" tabindex="5"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142316273.png" alt="" loading="lazy"></figure>
+<p>还有在<code>parse.c</code>中，<code>bool</code>标识符会报错，因为C99标准里没有<code>bool</code>只有<code>_Bool</code>，我换成了<code>BOOL</code>。</p>
+<p>另外<strong>后期生成事件</strong>里，要把命令改下，否则有可能会因为找不到路径导致失败。</p>
+<p>如果报<code>tomcrypt.lib</code>是用旧版本编译的，那就在这里把<u>全程序优化</u>设为<u>否</u>：</p>
+<figure data-type="image" tabindex="6"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142347148.png" alt="" loading="lazy"></figure>
+<p>另外一个情况是，替换掉原来的sleeve下的dll然后生成exe，client端会报一个错误：</p>
+<figure data-type="image" tabindex="7"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142418292.png" alt="" loading="lazy"></figure>
+<p>这是因为cs生成exe木马的逻辑是：先把回连地址等信息<code>patch</code>进<code>beacon.dll</code>，然后根据你需要的类型（exe、service exe、dll）再把<code>beacon.dll</code> <code>patch</code>进<code>artifact.xxx</code>里，这里的错误就是因为重新生成的<code>beacon.dll</code>太大导致原来的模板放不下了，所以生成出来的exe也会直接无法运行报访问冲突的错误。</p>
+<p>解决办法就是用Artifacts Kit重新生成一下即可：</p>
+<figure data-type="image" tabindex="8"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142429582.png" alt="" loading="lazy"></figure>
+<p>记住，生成出来的东西不能直接用来替换掉resources目录下的exe，得用给的cna脚本去加载，这个b问题折磨了我好几天，问了<code>@evilash</code>才解决。</p>
+<h1 id="0x2-去除特征和修复漏洞">0x2 去除特征和修复漏洞</h1>
+<p>这里的内容参考了很多网上的文章，时间久远忘了有哪些，只列举记得的：</p>
+<ul>
+<li>https://blog.qwqdanchun.com/CobaltStrike_Modify/</li>
+</ul>
+<h2 id="去除暗桩">去除暗桩</h2>
+<p>这个版本有一堆暗桩，Java端和beacon里都有，Java里基本就是两种：</p>
+<ol>
+<li>检验某个<code>.class</code>文件是否被篡改（对比哈希），如果被篡改就退出</li>
+</ol>
+<figure data-type="image" tabindex="9"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142442160.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>检验是否用 Java Agent 方式启动，是则退出</li>
+</ol>
+<figure data-type="image" tabindex="10"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142453778.png" alt="" loading="lazy"></figure>
+<p>还不少，全局搜索再耐心去掉就行。</p>
+<p>beacon端也有一处：</p>
+<figure data-type="image" tabindex="11"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142505198.png" alt="" loading="lazy"></figure>
+<p>这两个方法的返回值都要改为<code>FALSE</code>，因为会用 teamserver 端发过来的水印值进行校验，不符合就退出，所以全部改掉。</p>
+<h2 id="cve-2022-39197修复">CVE-2022-39197修复</h2>
+<p>这个漏洞就是 Cobalt Strike 的 XSS 漏洞，可以导致 RCE ：</p>
+<figure data-type="image" tabindex="12"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142518949.png" alt="" loading="lazy"></figure>
+<p>修复方式，在<code>aggressor.MultiFrame</code>中添加：</p>
+<pre><code class="language-java">try{
+    ClassPool pool = ClassPool.getDefault();
+    CtClass cc = pool.get(&quot;javax.swing.plaf.basic.BasicHTML&quot;);
+    CtMethod method = cc.getDeclaredMethod(&quot;isHTMLString&quot;);
+    method.setBody(&quot;return false;&quot;);
+    cc.toClass();
+}
+catch (Exception e){
+}
+</code></pre>
+<figure data-type="image" tabindex="13"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142537266.png" alt="" loading="lazy"></figure>
+<p>这种是完全关闭 HTML 标签解析，所以可能对正常显示会造成影响，遇到了再看怎么修复。</p>
+<h2 id="修复foreign派生错误的bug">修复foreign派生错误的bug</h2>
+<p>该版本无法正常使用<code>windows/foreign/reverse_http(s)</code>进行 spawn ，但没有做判断，导致这里的<code>beaconDLL.customDLL</code>和<code>beaconDLL.customFileName</code>会为空：</p>
+<figure data-type="image" tabindex="14"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142547945.png" alt="" loading="lazy"></figure>
+<p>暂时用直接返回原 DLL 的方式来修复，这样无法使用自定义反射 Loader：</p>
+<figure data-type="image" tabindex="15"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142559767.png" alt="" loading="lazy"></figure>
+<p>后续再看有没有更好的办法处理。</p>
+<h2 id="修改winvncdll位置">修改winvnc.dll位置</h2>
+<p>在<code>server\ManageUser.java</code>中修改，我放进了 resources 里，这样就不用单独开一个文件夹了：</p>
+<figure data-type="image" tabindex="16"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142611825.png" alt="" loading="lazy"></figure>
+<p>虽然 VNC 这个功能几乎用不上。</p>
+<h2 id="启用payload-generatorstageless">启用Payload Generator(Stageless)</h2>
+<p>这个是为了方便做自己想要的 Loader，因为 Stage 的 shellcode 特征更多。</p>
+<p>修改<code>scripts\default.cna</code>：</p>
+<figure data-type="image" tabindex="17"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142622248.png" alt="" loading="lazy"></figure>
+<h2 id="修复windows-7下https问题">修复Windows 7下https问题</h2>
+<p>新版本的 Java 会默认禁用 TLS1.2 以下的协议，这样在无补丁的 Windows 7 上无法用 HTTPS 上线，修改<code>server\TeamServer.java</code>：</p>
+<figure data-type="image" tabindex="18"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142644282.png" alt="" loading="lazy"></figure>
+<h2 id="修复cve-2022-23317">修复CVE-2022-23317</h2>
+<p><code>CVE-2022-23317</code>是 Cobalt Strike Webserver 的一个问题，利用不规则的URL访问时会产生特殊回显，导致可以识别该服务器为Cobalt Strike server，所以加个判断就行，在<code>cloudstrike\WebServer.java</code>中：</p>
+<figure data-type="image" tabindex="19"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142702279.png" alt="" loading="lazy"></figure>
+<h2 id="去除服务端信息特征">去除服务端信息特征</h2>
+<ol>
+<li>删除服务端响应字符串</li>
+</ol>
+<p>在<code>cloudstrike/NanoHTTPD.java</code>里修改回显字符串<code>This is the default!</code>为其他的：</p>
+<figure data-type="image" tabindex="20"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142716121.png" alt="" loading="lazy"></figure>
+<p>这里直接把<code>sendError</code>的第二个参数弃用，所有错误都只返回一个字符串：</p>
+<figure data-type="image" tabindex="21"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142726430.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>修改socket通信的magic值</li>
+</ol>
+<p><code>ssl\SecureServerSocket.java</code>和<code>ssl\SecureSocket.java</code>里都把<code>0xBEEF</code>改掉：</p>
+<figure data-type="image" tabindex="22"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142735790.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="23"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142747530.png" alt="" loading="lazy"></figure>
+<h2 id="修改默认异或密钥">修改默认异或密钥</h2>
+<p>这里不再使用原有的单字节异或密钥，而是改为多字节加密：</p>
+<figure data-type="image" tabindex="24"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142757803.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="25"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142807446.png" alt="" loading="lazy"></figure>
+<h2 id="修改beaconeye特征">修改BeaconEye特征</h2>
+<p>实际就是调用<code>memset()</code>时使用了0来填充，导致会有一个位置的值固定呈现为0，这个值又根本用不到，所以直接把<code>memset()</code>的参数改为另一个值即可：</p>
+<figure data-type="image" tabindex="26"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142819073.png" alt="" loading="lazy"></figure>
+<h2 id="sleep-mask未混淆部分的内存特征">Sleep Mask未混淆部分的内存特征</h2>
+<p><a href="https://codex-7.gitbook.io/codexs-terminal-window/blue-team/detecting-cobalt-strike/sleep-mask-kit-iocs">https://codex-7.gitbook.io/codexs-terminal-window/blue-team/detecting-cobalt-strike/sleep-mask-kit-iocs</a></p>
+<p>这个暂时先不修复，可以靠高版本sleepmask解决。</p>
+<h2 id="其他">其他</h2>
+<p>修改默认client配置文件名，在<code>aggressor\Prefs.java</code>中：</p>
+<figure data-type="image" tabindex="27"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142850182.png" alt="" loading="lazy"></figure>
+<p>这个是为了防止蜜罐读取本地文件，导致接管CS。</p>
+<h2 id="修复beaconformattostring错误">修复BeaconFormatToString错误</h2>
+<p>4.6版本更新日志中提到一个修复： 修复了在 BOF 中调用 BeaconFormatToString 时错误地要求传递字符串长度地址的问题。</p>
+<p>BeaconFormatToString的功能为将格式化数据提取为一个字符串，并用该字符串的长度填充传入的 size 变量：</p>
+<pre><code class="language-c">char * BeaconFormatToString (formatp * obj, int * size)
+</code></pre>
+<p>定位一下，发现该函数结果来源于：</p>
+<pre><code class="language-c">char * bformat_tostring(formatp * buffer, int * size) {
+	DWORD len = bformat_length(buffer);
+	if (size != NULL)
+		*size = (int)len;
+
+	if (size == 0)
+		return NULL;
+
+	return bformat_string(buffer);
+}
+</code></pre>
+<p>问题很明显，传入的是字符串长度的指针，但是却判断了它是否为0，实际上应该判断的是len：</p>
+<pre><code class="language-c">char * bformat_tostring(formatp * buffer, int * size) {
+    DWORD len = bformat_length(buffer);    
+    
+    if (size != NULL) {
+        *size = (int)len;
+    }
+
+    if (len == 0) {
+        return NULL;
+    }
+
+    char *str = bformat_string(buffer);
+    return str;
+}
+</code></pre>
+<h1 id="0x3-普通功能增加">0x3 普通功能增加</h1>
+<h2 id="已登录用户显示">已登录用户显示</h2>
+<p>用户登录如果使用同一个用户名，会提示该用户已存在，校验点在<code>server/ManageUser.java</code>：</p>
+<figure data-type="image" tabindex="28"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142902538.png" alt="" loading="lazy"></figure>
+<p>而已登录的用户名数据是存在<code>server.Resources</code>里的，所以要从这里面把数据取出来。</p>
+<p>这里要理清代码结构还是挺麻烦的，有以下几个问题需要解决：</p>
+<ol>
+<li>找到teamserver向client传递数据的方法，然后把已登录用户数据加进来</li>
+<li>用户登录和用户退出要自动进行增减</li>
+</ol>
+<p>在<code>server.Resources</code>里我新加了一个成员变量，用来存储用户的用户名、登录IP、登录时间，这个变量得是<code>LinkedList</code>对象，不然后期解析会出问题。</p>
+<p><code>getOnlineUsers()</code>就是获取数据的方法：</p>
+<figure data-type="image" tabindex="29"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142909753.png" alt="" loading="lazy"></figure>
+<p>用户登录IP在<code>TeamSocket</code>对象的<code>from</code>字段，加了个方法用来获取它。</p>
+<p>之后则是在用户登录和退出的时候，自动将<code>LinkedList</code>对象中的<code>hashmap</code>进行增删：</p>
+<figure data-type="image" tabindex="30"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142919075.png" alt="" loading="lazy"></figure>
+<p>这里最主要把<code>LinkedList</code>对象中的格式搞清楚。</p>
+<p>之后就是在用户登录和退出的地方调用这两个方法：</p>
+<figure data-type="image" tabindex="31"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142931509.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="32"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142948655.png" alt="" loading="lazy"></figure>
+<p>还有一个问题就是传递数据，也是调试了挺久，最后发现用<code>broadcast()</code>方法就可以：</p>
+<figure data-type="image" tabindex="33"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142959304.png" alt="" loading="lazy"></figure>
+<p>最后就是添加UI，这个也麻烦，最终是照着<code>Credential</code>显示功能做完了：</p>
+<figure data-type="image" tabindex="34"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143006813.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="35"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143014532.png" alt="" loading="lazy"></figure>
+<p>最后的效果：</p>
+<figure data-type="image" tabindex="36"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143022832.png" alt="" loading="lazy"></figure>
+<h2 id="windows错误代码解析">Windows错误代码解析</h2>
+<p>这个功能是新版本官方加了的，虽然不难，但Windows错误代码得有几万个，全弄进来麻烦死了。</p>
+<p><code>beacon/BeaconC2.java</code>这里是 Teamserver 向 Client 发送执行结果回显的代码：</p>
+<figure data-type="image" tabindex="37"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143033711.png" alt="" loading="lazy"></figure>
+<p><code>errorNo</code>是 Cobalt Strike 本身的错误代码，可以在<code>beacon/BeaconErrors.java</code>里找到：</p>
+<figure data-type="image" tabindex="38"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143042061.png" alt="" loading="lazy"></figure>
+<p>而<code>arg1</code>就是 Windows 错误代码，去做个判断就行，但是几万个。。。算了吧，手查一下也费不了什么事。</p>
+<figure data-type="image" tabindex="39"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143051425.png" alt="" loading="lazy"></figure>
+<h1 id="0x4-beacon细节">0x4 Beacon细节</h1>
+<h2 id="通信情况">通信情况</h2>
+<p>Cobalt Strike 用 AES 和 RSA 结合的方式进行通信，teamserver会新建一个密钥对并存储在<code>.cobaltstrike.beacon_keys</code>中。</p>
+<p>RSA 使用<code>RSA/ECB/PKCS1Padding</code>，AES 使用<code>AES/CBC/NoPadding</code>，并使用了硬编码的iv：<code>abcdefghijklmnop</code></p>
+<figure data-type="image" tabindex="40"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143306880.png" alt="" loading="lazy"></figure>
+<h2 id="数据包结构">数据包结构</h2>
+<h3 id="1-心跳包">1. 心跳包</h3>
+<p>心跳包就是Beacon 按照 Sleep 设置的时间，定时向 TeamServer 发起 HTTP GET 请求，以获取客户端下发的指令，然后根据指令的内容执行对应的代码。</p>
+<p>心跳包结构：</p>
+<figure data-type="image" tabindex="41"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143316498.png" alt="" loading="lazy"></figure>
+<ul>
+<li>Magic Number（固定值：0x0000beef即48879），4字节</li>
+<li>Size of Data，4字节（值要小于等于117字节）</li>
+<li>Raw key，16字节</li>
+<li>Code Page Charset，这里是ANSI，2字节，小端序</li>
+<li>OEM Charset，2字节，小端序</li>
+<li>Beacon ID，4字节，大端序，每个Beacon唯一，随机生成</li>
+<li>Beacon Process ID，4字节，大端序</li>
+<li>Port，2字节</li>
+<li>Flag，1字节，用来标识是否为高权限、x86/x64</li>
+<li>Beacon Version，2字节</li>
+<li>Beacon Build Version，2字节</li>
+<li>64 bit Pointer Prefix，4字节，大端序，目标系统为64位则添加函数指针前缀，32位则丢弃</li>
+<li><code>GetModuleHandleA</code> ptr，4字节，用来帮助shellcode在没有显式导入的情况下解析其他函数。如果beacon是64位的，则前两个字节带有前缀并将值存储在变量中</li>
+<li><code>GetProcAddress</code> ptr，4字节，同上</li>
+<li>Target IP，4字节，按C0A8C882的方式解析</li>
+<li>Target Info，剩余字节，ASCII编码，不超过58字节，包括了主机名、用户名、Beacon进程名，中间以<code>\t</code>分割</li>
+</ul>
+<p>心跳包会用RSA公钥加密，再根据 C2Profile 的配置进行编码，然后通过GET请求发送到teamserver</p>
+<p>之后通信时，会使用AES加密。</p>
+<h3 id="2-任务下发通信包">2. 任务下发通信包</h3>
+<p>当在teamserver端执行命令后，命令会被放入任务队列，等待下一次beacon回连请求时，再通过响应包的方式传递给beacon端。</p>
+<figure data-type="image" tabindex="42"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143406782.png" alt="" loading="lazy"></figure>
+<p>心跳包中的<code>Raw key</code>将用来生成<code>AES Key</code>和<code>HMAC Key</code>，生成方法是计算<code>Raw key</code>的SHA256值，之后前16字节为<code>AES Key</code>，后16字节为<code>HMAC Key</code>.</p>
+<p>raw key:</p>
+<pre><code>ef5ed760fba60e1973c8c3dbe001d86b
+</code></pre>
+<p>获得AESkey和HMAC key：</p>
+<pre><code class="language-python">import hashlib
+
+hex_string = &quot;e7b6c3dcbbaa7d6f8d6c7a5b4c3d2e1&quot;
+byte_string = bytes.fromhex(hex_string)
+hash_object = hashlib.sha256(byte_string)
+hex_dig = hash_object.hexdigest()
+print(hex_dig)
+</code></pre>
+<pre><code class="language-html"> aeskey:  97bc13f770f8dc2547a530536f08c2f1
+ hmackey: 876d31a333a9fdb6e46043b434f41246
+</code></pre>
+<p>指令下发数据，64字节：</p>
+<pre><code class="language-html">39aa6deab09da5f37125d732d559aba7465d1c648bfd3696cc0486dcb0ff88235ca309d67cf911da37e6e03d6628b13b1ac60df7a597517038d939cf1ab2880b71f343e7599a704c815099837e258598
+</code></pre>
+<p>其中最后16个字节为HMAC签名，用来校验数据包是否完整且未篡改。</p>
+<p>进行AES解密，IV为 <code>abcdefghijklmnop</code>，模式为<code>AES/CBC/NoPadding</code>，解得hex为：</p>
+<pre><code class="language-html">6530a91d0000002b0000004e000000230000000925434f4d535045432500000010202f432077686f616d69202f70726976000041414141414141414141414141c2b4a44fad005096e1c2b19e1ddeca67
+</code></pre>
+<p>这里就是下发的命令：</p>
+<pre><code class="language-html">6530a91d 前4个字节丢弃，实际是系统时间/1000
+0000002b 数据大小
+0000004e 任务类型 0x4e = 78 即SHELL类型任务
+00000023 4字节，标识有效命令字节长度
+00000009 4字节，标识环境变量的长度
+25434f4d5350454325 9字节，环境变量，标识了cmd.exe的位置
+00000010 命令执行参数的长度
+202f432077686f616d69202f707269760000 命令执行参数的内容
+41414141414141414141414141 长度不足16倍数的情况下会补A字符
+</code></pre>
+<h3 id="3-完成后回传结果通信包">3. 完成后回传结果通信包</h3>
+<p>执行完成后，beacon用POST方式请求teamserver，将结果回传：</p>
+<figure data-type="image" tabindex="43"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143429957.png" alt="" loading="lazy"></figure>
+<p>这里的结果也是AES加密的：</p>
+<pre><code class="language-html">000001f008fb3bd328ed1c66c1539f3613a2848bd1e9ec3dfca9dba55351bbd3eae2e335ce338cc12ce848275713ec035eaeac838460244409d67fb63c44312fa703ec858d4bf6b365584acf487b35ade23af66be28a32b29dba65b216bd6d1ff96ab418c8ec919b7bc5a83b486f99d66193653137b47d6d25fef61ab87517fa7293f8b7b9c9d75d5ced6d139251d1695ca4589a56a8a81464d474a54adce068f9150406c97d58f69a49ed3b997d65e1e1764595d37e8254442226d00e92c1a8a4f2ac43e317d905ad66a77466533b720cad9bcbedb4d676df90f38ec442f06cd7e9392e8ab00e6c2f950b1c6c9814079fcdf6dd378e4f61e5eeb2a8ff86e1de8d9d5de8d95a84e61221f76b278e56197c3d23de3fb9b032e961a2ea5cc1e6f7d601ed4a5880465a28edd8a95f1a6ee8e1cccf0fd31a737e2fe139c3c40dd481a5255962fb84c02016535a803a257eff851ab496831d6788650f2644b250fbafb9723a8fed195f0d85633465d1553abe27a71e95047a2ddc68245b2107dfc723e3d761185b4fb6f82fbf9915775a008bab39fe98c1ac17ea1327071deb91d68e64de3108435864dde5f36423a0488d9ffc5b9a0a6e83e6b65918a84f1476c2904d8236f6161fbaec21d2868344e08241885aabbfaf1e63f46791a96ce75921e5a8dc89d853c36b3f65b606328a8e27a05d02f242
+</code></pre>
+<p>去掉前面4个字节和最后的16个字节，AES解密得到：</p>
+<pre><code class="language-html">00000002000001c70000001e0d0accd8c8a8d0c5cfa20d0a2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d0d0a0d0accd8c8a8c3fb202020202020202020202020202020202020202020202020c3e8caf62020202020202020202020202020202020d7b4ccac20200d0a3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d203d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d203d3d3d3d3d3d0d0a536553687574646f776e50726976696c6567652020202020202020202020b9d8b1d5cfb5cdb320202020202020202020202020d2d1bdfbd3c30d0a53654368616e67654e6f7469667950726976696c65676520202020202020c8c6b9fdb1e9c0fabcecb2e9202020202020202020d2d1c6f4d3c30d0a5365556e646f636b50726976696c65676520202020202020202020202020b4d3c0a9d5b9ceebc9cfc8a1cfc2bcc6cbe3bbfa20d2d1bdfbd3c30d0a5365496e637265617365576f726b696e6753657450726976696c65676520d4f6bcd3bdf8b3ccb9a4d7f7bcaf20202020202020d2d1bdfbd3c30d0a536554696d655a6f6e6550726976696c6567652020202020202020202020b8fcb8c4cab1c7f820202020202020202020202020d2d1bdfbd3c30d0a0000000000000000000000000000000000
+</code></pre>
+<p>回传消息包结构为：</p>
+<pre><code class="language-html">结果长度 4字节 大端序 000001f0 即496（4+4+4+451+17+16）
+加密内容 480字节
+  	计数器 4字节 大端序 00000002 
+  	后续结果长度（类型+结果） 4字节 大端序 000001c7 即455
+  	callback类型 4字节 大端序  0000001e 即30 
+  	执行结果 451字节
+  	padding 补充了17字节的0
+HMAC签名 16字节
+</code></pre>
+<h2 id="自实现beacon要点">自实现beacon要点</h2>
+<h3 id="1-配置信息与编译">1. 配置信息与编译</h3>
+<p>Cobalt Strike 的生成exe，是把c2profile的信息异或加密后再patch进去的，beacon在初始化时会解密然后解析。</p>
+<p>为了实现云编译以及多样化，c2profile的信息最好不要直接写死在代码中，从外部读取解析最好。</p>
+<p>两种方案，第一种是参照WBGII的ReBeacon_src项目，在CS上生成raw，提取相应信息再patch进代码，这种就还需要异或解密一次；第二种则是完全的自实现，只依赖配置好的c2profile内容和部分信息。</p>
+<p>针对自实现方案，为实现正常上线和控制，需要外部的相关信息有（针对http/https监听器）：</p>
+<ul>
+<li>RSA公钥：用来加密心跳包的元数据，存储在teamserver生成的<code>.cobaltstrike.beacon_keys</code>中</li>
+<li>teamserver地址：IP+端口或者域名+端口</li>
+<li>GET请求信息：用来传输心跳包</li>
+<li>POST请求和响应信息：用来传输任务结果</li>
+<li>代理</li>
+<li>睡眠时间及抖动</li>
+</ul>
+<p>可以看出，对于自实现，我们只关注网络通信部分是否能与teamserver保持一致，其他部分都可以不参照原本的beacon实现，具体项目可以参考geacon之类的。</p>
+<h3 id="2-命令执行">2. 命令执行</h3>
+<p>CS的命令执行有3种，<code>shell</code>、<code>execute</code>、<code>run</code></p>
+<p>shell是利用cmd.exe执行，命名管道读取回显的；excute只执行不回显；而run执行且回显。</p>
+<p>执行命令要考虑令牌的问题，runas命令本身就考虑了这个。</p>
+<h3 id="3-beacon运行时的初始化">3. beacon运行时的初始化</h3>
+<p>初始化需要完成以下几个操作：</p>
+<ol>
+<li>申请内存</li>
+<li>异或解密 beacon 配置信息</li>
+<li>解析配置信息</li>
+</ol>
+<p>重点在于这个解析环节，在 teamserver 端，每一项都是用<code>Type-Length-Value</code>的方式来存储的：</p>
+<figure data-type="image" tabindex="44"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143444268.png" alt="" loading="lazy"></figure>
+<p>到了beacon端，Type有3种值：<code>1 - Short</code>，<code>2 - Int</code>，<code> 3 - Data</code>，但实际上只有<code>Data</code>的<code>Length</code>用得上，因为<code>Short</code>和<code>Int</code>的长度是已知的。</p>
+<p>这个问题也导致了beacon的配置文件内存区域存在特征，可以被BeaconEye扫描到。</p>
+<p>以及在beacon端，配置信息的结构是这样：</p>
+<figure data-type="image" tabindex="45"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143458588.png" alt="" loading="lazy"></figure>
+<p>另外，beacon还有个主机轮换策略，这个我平时很少用，分为四种：</p>
+<ul>
+<li>round-robin：选择按主机名提供的顺序循环遍历主机名列表。每台主机用于一个连接。</li>
+<li>random：选择此项可在每次尝试连接时从列表中随机选择一个主机名。</li>
+<li>failover-xx：选择尽可能长时间地使用工作主机。使用列表中的每个主机，直到它们达到连续故障转移计数 (x) 或持续时间段 (m,h,d)，然后使用下一个主机。</li>
+<li>rotate-xx：选择使用每个主机一段时间。使用列表中的每个主机指定的持续时间 (m,h,d)，然后使用下一个主机。</li>
+</ul>
+<h1 id="0x5-总结">0x5 总结</h1>
+<p>可能你会说：怎么就戛然而止了？因为以上就是之前基本所有的笔记了，从结构上来说肯定是不全的，后续也没继续研究了，凑合看吧。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#0x1-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">0x1 环境搭建</a>
+<ul>
+<li><a href="#java%E7%AB%AF">Java端</a></li>
+<li><a href="#beacon%E7%AB%AF">Beacon端</a></li>
+</ul>
+</li>
+<li><a href="#0x2-%E5%8E%BB%E9%99%A4%E7%89%B9%E5%BE%81%E5%92%8C%E4%BF%AE%E5%A4%8D%E6%BC%8F%E6%B4%9E">0x2 去除特征和修复漏洞</a>
+<ul>
+<li><a href="#%E5%8E%BB%E9%99%A4%E6%9A%97%E6%A1%A9">去除暗桩</a></li>
+<li><a href="#cve-2022-39197%E4%BF%AE%E5%A4%8D">CVE-2022-39197修复</a></li>
+<li><a href="#%E4%BF%AE%E5%A4%8Dforeign%E6%B4%BE%E7%94%9F%E9%94%99%E8%AF%AF%E7%9A%84bug">修复foreign派生错误的bug</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9winvncdll%E4%BD%8D%E7%BD%AE">修改winvnc.dll位置</a></li>
+<li><a href="#%E5%90%AF%E7%94%A8payload-generatorstageless">启用Payload Generator(Stageless)</a></li>
+<li><a href="#%E4%BF%AE%E5%A4%8Dwindows-7%E4%B8%8Bhttps%E9%97%AE%E9%A2%98">修复Windows 7下https问题</a></li>
+<li><a href="#%E4%BF%AE%E5%A4%8Dcve-2022-23317">修复CVE-2022-23317</a></li>
+<li><a href="#%E5%8E%BB%E9%99%A4%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BF%A1%E6%81%AF%E7%89%B9%E5%BE%81">去除服务端信息特征</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%BC%82%E6%88%96%E5%AF%86%E9%92%A5">修改默认异或密钥</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9beaconeye%E7%89%B9%E5%BE%81">修改BeaconEye特征</a></li>
+<li><a href="#sleep-mask%E6%9C%AA%E6%B7%B7%E6%B7%86%E9%83%A8%E5%88%86%E7%9A%84%E5%86%85%E5%AD%98%E7%89%B9%E5%BE%81">Sleep Mask未混淆部分的内存特征</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96">其他</a></li>
+<li><a href="#%E4%BF%AE%E5%A4%8Dbeaconformattostring%E9%94%99%E8%AF%AF">修复BeaconFormatToString错误</a></li>
+</ul>
+</li>
+<li><a href="#0x3-%E6%99%AE%E9%80%9A%E5%8A%9F%E8%83%BD%E5%A2%9E%E5%8A%A0">0x3 普通功能增加</a>
+<ul>
+<li><a href="#%E5%B7%B2%E7%99%BB%E5%BD%95%E7%94%A8%E6%88%B7%E6%98%BE%E7%A4%BA">已登录用户显示</a></li>
+<li><a href="#windows%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90">Windows错误代码解析</a></li>
+</ul>
+</li>
+<li><a href="#0x4-beacon%E7%BB%86%E8%8A%82">0x4 Beacon细节</a>
+<ul>
+<li><a href="#%E9%80%9A%E4%BF%A1%E6%83%85%E5%86%B5">通信情况</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E7%BB%93%E6%9E%84">数据包结构</a>
+<ul>
+<li><a href="#1-%E5%BF%83%E8%B7%B3%E5%8C%85">1. 心跳包</a></li>
+<li><a href="#2-%E4%BB%BB%E5%8A%A1%E4%B8%8B%E5%8F%91%E9%80%9A%E4%BF%A1%E5%8C%85">2. 任务下发通信包</a></li>
+<li><a href="#3-%E5%AE%8C%E6%88%90%E5%90%8E%E5%9B%9E%E4%BC%A0%E7%BB%93%E6%9E%9C%E9%80%9A%E4%BF%A1%E5%8C%85">3. 完成后回传结果通信包</a></li>
+</ul>
+</li>
+<li><a href="#%E8%87%AA%E5%AE%9E%E7%8E%B0beacon%E8%A6%81%E7%82%B9">自实现beacon要点</a>
+<ul>
+<li><a href="#1-%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%BC%96%E8%AF%91">1. 配置信息与编译</a></li>
+<li><a href="#2-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C">2. 命令执行</a></li>
+<li><a href="#3-beacon%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96">3. beacon运行时的初始化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#0x5-%E6%80%BB%E7%BB%93">0x5 总结</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/PUu40xHjrU/">
+              <h3 class="post-title">
+                斗罢艰险再出发——2024年终总结
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

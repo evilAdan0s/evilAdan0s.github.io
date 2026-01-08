@@ -1,0 +1,256 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>我的OSCE3之路——OSDA | 白袍的小行星</title>
+<link rel="shortcut icon" href="https://red-team.tips/favicon.ico?v=1767833857201">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://red-team.tips/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="我的OSCE3之路——OSDA | 白袍的小行星 - Atom Feed" href="https://red-team.tips/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="
+前言
+OSDA即OffSec Defense Analyst，是一个面向蓝队人员的证书，对应的课程名称为SOC-200(OffSec Foundational Security Operations and Defensive Analy..." />
+    <meta name="keywords" content="OffSec" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://red-team.tips">
+  <img class="avatar" src="https://red-team.tips/images/avatar.png?v=1767833857201" alt="">
+  </a>
+  <h1 class="site-title" data-text=白袍的小行星>
+    白袍的小行星
+  </h1>
+  <p class="site-description">
+    <strong>Once a hacker, always a hacker!</strong>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="/post/friends" class="menu">
+          友链
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/evilAdan0s" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Adan0s1" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              我的OSCE3之路——OSDA
+            </h2>
+            <div class="post-info">
+              <span>
+                2024-04-14
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://red-team.tips/tag/omhFdQrox/" class="post-tag">
+                  # OffSec
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <!-- more -->
+<h1 id="前言">前言</h1>
+<p><code>OSDA</code>即<code>OffSec Defense Analyst</code>，是一个面向蓝队人员的证书，对应的课程名称为<code>SOC-200(OffSec Foundational Security Operations and Defensive Analysis)</code>，看名字就知道是面向SOC分析师岗位的。</p>
+<p>这一点要吐槽下，国外的蓝队岗位划分比较细，有SOC、DFIR、Threat Hunt等等，国内则是一锅粥，恨不得5000块招一个三头六臂无所不能的进来。</p>
+<p><code>SOC-200</code>使用的SIEM是ELK，有的人觉得不教<code>Splunk</code>简直对不起这个价钱，我倒无所谓，反正<code>OSCP</code>和<code>OSCE3</code>已经值回票价了，剩下再考到都是赚的。</p>
+<h1 id="考试规则">考试规则</h1>
+<p>考试是要求只能用提供的<code>ELK</code>来进行各种操作，例如查询日志、查看告警等，也就是不存在上机排查环节。</p>
+<p>其他的规则和之前一样，不能用chatgpt之类的。</p>
+<p>考试里总共是10个阶段，每个阶段满分10分，会根据你对每个阶段的发现情况给分，总分拿到75分才能通过。</p>
+<p>报告要求：</p>
+<blockquote>
+<p>您需要撰写一份专业报告，包括您收集的所有证据、有关攻击者技术的结论以及每个阶段的妥协方案。您必须记录所有发现结果，包括 SIEM 的所有屏幕截图以及用于确定攻击者操作的任何查询。此外，您必须描述攻击者在每个阶段在网络中获得的访问类型。您的文档应该足够详尽，以便技术上有能力的读者可以逐步复制您的分析。</p>
+</blockquote>
+<h1 id="备考">备考</h1>
+<p>官方给的资源完全够备考，所以不需要额外练习。</p>
+<p>课程材料里前面会根据<code>MITRE ATT&amp;CK</code>的各个阶段进行讲解，后面则会专门教授<code>ELK</code>的使用，以一次事件来完整演示日志调查、告警规则编写这个流程。</p>
+<p>课程提供13个challenge，从简单到复杂，每个challenge都有多个阶段，需要手动启动阶段才会有对应的事件日志。</p>
+<p>challenge是不需要提交flag的，所以一大难点就是你不知道自己是否完全找到了该阶段的所有内容，这一点和真实工作很像。不过也有技巧，就是用启动每个阶段的时间来帮你把范围缩小，不然海量的日志能让你找到头晕。</p>
+<p>另外challenge里的预置规则很少，基本都需要通过日志来分析行为，当然你可以自己导入规则，这在考试中也是允许的，不过根据我的实际经验来看，没这个必要。</p>
+<p>备考OSDA花的时间很短，不到一个月，因为我只重点看了ELK使用介绍的部分，然后就开始challenge了。因为工作忙，直到考试前一晚我才做完第12个，最后一个就没做。</p>
+<p>这门课程提供了专门的challenge讲解视频，可能是为了照顾新手，还是直播讲的，能够听到讲师与听众的互动。不过讲课程的估计是个印度哥们，口音有点奇怪，再加上讲的很磨叽，我就基本没看。</p>
+<p>OffSec的discord里提供了SOC-200课程challenge的hint bot，如果遇到困难或者想确认自己是不是找到了所有内容，就可以去看看。</p>
+<h1 id="考试">考试</h1>
+<p>这次考试算是压力最小的一次了，虽然只有24小时，但完全够用。</p>
+<p>考试总共有10个阶段，也给了一些预置规则，这些规则很有用，基本算是提示了。</p>
+<p>我从早上8点开始，中间遇到过一些小插曲耽误了点时间，到下午6点就全部做完了，个人认为所有攻击内容都找到了，应该没有遗漏的。</p>
+<p>然后就是写报告，这次没用官方的Word模板，因为做的真的是依托史，我连改都不想改，最后用github上的markdown模板做的。</p>
+<p>最终在凌晨1点提前结束了考试，报告写了近50页，里面大概放了100张图片，检查了几遍后就交了报告。<br>
+一些考试经验：</p>
+<ul>
+<li>考试环境不是非常稳定，万一发现找不到应该找的日志，就重置。只不过重置很费时间，尤其是打到后面几个阶段，每次重置要十几分钟，还要再花时间一个阶段一个阶段走过去，基本上得一小时起步</li>
+<li>每次启动阶段的时间可以记录下来，这是防止后面你突然发现某个攻击环节明显缺信息了，还能根据时间再回去找，不必重置环境</li>
+<li>每个阶段里的事件数量不是固定的，有可能是多个，有可能只有一个，所以如果找不到别的痕迹就直接开始下一个阶段吧</li>
+<li>考试不要求写检测规则，只需要把你找到的攻击者的手法描述清楚就行，贴上截图、所用到的KQL语句等，不需要把每个查询都写上，稍微复杂点的（有多个过滤或限定条件）写上就行</li>
+</ul>
+<h1 id="小结">小结</h1>
+<p>4月5号凌晨1点提交了报告，4月8号早上起来就看到了通过的邮件，速度还是挺快的。</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240414140028qcGNIkimage.png" alt="" loading="lazy"></figure>
+<p>还剩一个<code>OSMR</code>，但是我不想继续考了，已经考麻了，反正macOS的安全和我的工作相关不大，未来也大概率不会做这方面的研究，所以就放弃好了，好好休息下，剩下的时间看看新出的几个<code>Learn Path</code>，一年的OffSec之旅就这样结束吧。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E8%80%83%E8%AF%95%E8%A7%84%E5%88%99">考试规则</a></li>
+<li><a href="#%E5%A4%87%E8%80%83">备考</a></li>
+<li><a href="#%E8%80%83%E8%AF%95">考试</a></li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://red-team.tips/post/oxqLv6NzK/">
+              <h3 class="post-title">
+                我的OSCE3之路——OSED
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '971b65ce804f770e6019',
+    clientSecret: 'a9fca4ca8deef880c5fac95e97fceb4edb23098a',
+    repo: 'eviladan0s.github.io',
+    owner: 'eviladan0s',
+    admin: ['eviladan0s'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://red-team.tips/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

